@@ -29,3 +29,10 @@ we can determine who the current clients of a Autobahn session are.
 * Activity can be tracked.  Any publish,subscribe,call,register action is
 called an activity.
 
+## Schema
+
+A picture is worth 1,000 words:
+![alt text][schema]
+
+[schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
+

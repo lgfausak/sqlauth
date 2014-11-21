@@ -5,12 +5,22 @@ SQL Authorization and Authentication via SQL for Autobahn
 
 ## Summary
 
-This module does two things for Autobahn.  Theoretically this can be backended by any
-database that sqlbridge supports.  However, I am only interested in (and supporting)
-a Postgres backend at this time.  Primarily because the listen/notify functionality
-makes it possible.
+I need the ability to dynamically authorize Autobahn clients in a
+multi-tenant fashion.  I do not want to push this to the application
+level.  Logically, if an Autobahn client receives a call to an RPC
+the client can assume that the caller has the authority to make that
+call. Similarly with all the activities (subscribe,publish,register).
+The actual authorization is done centrally so that the application
+clients can just be concerned with their function, not the
+authentication/authorization function.
 
-* Authenticate a user.  At web socket connection time a challenge
+From an implementation point of view this can be backended by any
+database that sqlbridge supports.  However, I am only interested in
+(and supporting) a Postgres backend at this time.  Primarily because
+the listen/notify functionality.  This makes authentication/authorization
+caching extremely efficient. In a nutshell, this code:
+
+* Authenticates a user.  At web socket connection time a challenge
 is submitted using wampcra. The credentials and associated permissions
 are maintained in an sql database.
 
@@ -35,5 +45,4 @@ A picture is worth 1,000 words:
 ![alt text][schema]
 
 [schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
-
 

@@ -18,3 +18,9 @@ incver:
 pypi:
 	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"') > $(TFILE); mv $(TFILE) $(VFILE)
 	python setup.py sdist upload
+
+#
+# register, only do this once per project
+#
+register:
+	python setup.py register

@@ -44,5 +44,11 @@ called an activity.
 A picture is worth 1,000 words:
 ![alt text][schema]
 
+## Postgres Installation Hints
+
+Before we can start, we have to have a postgres installation. The example here uses a
+database named autobahn, and a user with super user privileges called autouser. Here are
+some [notes](docs/postgres_hints.md) I put together: 
+
 [schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
 

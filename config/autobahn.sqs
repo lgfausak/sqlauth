@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<SQLContainer>
+    <SQLComment>
+        <name><![CDATA[Comment4]]></name>
+        <comment><![CDATA[topics are addresses.  com.db.query is an example, or adm.user.login.  The addresses can be subscribed/published.  Registered and called.  topics have permissions granted to them.]]></comment>
+        <location>
+            <x>1701.00</x>
+            <y>407.00</y>
+        </location>
+        <size>
+            <width>216.00</width>
+            <height>106.00</height>
+        </size>
+        <zorder>10</zorder>
+        <commentTitle><![CDATA[topics]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
+        <labelName><![CDATA[comments]]></labelName>
+        <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
+        <labelWindowIndex><![CDATA[6]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[Comment4]]></temporaryOriginalName>
+        <uid><![CDATA[0AEEA148-9288-44BE-B3CF-78846ACEBD2B]]></uid>
+    </SQLComment>
+    <SQLTable>
+        <name><![CDATA[loginrole]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1220.00</x>
+            <y>531.00</y>
+        </location>
+        <size>
+            <width>211.00</width>
+            <height>100.00</height>
+        </size>
+        <zorder>13</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[FDDD031D-E855-4311-A644-E68EEADF11CF]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[login_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>login</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[login]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></referencesTableUID>
+            <temporaryOriginalName><![CDATA[user_id]]></temporaryOriginalName>
+            <uid><![CDATA[D08D5113-6366-414B-B7C7-5006C76AFB52]]></uid>
+            <unique><![CDATA[0]]></unique>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[role_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></uid>
+            <unique><![CDATA[0]]></unique>
+        </SQLField>
+        <SQLIndex>
+            <name><![CDATA[loginrole_login_id_role_id]]></name>
+            <fieldName><![CDATA[login_id]]></fieldName>
+            <fieldName><![CDATA[role_id]]></fieldName>
+            <SQLIndexEntry>
+                <name><![CDATA[login_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[D08D5113-6366-414B-B7C7-5006C76AFB52]]></fieldUid>
+            </SQLIndexEntry>
+            <SQLIndexEntry>
+                <name><![CDATA[role_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></fieldUid>
+            </SQLIndexEntry>
+            <indexType><![CDATA[UNIQUE]]></indexType>
+            <uid><![CDATA[E32B1188-A601-47AB-A602-D335AEFCADED]]></uid>
+        </SQLIndex>
+        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
+        <labelName><![CDATA[authentication]]></labelName>
+        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
+        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.loginrole]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></uid>
+    </SQLTable>
+    <SQLComment>
+        <name><![CDATA[Comment2]]></name>
+        <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
+        <location>
+            <x>1734.00</x>
+            <y>777.00</y>
+        </location>
+        <size>
+            <width>184.00</width>
+            <height>168.00</height>
+        </size>
+        <zorder>11</zorder>
+        <commentTitle><![CDATA[topicrole]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
+        <uid><![CDATA[1EA7360E-8F45-47A3-A84F-A5E2BC864545]]></uid>
+    </SQLComment>
+    <SQLComment>
+        <name><![CDATA[Comment2_1]]></name>
+        <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
+        <location>
+            <x>1340.00</x>
+            <y>742.00</y>
+        </location>
+        <size>
+            <width>229.00</width>
+            <height>124.00</height>
+        </size>
+        <zorder>8</zorder>
+        <commentTitle><![CDATA[role]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
+        <uid><![CDATA[203FCF6D-C8F5-46D1-9BB6-60EF4AF3B998]]></uid>
+    </SQLComment>
+    <SQLTable>
+        <name><![CDATA[topicrole]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1922.00</x>
+            <y>637.00</y>
+        </location>
+        <size>
+            <width>426.00</width>
+            <height>140.00</height>
+        </size>
+        <zorder>6</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[B2742481-C50F-4CA4-A50F-BE17D104A5AE]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[topic_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>topic</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[topic]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[D9C09D16-5EF1-4E48-8EE2-DD0FFDC18607]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></referencesTableUID>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[641475EF-28A2-41EB-B0F3-A1FEADC95A53]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[role_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>role</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[role]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[7ABE65C4-7B82-4EA4-8836-CC74D3A23498]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[DFA4A4AA-39A8-490A-81D9-6204BA5E7573]]></uid>
+            <unique><![CDATA[0]]></unique>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[type_id]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>activity_type</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[activity_type]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[8B5D1ACC-B0B6-476F-8CF7-8D74D6238756]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></referencesTableUID>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[E739030C-857D-410D-BD1A-7E3B14DA24C1]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[allow]]></name>
+            <type><![CDATA[BOOLEAN]]></type>
+            <temporaryOriginalName><![CDATA[publish_1]]></temporaryOriginalName>
+            <uid><![CDATA[0CA1A0AD-06F6-4765-BCE8-2B3D87832D7A]]></uid>
+        </SQLField>
+        <SQLIndex>
+            <name><![CDATA[topicrole_topic_id_role_id_type_id]]></name>
+            <fieldName><![CDATA[topic_id]]></fieldName>
+            <fieldName><![CDATA[role_id]]></fieldName>
+            <fieldName><![CDATA[allow]]></fieldName>
+            <SQLIndexEntry>
+                <name><![CDATA[topic_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[641475EF-28A2-41EB-B0F3-A1FEADC95A53]]></fieldUid>
+            </SQLIndexEntry>
+            <SQLIndexEntry>
+                <name><![CDATA[role_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[DFA4A4AA-39A8-490A-81D9-6204BA5E7573]]></fieldUid>
+            </SQLIndexEntry>
+            <SQLIndexEntry>
+                <name><![CDATA[allow]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[0CA1A0AD-06F6-4765-BCE8-2B3D87832D7A]]></fieldUid>
+            </SQLIndexEntry>
+            <indexType><![CDATA[UNIQUE]]></indexType>
+            <uid><![CDATA[89F3DA29-15B6-450F-892C-C5F363B631A7]]></uid>
+        </SQLIndex>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.topicrole]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[35360BB8-09B2-4AC1-B27D-7471F3F219F2]]></uid>
+    </SQLTable>
+    <SQLTable>
+        <name><![CDATA[activity]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>2175.00</x>
+            <y>258.00</y>
+        </location>
+        <size>
+            <width>173.00</width>
+            <height>140.00</height>
+        </size>
+        <zorder>4</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[51D5BBEF-6AA4-45CA-8797-B6689956A052]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[session_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>session</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[session]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[F7D61799-3C0F-4DD0-9D33-B653FC32F72A]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[EA0931D6-E3B7-4381-988E-3E4B9AD0D8B7]]></referencesTableUID>
+            <forcedUnique><![CDATA[0]]></forcedUnique>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[AF387045-37F0-4E4C-BFC7-43B59C82A79A]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[topic_name]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[topic_id]]></temporaryOriginalName>
+            <uid><![CDATA[99B5A9E4-516A-4E86-8097-9B301D246468]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[type_id]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>activity_type</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[activity_type]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[8B5D1ACC-B0B6-476F-8CF7-8D74D6238756]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></referencesTableUID>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[47A17C94-87AF-4404-B5D8-DCC3A0BB30ED]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[allow]]></name>
+            <type><![CDATA[BOOLEAN]]></type>
+            <temporaryOriginalName><![CDATA[publish_1]]></temporaryOriginalName>
+            <uid><![CDATA[D50B5B3C-5AA3-490E-BB98-05198D675B9D]]></uid>
+        </SQLField>
+        <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.activity]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[401A249C-BCE5-42F0-A0B0-2B53AE64FB8E]]></uid>
+    </SQLTable>
+    <SQLComment>
+        <name><![CDATA[Comment1]]></name>
+        <comment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></comment>
+        <location>
+            <x>1658.00</x>
+            <y>122.00</y>
+        </location>
+        <size>
+            <width>162.00</width>
+            <height>158.00</height>
+        </size>
+        <zorder>12</zorder>
+        <commentTitle><![CDATA[session]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
+        <labelName><![CDATA[authentication]]></labelName>
+        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
+        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[login authentication]]></temporaryOriginalName>
+        <uid><![CDATA[51C474B7-790F-4D09-9CFB-1F6B05EAF083]]></uid>
+    </SQLComment>
+    <SQLComment>
+        <name><![CDATA[Comment1_1]]></name>
+        <comment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></comment>
+        <location>
+            <x>1220.00</x>
+            <y>195.00</y>
+        </location>
+        <size>
+            <width>276.00</width>
+            <height>157.00</height>
+        </size>
+        <zorder>7</zorder>
+        <commentTitle><![CDATA[login authentication]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
+        <labelName><![CDATA[authentication]]></labelName>
+        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
+        <labelWindowIndex><![CDATA[4]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[user authentication]]></temporaryOriginalName>
+        <uid><![CDATA[53E73D9A-DFD7-44C6-AB61-2211B0730E67]]></uid>
+    </SQLComment>
+    <SQLComment>
+        <name><![CDATA[Comment3]]></name>
+        <comment><![CDATA[all activity by a user is recorded in the activity table. types of activity are register, call, publish, subscribe and grant.]]></comment>
+        <location>
+            <x>1892.00</x>
+            <y>207.00</y>
+        </location>
+        <size>
+            <width>254.00</width>
+            <height>74.00</height>
+        </size>
+        <zorder>9</zorder>
+        <commentTitle><![CDATA[activity]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
+        <labelName><![CDATA[comments]]></labelName>
+        <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[Comment3]]></temporaryOriginalName>
+        <uid><![CDATA[5F736E38-1514-420F-A732-A9E5DE4C7B1B]]></uid>
+    </SQLComment>
+    <SQLTable>
+        <name><![CDATA[role]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1445.00</x>
+            <y>894.00</y>
+        </location>
+        <size>
+            <width>183.00</width>
+            <height>80.00</height>
+        </size>
+        <zorder>1</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <referencesField>role_id</referencesField>
+            <referencesTable>loginrole</referencesTable>
+            <referencesField><![CDATA[role_id]]></referencesField>
+            <referencesTable><![CDATA[loginrole]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></referencesTableUID>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[7ABE65C4-7B82-4EA4-8836-CC74D3A23498]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[name]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[8346705D-DD57-4A8F-895D-8075BCB26869]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[description]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[FAB95116-8C65-471A-9916-1FD217BB6390]]></uid>
+        </SQLField>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.role]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></uid>
+    </SQLTable>
+    <SQLTable>
+        <name><![CDATA[login]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1333.00</x>
+            <y>44.00</y>
+        </location>
+        <size>
+            <width>166.00</width>
+            <height>120.00</height>
+        </size>
+        <zorder>0</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <notNull><![CDATA[0]]></notNull>
+            <objectComment><![CDATA[Primary Key for the user]]></objectComment>
+            <uid><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[login]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[1A10F97B-CF23-49C3-BB96-C4B0A1F6EF61]]></uid>
+            <unique><![CDATA[1]]></unique>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[fullname]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[9CDC0DB8-BE63-4C14-9A5E-C13ACB49F705]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[password]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <forcedUnique><![CDATA[0]]></forcedUnique>
+            <uid><![CDATA[B570D8DD-D65E-456C-BD9A-371DBDFFBD5B]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[tzname]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[tzname]]></temporaryOriginalName>
+            <uid><![CDATA[A5104793-AF91-4431-9685-0D0EFD2ADEDF]]></uid>
+        </SQLField>
+        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
+        <labelName><![CDATA[authentication]]></labelName>
+        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.login]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></uid>
+    </SQLTable>
+    <SQLTable>
+        <name><![CDATA[topic]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1686.00</x>
+            <y>532.00</y>
+        </location>
+        <size>
+            <width>166.00</width>
+            <height>100.00</height>
+        </size>
+        <zorder>3</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[D9C09D16-5EF1-4E48-8EE2-DD0FFDC18607]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[name]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[4164851A-16EA-4442-8303-8D1D8BBBD31D]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[description]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[desc]]></temporaryOriginalName>
+            <uid><![CDATA[674F5402-A92A-4A1B-8B65-27F0A65BB454]]></uid>
+        </SQLField>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.topic]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></uid>
+    </SQLTable>
+    <SQLTable>
+        <name><![CDATA[activity_type]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>2263.00</x>
+            <y>464.00</y>
+        </location>
+        <size>
+            <width>141.00</width>
+            <height>80.00</height>
+        </size>
+        <zorder>5</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <primaryKey>1</primaryKey>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[8B5D1ACC-B0B6-476F-8CF7-8D74D6238756]]></uid>
+            <unique><![CDATA[1]]></unique>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[name]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[042BF2E0-FBCE-4977-9E11-084B1EA5788B]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[description]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[desc]]></temporaryOriginalName>
+            <uid><![CDATA[F8319815-1811-4330-B319-2FC081C235E3]]></uid>
+        </SQLField>
+        <labelWindowIndex><![CDATA[7]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.activity_type]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></uid>
+    </SQLTable>
+    <SQLTable>
+        <name><![CDATA[session]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>1824.00</x>
+            <y>25.00</y>
+        </location>
+        <size>
+            <width>377.00</width>
+            <height>172.00</height>
+        </size>
+        <zorder>2</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <primaryKey>1</primaryKey>
+            <autoIncrement><![CDATA[1]]></autoIncrement>
+            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
+            <uid><![CDATA[F7D61799-3C0F-4DD0-9D33-B653FC32F72A]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[login_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>login</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[login]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></referencesTableUID>
+            <temporaryOriginalName><![CDATA[user_id]]></temporaryOriginalName>
+            <uid><![CDATA[828E6E7E-0785-4B16-B184-911D470FC2B4]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[ab_session_id]]></name>
+            <type><![CDATA[BIGINT]]></type>
+            <temporaryOriginalName><![CDATA[session_id]]></temporaryOriginalName>
+            <uid><![CDATA[48999E17-308F-4337-BC87-8D9E25B6422C]]></uid>
+            <unique><![CDATA[1]]></unique>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[tzname]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <temporaryOriginalName><![CDATA[tzname]]></temporaryOriginalName>
+            <uid><![CDATA[9C2EA175-7F90-4D40-88F2-E7D4D8DD7366]]></uid>
+        </SQLField>
+        <SQLIndex>
+            <name><![CDATA[session_ab_session_id]]></name>
+            <fieldName><![CDATA[ab_session_id]]></fieldName>
+            <SQLIndexEntry>
+                <name><![CDATA[ab_session_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[48999E17-308F-4337-BC87-8D9E25B6422C]]></fieldUid>
+            </SQLIndexEntry>
+            <indexType><![CDATA[UNIQUE]]></indexType>
+            <uid><![CDATA[09DA758C-A206-4EB8-AD8C-38081D6108F5]]></uid>
+        </SQLIndex>
+        <labelWindowIndex><![CDATA[3]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[auto.session]]></temporaryOriginalName>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[EA0931D6-E3B7-4381-988E-3E4B9AD0D8B7]]></uid>
+    </SQLTable>
+    <SQLDocumentInfo>
+        <encodedPrintInfo><![CDATA[BAtzdHJlYW10eXBlZIHoA4QBQISEhAtOU1ByaW50SW5mbwGEhAhOU09iamVjdACF
+koSEhBNOU011dGFibGVEaWN0aW9uYXJ5AISEDE5TRGljdGlvbmFyeQCUhAFpDZKE
+hIQITlNTdHJpbmcBlIQBKw5OU1BNUGFnZUZvcm1hdIaShISEDU5TTXV0YWJsZURh
+dGEAhIQGTlNEYXRhAJSXgaoZhAdbNjU3MGNdPD94bWwgdmVyc2lvbj0iMS4wIiBl
+bmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHBsaXN0IFBVQkxJQyAiLS8vQXBw
+bGUvL0RURCBQTElTVCAxLjAvL0VOIiAiaHR0cDovL3d3dy5hcHBsZS5jb20vRFRE
+cy9Qcm9wZXJ0eUxpc3QtMS4wLmR0ZCI+CjxwbGlzdCB2ZXJzaW9uPSIxLjAiPgo8
+ZGljdD4KCTxrZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1Ib3Jpem9u
+dGFsUmVzPC9rZXk+Cgk8ZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNr
+ZXQuY3JlYXRvcjwva2V5PgoJCTxzdHJpbmc+Y29tLmFwcGxlLmpvYnRpY2tldDwv
+c3RyaW5nPgoJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5pdGVtQXJyYXk8
+L2tleT4KCQk8YXJyYXk+CgkJCTxkaWN0PgoJCQkJPGtleT5jb20uYXBwbGUucHJp
+bnQuUGFnZUZvcm1hdC5QTUhvcml6b250YWxSZXM8L2tleT4KCQkJCTxyZWFsPjcy
+PC9yZWFsPgoJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxh
+Zzwva2V5PgoJCQkJPGludGVnZXI+MDwvaW50ZWdlcj4KCQkJPC9kaWN0PgoJCTwv
+YXJyYXk+Cgk8L2RpY3Q+Cgk8a2V5PmNvbS5hcHBsZS5wcmludC5QYWdlRm9ybWF0
+LlBNT3JpZW50YXRpb248L2tleT4KCTxkaWN0PgoJCTxrZXk+Y29tLmFwcGxlLnBy
+aW50LnRpY2tldC5jcmVhdG9yPC9rZXk+CgkJPHN0cmluZz5jb20uYXBwbGUuam9i
+dGlja2V0PC9zdHJpbmc+CgkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0Lml0
+ZW1BcnJheTwva2V5PgoJCTxhcnJheT4KCQkJPGRpY3Q+CgkJCQk8a2V5PmNvbS5h
+cHBsZS5wcmludC5QYWdlRm9ybWF0LlBNT3JpZW50YXRpb248L2tleT4KCQkJCTxp
+bnRlZ2VyPjE8L2ludGVnZXI+CgkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNr
+ZXQuc3RhdGVGbGFnPC9rZXk+CgkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJCQk8
+L2RpY3Q+CgkJPC9hcnJheT4KCTwvZGljdD4KCTxrZXk+Y29tLmFwcGxlLnByaW50
+LlBhZ2VGb3JtYXQuUE1TY2FsaW5nPC9rZXk+Cgk8ZGljdD4KCQk8a2V5PmNvbS5h
+cHBsZS5wcmludC50aWNrZXQuY3JlYXRvcjwva2V5PgoJCTxzdHJpbmc+Y29tLmFw
+cGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRp
+Y2tldC5pdGVtQXJyYXk8L2tleT4KCQk8YXJyYXk+CgkJCTxkaWN0PgoJCQkJPGtl
+eT5jb20uYXBwbGUucHJpbnQuUGFnZUZvcm1hdC5QTVNjYWxpbmc8L2tleT4KCQkJ
+CTxyZWFsPjE8L3JlYWw+CgkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQu
+c3RhdGVGbGFnPC9rZXk+CgkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJCQk8L2Rp
+Y3Q+CgkJPC9hcnJheT4KCTwvZGljdD4KCTxrZXk+Y29tLmFwcGxlLnByaW50LlBh
+Z2VGb3JtYXQuUE1WZXJ0aWNhbFJlczwva2V5PgoJPGRpY3Q+CgkJPGtleT5jb20u
+YXBwbGUucHJpbnQudGlja2V0LmNyZWF0b3I8L2tleT4KCQk8c3RyaW5nPmNvbS5h
+cHBsZS5qb2J0aWNrZXQ8L3N0cmluZz4KCQk8a2V5PmNvbS5hcHBsZS5wcmludC50
+aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJPGFycmF5PgoJCQk8ZGljdD4KCQkJCTxr
+ZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1WZXJ0aWNhbFJlczwva2V5
+PgoJCQkJPHJlYWw+NzI8L3JlYWw+CgkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC50
+aWNrZXQuc3RhdGVGbGFnPC9rZXk+CgkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJ
+CQk8L2RpY3Q+CgkJPC9hcnJheT4KCTwvZGljdD4KCTxrZXk+Y29tLmFwcGxlLnBy
+aW50LlBhZ2VGb3JtYXQuUE1WZXJ0aWNhbFNjYWxpbmc8L2tleT4KCTxkaWN0PgoJ
+CTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9yPC9rZXk+CgkJPHN0
+cmluZz5jb20uYXBwbGUuam9idGlja2V0PC9zdHJpbmc+CgkJPGtleT5jb20uYXBw
+bGUucHJpbnQudGlja2V0Lml0ZW1BcnJheTwva2V5PgoJCTxhcnJheT4KCQkJPGRp
+Y3Q+CgkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC5QYWdlRm9ybWF0LlBNVmVydGlj
+YWxTY2FsaW5nPC9rZXk+CgkJCQk8cmVhbD4xPC9yZWFsPgoJCQkJPGtleT5jb20u
+YXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJPGludGVnZXI+
+MDwvaW50ZWdlcj4KCQkJPC9kaWN0PgoJCTwvYXJyYXk+Cgk8L2RpY3Q+Cgk8a2V5
+PmNvbS5hcHBsZS5wcmludC5zdWJUaWNrZXQucGFwZXJfaW5mb190aWNrZXQ8L2tl
+eT4KCTxkaWN0PgoJCTxrZXk+UE1QUERQYXBlckNvZGVOYW1lPC9rZXk+CgkJPGRp
+Y3Q+CgkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9yPC9rZXk+
+CgkJCTxzdHJpbmc+Y29tLmFwcGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJCQk8a2V5
+PmNvbS5hcHBsZS5wcmludC50aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJCTxhcnJh
+eT4KCQkJCTxkaWN0PgoJCQkJCTxrZXk+UE1QUERQYXBlckNvZGVOYW1lPC9rZXk+
+CgkJCQkJPHN0cmluZz5MZXR0ZXI8L3N0cmluZz4KCQkJCQk8a2V5PmNvbS5hcHBs
+ZS5wcmludC50aWNrZXQuc3RhdGVGbGFnPC9rZXk+CgkJCQkJPGludGVnZXI+MDwv
+aW50ZWdlcj4KCQkJCTwvZGljdD4KCQkJPC9hcnJheT4KCQk8L2RpY3Q+CgkJPGtl
+eT5QTVBQRFRyYW5zbGF0aW9uU3RyaW5nUGFwZXJOYW1lPC9rZXk+CgkJPGRpY3Q+
+CgkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9yPC9rZXk+CgkJ
+CTxzdHJpbmc+Y29tLmFwcGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJCQk8a2V5PmNv
+bS5hcHBsZS5wcmludC50aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJCTxhcnJheT4K
+CQkJCTxkaWN0PgoJCQkJCTxrZXk+UE1QUERUcmFuc2xhdGlvblN0cmluZ1BhcGVy
+TmFtZTwva2V5PgoJCQkJCTxzdHJpbmc+VVMgTGV0dGVyPC9zdHJpbmc+CgkJCQkJ
+PGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJ
+CTxpbnRlZ2VyPjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJ
+PC9kaWN0PgoJCTxrZXk+UE1UaW9nYVBhcGVyTmFtZTwva2V5PgoJCTxkaWN0PgoJ
+CQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQuY3JlYXRvcjwva2V5PgoJCQk8
+c3RyaW5nPmNvbS5hcHBsZS5qb2J0aWNrZXQ8L3N0cmluZz4KCQkJPGtleT5jb20u
+YXBwbGUucHJpbnQudGlja2V0Lml0ZW1BcnJheTwva2V5PgoJCQk8YXJyYXk+CgkJ
+CQk8ZGljdD4KCQkJCQk8a2V5PlBNVGlvZ2FQYXBlck5hbWU8L2tleT4KCQkJCQk8
+c3RyaW5nPm5hLWxldHRlcjwvc3RyaW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnBy
+aW50LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRl
+Z2VyPgoJCQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNv
+bS5hcHBsZS5wcmludC5QYWdlRm9ybWF0LlBNQWRqdXN0ZWRQYWdlUmVjdDwva2V5
+PgoJCTxkaWN0PgoJCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQuY3JlYXRv
+cjwva2V5PgoJCQk8c3RyaW5nPmNvbS5hcHBsZS5qb2J0aWNrZXQ8L3N0cmluZz4K
+CQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0Lml0ZW1BcnJheTwva2V5PgoJ
+CQk8YXJyYXk+CgkJCQk8ZGljdD4KCQkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC5Q
+YWdlRm9ybWF0LlBNQWRqdXN0ZWRQYWdlUmVjdDwva2V5PgoJCQkJCTxhcnJheT4K
+CQkJCQkJPGludGVnZXI+MDwvaW50ZWdlcj4KCQkJCQkJPGludGVnZXI+MDwvaW50
+ZWdlcj4KCQkJCQkJPHJlYWw+NzM0PC9yZWFsPgoJCQkJCQk8cmVhbD41NzY8L3Jl
+YWw+CgkJCQkJPC9hcnJheT4KCQkJCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNr
+ZXQuc3RhdGVGbGFnPC9rZXk+CgkJCQkJPGludGVnZXI+MDwvaW50ZWdlcj4KCQkJ
+CTwvZGljdD4KCQkJPC9hcnJheT4KCQk8L2RpY3Q+CgkJPGtleT5jb20uYXBwbGUu
+cHJpbnQuUGFnZUZvcm1hdC5QTUFkanVzdGVkUGFwZXJSZWN0PC9rZXk+CgkJPGRp
+Y3Q+CgkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9yPC9rZXk+
+CgkJCTxzdHJpbmc+Y29tLmFwcGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJCQk8a2V5
+PmNvbS5hcHBsZS5wcmludC50aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJCTxhcnJh
+eT4KCQkJCTxkaWN0PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3Jt
+YXQuUE1BZGp1c3RlZFBhcGVyUmVjdDwva2V5PgoJCQkJCTxhcnJheT4KCQkJCQkJ
+PHJlYWw+LTE4PC9yZWFsPgoJCQkJCQk8cmVhbD4tMTg8L3JlYWw+CgkJCQkJCTxy
+ZWFsPjc3NDwvcmVhbD4KCQkJCQkJPHJlYWw+NTk0PC9yZWFsPgoJCQkJCTwvYXJy
+YXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwv
+a2V5PgoJCQkJCTxpbnRlZ2VyPjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwv
+YXJyYXk+CgkJPC9kaWN0PgoJCTxrZXk+Y29tLmFwcGxlLnByaW50LlBhcGVySW5m
+by5QTVBhcGVyTmFtZTwva2V5PgoJCTxkaWN0PgoJCQk8a2V5PmNvbS5hcHBsZS5w
+cmludC50aWNrZXQuY3JlYXRvcjwva2V5PgoJCQk8c3RyaW5nPmNvbS5hcHBsZS5q
+b2J0aWNrZXQ8L3N0cmluZz4KCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0
+Lml0ZW1BcnJheTwva2V5PgoJCQk8YXJyYXk+CgkJCQk8ZGljdD4KCQkJCQk8a2V5
+PmNvbS5hcHBsZS5wcmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQkJ
+CQk8c3RyaW5nPm5hLWxldHRlcjwvc3RyaW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxl
+LnByaW50LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9p
+bnRlZ2VyPgoJCQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5
+PmNvbS5hcHBsZS5wcmludC5QYXBlckluZm8uUE1VbmFkanVzdGVkUGFnZVJlY3Q8
+L2tleT4KCQk8ZGljdD4KCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LmNy
+ZWF0b3I8L2tleT4KCQkJPHN0cmluZz5jb20uYXBwbGUuam9idGlja2V0PC9zdHJp
+bmc+CgkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5pdGVtQXJyYXk8L2tl
+eT4KCQkJPGFycmF5PgoJCQkJPGRpY3Q+CgkJCQkJPGtleT5jb20uYXBwbGUucHJp
+bnQuUGFwZXJJbmZvLlBNVW5hZGp1c3RlZFBhZ2VSZWN0PC9rZXk+CgkJCQkJPGFy
+cmF5PgoJCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJCQkJCQk8aW50ZWdlcj4w
+PC9pbnRlZ2VyPgoJCQkJCQk8cmVhbD43MzQ8L3JlYWw+CgkJCQkJCTxyZWFsPjU3
+NjwvcmVhbD4KCQkJCQk8L2FycmF5PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50
+LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2Vy
+PgoJCQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5h
+cHBsZS5wcmludC5QYXBlckluZm8uUE1VbmFkanVzdGVkUGFwZXJSZWN0PC9rZXk+
+CgkJPGRpY3Q+CgkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9y
+PC9rZXk+CgkJCTxzdHJpbmc+Y29tLmFwcGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJ
+CQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJ
+CTxhcnJheT4KCQkJCTxkaWN0PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LlBh
+cGVySW5mby5QTVVuYWRqdXN0ZWRQYXBlclJlY3Q8L2tleT4KCQkJCQk8YXJyYXk+
+CgkJCQkJCTxyZWFsPi0xODwvcmVhbD4KCQkJCQkJPHJlYWw+LTE4PC9yZWFsPgoJ
+CQkJCQk8cmVhbD43NzQ8L3JlYWw+CgkJCQkJCTxyZWFsPjU5NDwvcmVhbD4KCQkJ
+CQk8L2FycmF5PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5zdGF0
+ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRlZ2VyPgoJCQkJPC9kaWN0
+PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5wcmludC5Q
+YXBlckluZm8ucHBkLlBNUGFwZXJOYW1lPC9rZXk+CgkJPGRpY3Q+CgkJCTxrZXk+
+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jcmVhdG9yPC9rZXk+CgkJCTxzdHJpbmc+
+Y29tLmFwcGxlLmpvYnRpY2tldDwvc3RyaW5nPgoJCQk8a2V5PmNvbS5hcHBsZS5w
+cmludC50aWNrZXQuaXRlbUFycmF5PC9rZXk+CgkJCTxhcnJheT4KCQkJCTxkaWN0
+PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LlBhcGVySW5mby5wcGQuUE1QYXBl
+ck5hbWU8L2tleT4KCQkJCQk8c3RyaW5nPkxldHRlcjwvc3RyaW5nPgoJCQkJCTxr
+ZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8
+aW50ZWdlcj4wPC9pbnRlZ2VyPgoJCQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwv
+ZGljdD4KCQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQuQVBJVmVyc2lvbjwv
+a2V5PgoJCTxzdHJpbmc+MDAuMjA8L3N0cmluZz4KCQk8a2V5PmNvbS5hcHBsZS5w
+cmludC50aWNrZXQudHlwZTwva2V5PgoJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50
+LlBhcGVySW5mb1RpY2tldDwvc3RyaW5nPgoJPC9kaWN0PgoJPGtleT5jb20uYXBw
+bGUucHJpbnQudGlja2V0LkFQSVZlcnNpb248L2tleT4KCTxzdHJpbmc+MDAuMjA8
+L3N0cmluZz4KCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC50eXBlPC9rZXk+
+Cgk8c3RyaW5nPmNvbS5hcHBsZS5wcmludC5QYWdlRm9ybWF0VGlja2V0PC9zdHJp
+bmc+CjwvZGljdD4KPC9wbGlzdD4KhpKEmZkLTlNQYXBlclNpemWGkoSEhAdOU1Zh
+bHVlAJSEASqEhAt7Q0dTaXplPWRkfZ+BZAKBGAOGkoSZmRZOU0hvcml6b250YWxs
+eUNlbnRlcmVkhpKEhIQITlNOdW1iZXIAn56EhAFjoQGGkoSZmRROU1ZlcnRpY2Fs
+bHlDZW50ZXJlZIaSopKEmZkMTlNMZWZ0TWFyZ2luhpKEo56EhAFkohKGkoSZmQ1O
+U1JpZ2h0TWFyZ2luhpKEo56oohKGkoSZmQtOU1RvcE1hcmdpboaShKOeqKIehpKE
+mZkNTlNPcmllbnRhdGlvboaShKOehIQBcaMAhpKEmZkVTlNIb3Jpem9uYWxQYWdp
+bmF0aW9uhpKukoSZmRROU1ZlcnRpY2FsUGFnaW5hdGlvboaSrpKEmZkOTlNCb3R0
+b21NYXJnaW6GkoSjnqiiNIaShJmZD05TU2NhbGluZ0ZhY3RvcoaShKOeqKIBhpKE
+mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
+]]></encodedPrintInfo>
+        <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
+        <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
+        <dropTableOption><![CDATA[0]]></dropTableOption>
+        <exportDialect><![CDATA[mysql]]></exportDialect>
+        <fileversion><![CDATA[3.1]]></fileversion>
+        <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
+        <generatorVersion><![CDATA[2.0]]></generatorVersion>
+        <hideFieldIcons><![CDATA[0]]></hideFieldIcons>
+        <hideFieldTypes><![CDATA[0]]></hideFieldTypes>
+        <pageBoundariesVisible><![CDATA[0]]></pageBoundariesVisible>
+        <PageGridVisible><![CDATA[0]]></PageGridVisible>
+        <sidebarIndex><![CDATA[0]]></sidebarIndex>
+        <snapToGrid><![CDATA[0]]></snapToGrid>
+        <SourceSidebarWidth><![CDATA[388.000000]]></SourceSidebarWidth>
+        <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
+        <windowHeight><![CDATA[842.000000]]></windowHeight>
+        <windowLocationX><![CDATA[441.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[35.000000]]></windowLocationY>
+        <windowScrollOrigin><![CDATA[{1244, 0}]]></windowScrollOrigin>
+        <windowWidth><![CDATA[954.000000]]></windowWidth>
+    </SQLDocumentInfo>
+    <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>
+    <containerName><![CDATA[model controller orginal container]]></containerName>
+    <defaultLabelExpanded><![CDATA[1]]></defaultLabelExpanded>
+    <SQLObjectLabel>
+        <name><![CDATA[comments]]></name>
+        <colorString><![CDATA[{0.841398,0.674705,0.837643,1}]]></colorString>
+        <expanded><![CDATA[1]]></expanded>
+        <uid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></uid>
+    </SQLObjectLabel>
+    <SQLObjectLabel>
+        <name><![CDATA[authentication]]></name>
+        <colorString><![CDATA[{0.8,1,1,0.8}]]></colorString>
+        <expanded><![CDATA[1]]></expanded>
+        <uid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></uid>
+    </SQLObjectLabel>
+    <SQLObjectLabel>
+        <name><![CDATA[roles]]></name>
+        <colorString><![CDATA[{1,0.828828,0,1}]]></colorString>
+        <uid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></uid>
+    </SQLObjectLabel>
+</SQLContainer>

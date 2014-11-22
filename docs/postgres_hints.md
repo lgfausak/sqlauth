@@ -5,7 +5,7 @@ Postgres setup on linux
 ## Summary
 
 Quickly set up a Postgres environment. The easiest way is to use the native
-installation techniques.  Here is a good write up at [postgres installation]. It
+installation techniques.  Here is a good write up at [postgres installation][]. It
 basically boils down to:
 
 * sudo apt-get install postgresql postgresql-contrib
@@ -22,7 +22,7 @@ PATH=/usr/local/pgsql/bin:$PATH
 PGDATA=/var/local/pgsql/data; export PGDATA
 3. logout
 4. log back in
-5. Download from [postgres download]
+5. Download from [postgres download][]
 6. Make sure that /usr/local/pgsql doesn't exist (mv or rm it if it does)
 7. unpack the downloaded source
 8. cd to unpacked directory

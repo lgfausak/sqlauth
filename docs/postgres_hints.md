@@ -5,7 +5,7 @@ Postgres setup on linux
 ## Summary
 
 Quickly set up a Postgres environment. The easiest way is to use the native
-installation techniques.  Here is a good write up at [postgres installation][Digital Ocean]. It
+installation techniques.  Here is a good write up at [postgres installation][]. It
 basically boils down to:
 
 * sudo apt-get install postgresql postgresql-contrib
@@ -48,6 +48,6 @@ pg_ctl -D /var/local/pgsql/data -l logfile start
 
 *** that is it, the database autobahn is up with autouser accessing it ***
 
-[postgres installation]:https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04
+[postgres installation]:https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04 "Digital Ocean"
 [postgres download]:http://www.postgresql.org/ftp/source/
 

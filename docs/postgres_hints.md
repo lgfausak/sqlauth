@@ -36,15 +36,15 @@ architecture then this really speeds things up)
 13. ln -s /usr/local/pgsql_version /usr/local/pgsql
 * note, i do these steps to have more than one version at a time on my
 machine, you can omit all of this if you don't care.
-14) su to postgres
-15) initdb --auth-host=trust
+14. su to postgres
+15. initdb --auth-host=trust
 *** start the database, this can be placed in /etc/init.d/postgresql with some effort... ***
-16) cat > ~/postgres_start.sh
+16. cat > ~/postgres_start.sh
 pg_ctl -D /var/local/pgsql/data -l logfile start
 ^D
-17) ~/postgres_start.sh
-18) createdb -Upostgres autobahn
-19) createuser -Upostgres -s autouser
+17. ~/postgres_start.sh
+18. createdb -Upostgres autobahn
+19. createuser -Upostgres -s autouser
 
 *** that is it, the database autobahn is up with autouser accessing it ***
 

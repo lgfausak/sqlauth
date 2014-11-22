@@ -48,6 +48,6 @@ pg_ctl -D /var/local/pgsql/data -l logfile start
 
 *** that is it, the database autobahn is up with autouser accessing it ***
 
-[postgres installation]:(https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)
-[postgres download]:(http://www.postgresql.org/ftp/source/)
+[postgres installation]:https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04
+[postgres download]:http://www.postgresql.org/ftp/source/
 

@@ -48,7 +48,14 @@ A picture is worth 1,000 words:
 
 Before we can start, we have to have a postgres installation. The example here uses a
 database named autobahn, and a user with super user privileges called autouser. Here are
-some [notes](docs/postgres_hints.md) I put together: 
+some [notes](docs/postgres_hints.md) I put together.  The starting point here should be
+an installed postgres installation, with a postgres superuser named 'autouser'. Given that,
+from the linux command line:
+
+```
+dropdb -Uautouser autobahn
+createdb -Uautouser autobahn
+```
 
 [schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
 

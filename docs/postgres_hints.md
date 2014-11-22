@@ -5,7 +5,7 @@ Postgres setup on linux
 ## Summary
 
 Quickly set up a Postgres environment. The easiest way is to use the native
-installation techniques.  Here is a good write up at [postgres installation][]. It
+installation techniques.  Here is a good write up at [postgres installation][Digital Ocean]. It
 basically boils down to:
 
 * sudo apt-get install postgresql postgresql-contrib

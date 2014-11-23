@@ -68,6 +68,7 @@ setup(
    },
    entry_points = {
       'console_scripts': [
+         'sqlpginit = sqlauth.scripts.sqlPGinit:run',
          'sqlauthrouter = sqlauth.scripts.basicrouter:run',
       ]},
    packages = find_packages(),

@@ -75,7 +75,7 @@ setup(
    package_data = {
        ".": [ "LICENSE" ]
    },
-   data_files=[('sqlauth', glob('config/*.conf') + glob('config/*.sql'))],
+   data_files=[('sqlauth', glob('config/*.conf'))],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##

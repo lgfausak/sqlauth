@@ -1,0 +1,9 @@
+# try again
+include README.md
+include LICENSE
+
+# taskforce files
+include config/*.conf
+
+# database instantiation files
+include config/*.sql

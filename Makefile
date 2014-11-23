@@ -16,8 +16,10 @@ incver:
 # also, the file will be uploaded to pypi with the new version
 #
 pypi:
-	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"') > $(TFILE); mv $(TFILE) $(VFILE)
+	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"') > $(TFILE); mv $(TFILE) $(VFILE); echo $$nv > $(TFILE)
 	python setup.py sdist upload
+	git commit -m 'sync with pypi version: '`cat $(TFILE)` .
+	git push
 
 #
 # register, only do this once per project

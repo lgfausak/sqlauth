@@ -17,8 +17,10 @@
 ##
 ###############################################################################
 
+from __future__ import print_function
 
 import sys, argparse, os
+import subprocess, string
 
 ## parse command line arguments
 ##
@@ -57,6 +59,8 @@ WARNING!!! This is highly destructive!!!
 
 """)
 
+p.add_argument('-q', '--quiet', action='store_true', dest='quiet',
+            default=False, help='Suppress error output as much as humanly possible')
 p.add_argument('-b', '--backwards', action='store_true', dest='backwards',
             default=False, help='run command backwards (undo)')
 p.add_argument('-n', '--name', action='store', dest='dbname', default=def_dbname,
@@ -81,13 +85,13 @@ args = p.parse_args()
 #
 cmds = [
     'adduser --system --disabled-password --home {dbdirectory} --shell /bin/sh {superuser}',
-    'echo "PGDATA={dbdirectory}; export PGDATA" > {profile}',
-    'echo "PATH={xdir}:$PATH" >> {profile}',
+    'makeprofile',
     'sudo -i rm -rf {dbdirectory}',
     'mkdir -p {dbdirectory}',
     'chown {superuser} {dbdirectory}',
     'sudo -i -u {superuser} {xdir}/initdb --auth-host=trust {dbdirectory}',
-    'sudo -i -u postgres {xdir}/pg_ctl -D {dbdirectory} -l {dbdirectory}/postgres.log start; sleep 5',
+    'sudo -i -u postgres {xdir}/pg_ctl -D {dbdirectory} -l {dbdirectory}/postgres.log start',
+    'sleep 5',
     'sudo -i -u postgres {xdir}/createuser -h localhost -U{superuser} --createdb --login --superuser {dbuser}',
     'sudo -i -u postgres {xdir}/createdb -h localhost -U {superuser} {dbname}',
     'psql -U{dbuser} -h localhost -f {configdir}/PG.sql {dbname}',
@@ -123,9 +127,27 @@ clist = cmds
 if args.backwards:
     clist = backwards_cmds
 
+rv = 0
 for i in clist:
     cs = i.format(**cag)
-    print "{}".format(cs)
+    css = cs.split()
+    if not args.quiet:
+        print("{}".format(cs), file=sys.stdout)
     if args.apply:
-        os.system(cs)
+        try:
+            if css[0] == 'makeprofile':
+                f = open(cag['profile'],'w')
+                f.write("PGDATA={dbdirectory}; export PGDATA\n".format(**cag))
+                f.write("PATH={xdir}:$PATH\n".format(**cag))
+                f.close()
+            else:
+                subprocess.check_call(css)
+        except:
+            e = sys.exc_info()[0]
+            es = str(e)
+            rv = 1
+            if not args.quiet:
+                print("ERROR:", file=sys.stderr)
+                print("\t\t" + string.replace(es, "\n", "\n\t\t"), file=sys.stderr)
 
+sys.exit(rv)

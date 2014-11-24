@@ -46,29 +46,26 @@ A picture is worth 1,000 words:
 
 ## Postgres Installation Hints
 
-Before we can start, we have to have a postgres installation. The example here uses a
-database named autobahn, and a user with super user privileges called autouser. Here are
-some [notes](docs/postgres_hints.md) I put together.  The starting point here should be
-an installed postgres installation, with a postgres superuser named 'autouser'. Given that,
-from the linux command line:
+Before we can start, we have to have a postgres installation. The
+example here uses a database named autobahn, and a user with super user
+privileges called autouser. Here are some [notes](docs/postgres_hints.md)
+I put together.  The starting point here should be an installed postgres
+installation, with a postgres superuser named 'autouser'.
 
-```
-dropdb -Uautouser autobahn
-createdb -Uautouser autobahn
-```
-
-I have included a quick setup script for postgres.  You can run it like this:
+I have included a quick setup script for postgres.  You can run it
+like this:
 
 ```
 sudo sqlpginit -a
 ```
 
-This will print out all of the commands necessary to configure postgres (assuming it
-it already installed).  The -a flag actually runs the commands.  After running this
-command the postgres installation will be recreated from scratch.  This is a very destructive command.
-You have been warned!  Anyway, this command does an initdb, creates the database, creates
-the schema in the database, and loads the initial data. When this command completes successfully
-the database is ready for the sqlauthrouter.
+This will run all of the commands necessary to configure postgres.  The -a
+flag actually runs the commands, leave it off to just 'see' the commands.
+After running this command the postgres installation will be recreated
+from scratch.  This is a very destructive command.  You have been warned!
+Anyway, this command does an initdb, creates the database, creates the
+schema in the database, and loads the initial data. When this command
+completes successfully the database is ready for the sqlauthrouter.
 
 [schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
 

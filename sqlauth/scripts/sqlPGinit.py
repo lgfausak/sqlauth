@@ -71,6 +71,8 @@ p.add_argument('-d', '--directory', action='store', dest='dbdirectory', default=
 		help='the superuser for the postgres installation, normally "postgres", default is: ' + def_dbdirectory)
 p.add_argument('-x', '--executabledirectory', action='store', dest='xdir', default=def_xdir,
 		help='the executable path for all executables postgres, default is: ' + def_xdir)
+p.add_argument('-a', '--apply', action='store_true', dest='apply',
+            default=False, help='apply changes (if not specified, the commands to run are listed but not actually applied')
 
 args = p.parse_args()
 
@@ -121,6 +123,7 @@ if args.backwards:
 
 for i in clist:
     cs = i.format(**cag)
-    print "running: {}".format(cs)
-    os.system(cs)
+    print "{}".format(cs)
+    if args.apply:
+        os.system(cs)
 

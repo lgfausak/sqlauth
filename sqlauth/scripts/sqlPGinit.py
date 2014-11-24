@@ -80,7 +80,7 @@ args = p.parse_args()
 # these are the commands we are gonna run, in order
 #
 cmds = [
-    'adduser --disabled-password --home {dbdirectory} {superuser}',
+    'adduser --system --disabled-password --home {dbdirectory} --shell /bin/sh {superuser}',
     'echo "PGDATA={dbdirectory}; export PGDATA" > {profile}',
     'echo "PATH={xdir}:$PATH" >> {profile}',
     'sudo -i rm -rf {dbdirectory}',
@@ -90,6 +90,8 @@ cmds = [
     'sudo -i -u postgres {xdir}/pg_ctl -D {dbdirectory} -l {dbdirectory}/postgres.log start; sleep 5',
     'sudo -i -u postgres {xdir}/createuser -h localhost -U{superuser} --createdb --login --superuser {dbuser}',
     'sudo -i -u postgres {xdir}/createdb -h localhost -U {superuser} {dbname}',
+    'psql -U{dbuser} -h localhost -f {configdir}/PG.sql {dbname}',
+
 
 ]
 

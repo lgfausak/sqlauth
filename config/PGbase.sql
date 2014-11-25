@@ -21,9 +21,10 @@ PRIMARY KEY (id)
 
 CREATE TABLE role
 (
-id INTEGER UNIQUE,
+id SERIAL,
 name TEXT,
-description TEXT
+description TEXT,
+PRIMARY KEY (id)
 );
 
 CREATE TABLE session
@@ -49,7 +50,7 @@ CREATE TABLE topicrole
 (
 id SERIAL NOT NULL,
 topic_id INTEGER NOT NULL,
-role_id INTEGER NOT NULL,
+role_id SERIAL NOT NULL,
 type_id TEXT NOT NULL,
 allow BOOLEAN,
 PRIMARY KEY (id)
@@ -67,7 +68,8 @@ CREATE TABLE sqlauth
 (
 component TEXT,
 version TEXT,
-profile JSONB
+profile JSONB,
+PRIMARY KEY (component)
 );
 
 CREATE TABLE topic

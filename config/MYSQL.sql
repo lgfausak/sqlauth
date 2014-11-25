@@ -10,7 +10,7 @@ PRIMARY KEY (id)
 
 CREATE TABLE login
 (
-id INTEGER AUTO_INCREMENT COMMENT 'Primary Key for the user',
+id SERIAL AUTO_INCREMENT COMMENT 'Primary Key for the user',
 login TEXT UNIQUE,
 fullname TEXT,
 password TEXT,
@@ -20,14 +20,15 @@ PRIMARY KEY (id)
 
 CREATE TABLE role
 (
-id INTEGER UNIQUE,
+id SERIAL,
 name TEXT,
-description TEXT
+description TEXT,
+PRIMARY KEY (id)
 );
 
 CREATE TABLE session
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
+id SERIAL NOT NULL AUTO_INCREMENT,
 login_id INTEGER,
 ab_session_id BIGINT UNIQUE,
 tzname TEXT,
@@ -36,7 +37,7 @@ PRIMARY KEY (id)
 
 CREATE TABLE activity
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
+id SERIAL NOT NULL AUTO_INCREMENT,
 session_id INTEGER,
 topic_name TEXT,
 type_id TEXT,
@@ -46,9 +47,9 @@ PRIMARY KEY (id)
 
 CREATE TABLE topicrole
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
+id SERIAL NOT NULL AUTO_INCREMENT,
 topic_id INTEGER NOT NULL,
-role_id INTEGER NOT NULL,
+role_id SERIAL NOT NULL,
 type_id TEXT NOT NULL,
 allow BOOLEAN,
 PRIMARY KEY (id)
@@ -56,7 +57,7 @@ PRIMARY KEY (id)
 
 CREATE TABLE loginrole
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
+id SERIAL NOT NULL AUTO_INCREMENT,
 login_id INTEGER,
 role_id INTEGER,
 PRIMARY KEY (id)
@@ -66,12 +67,13 @@ CREATE TABLE sqlauth
 (
 component TEXT,
 version TEXT,
-profile JSONB
+profile JSONB,
+PRIMARY KEY (component)
 );
 
 CREATE TABLE topic
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
+id SERIAL NOT NULL AUTO_INCREMENT,
 name TEXT,
 description TEXT,
 PRIMARY KEY (id)

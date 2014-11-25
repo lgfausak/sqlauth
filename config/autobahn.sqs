@@ -35,7 +35,7 @@
         <zorder>13</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <notNull><![CDATA[1]]></notNull>
@@ -154,7 +154,7 @@
         <zorder>6</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <notNull><![CDATA[1]]></notNull>
@@ -178,7 +178,7 @@
         </SQLField>
         <SQLField>
             <name><![CDATA[role_id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <referencesField>id</referencesField>
             <referencesTable>role</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
@@ -258,13 +258,13 @@
             <y>258.00</y>
         </location>
         <size>
-            <width>173.00</width>
-            <height>140.00</height>
+            <width>203.00</width>
+            <height>120.00</height>
         </size>
         <zorder>4</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <notNull><![CDATA[1]]></notNull>
@@ -394,9 +394,11 @@
         <zorder>1</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
+            <primaryKey>1</primaryKey>
             <forcedUnique><![CDATA[1]]></forcedUnique>
             <uid><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></uid>
+            <unique><![CDATA[0]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[name]]></name>
@@ -426,13 +428,13 @@
             <y>44.00</y>
         </location>
         <size>
-            <width>166.00</width>
+            <width>193.00</width>
             <height>120.00</height>
         </size>
         <zorder>0</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <forcedUnique><![CDATA[1]]></forcedUnique>
@@ -481,13 +483,13 @@
             <y>532.00</y>
         </location>
         <size>
-            <width>166.00</width>
-            <height>100.00</height>
+            <width>199.00</width>
+            <height>80.00</height>
         </size>
         <zorder>3</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <forcedUnique><![CDATA[1]]></forcedUnique>
@@ -530,6 +532,7 @@
         <SQLField>
             <name><![CDATA[component]]></name>
             <type><![CDATA[TEXT]]></type>
+            <primaryKey>1</primaryKey>
             <uid><![CDATA[B6DA2066-50BB-4258-84A8-19664CFA14E4]]></uid>
         </SQLField>
         <SQLField>
@@ -620,7 +623,7 @@
         <zorder>2</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
-            <type><![CDATA[INTEGER]]></type>
+            <type><![CDATA[SERIAL]]></type>
             <primaryKey>1</primaryKey>
             <autoIncrement><![CDATA[1]]></autoIncrement>
             <forcedUnique><![CDATA[1]]></forcedUnique>
@@ -825,7 +828,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[SQLite]]></exportDialect>
+        <exportDialect><![CDATA[postgres]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>
@@ -837,9 +840,9 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <snapToGrid><![CDATA[0]]></snapToGrid>
         <SourceSidebarWidth><![CDATA[868.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[1269.000000]]></windowHeight>
-        <windowLocationX><![CDATA[2612.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[112.000000]]></windowLocationY>
+        <windowHeight><![CDATA[1324.000000]]></windowHeight>
+        <windowLocationX><![CDATA[-2390.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[93.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[2300.000000]]></windowWidth>
     </SQLDocumentInfo>

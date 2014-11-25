@@ -31,7 +31,7 @@ admin	Admin Domain	Rule over this space
 --
 
 COPY login (id, login, fullname, password, tzname, modified_by_user, modified_timestamp) FROM stdin;
-1	sys	System Admin	123test	America/Chicago	0	2014-11-25 12:45:30.984824-06
+0	sys	System Admin	123test	America/Chicago	0	2014-11-25 16:39:11.141461-06
 \.
 
 
@@ -80,8 +80,8 @@ COPY role (id, name, description, modified_by_user, modified_timestamp) FROM std
 --
 
 COPY loginrole (id, login_id, role_id, modified_by_user, modified_timestamp) FROM stdin;
-1	1	1	0	2014-11-25 12:55:40.294199-06
-2	1	2	0	2014-11-25 12:56:14.537458-06
+1	0	1	0	2014-11-25 16:40:27.358583-06
+2	0	2	0	2014-11-25 16:41:37.57475-06
 \.
 
 
@@ -89,7 +89,7 @@ COPY loginrole (id, login_id, role_id, modified_by_user, modified_timestamp) FRO
 -- Name: loginrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('loginrole_id_seq', 3, true);
+SELECT pg_catalog.setval('loginrole_id_seq', 5, true);
 
 
 --
@@ -139,7 +139,7 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 -- Name: topicrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topicrole_id_seq', 6, true);
+SELECT pg_catalog.setval('topicrole_id_seq', 1, false);
 
 
 --

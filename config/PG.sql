@@ -305,3 +305,13 @@ CREATE TRIGGER session_20_audit_full
     FOR EACH ROW
     EXECUTE PROCEDURE audit_full();
 
+COPY activity_type (id, name, description) FROM stdin;
+call	rpc call	A call to a registered rpc
+register	register	Register an rpc so it can be called
+publish	publish	Publish a message
+subscribe	subscribe	Subscribe to a message
+start	begin a session	Begin a new autobahn session
+end	end a session	End an existing autobahn session
+admin	Admin Domain	Rule over this space
+\.
+

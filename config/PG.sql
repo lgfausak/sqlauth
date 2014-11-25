@@ -1,4 +1,18 @@
+CREATE SCHEMA private;
+
+ALTER SCHEMA private OWNER TO postgres;
+
 SET check_function_bodies = false;
+
+CREATE FUNCTION private.set_session_variable(var_name text, var_value text) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $_$
+  begin
+    perform pg_catalog.set_config('private.' || var_name, var_value, false);
+  end;
+$_$;
+
+ALTER FUNCTION private.set_session_variable(var_name text, var_value text) OWNER TO postgres;
 
 CREATE FUNCTION audit_fullmodified() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
@@ -23,6 +37,36 @@ END$_$;
 ALTER FUNCTION audit_fullmodified() OWNER TO postgres;
 
 COMMENT ON FUNCTION audit_fullmodified() IS 'Provides created values for audit columns.';
+
+CREATE FUNCTION private.get_session_variable(var_name text, default_value text) RETURNS text
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $_$
+  begin
+    return pg_catalog.current_setting('private.' || var_name);
+  exception
+    when undefined_object then
+      return default_value;
+  end;
+$_$;
+
+ALTER FUNCTION private.get_session_variable(var_name text, default_value text) OWNER TO postgres;
+
+CREATE FUNCTION private.set_session(ab_sid bigint) RETURNS void
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $_$
+  declare
+    srec record;
+  begin
+    select * into strict srec from auto.session where ab_session_id = ab_sid;
+    perform pg_catalog.set_config('private.audit_user', srec.login_id::text, false);
+    perform pg_catalog.set_config('private.audit_session', srec.id::text, false);
+    if srec.tzname is not null then
+      perform pg_catalog.set_config('timezone', srec.tzname, false);
+    end if;
+  end;
+$_$;
+
+ALTER FUNCTION private.set_session(ab_sid bigint) OWNER TO postgres;
 
 CREATE FUNCTION audit_full() RETURNS trigger
     LANGUAGE plpgsql SECURITY DEFINER
@@ -55,6 +99,16 @@ END$_$;
 ALTER FUNCTION audit_full() OWNER TO postgres;
 
 COMMENT ON FUNCTION audit_full() IS 'Provides created/modified values for audit columns.';
+
+CREATE FUNCTION private.get_session_variable(var_name text) RETURNS text
+    LANGUAGE plpgsql SECURITY DEFINER
+    AS $_$
+  begin
+    return pg_catalog.current_setting('private.' || var_name);
+  end;
+$_$;
+
+ALTER FUNCTION private.get_session_variable(var_name text) OWNER TO postgres;
 
 CREATE SEQUENCE loginrole_id_seq
     START WITH 1
@@ -304,14 +358,4 @@ CREATE TRIGGER session_20_audit_full
     BEFORE INSERT OR UPDATE OR DELETE ON session
     FOR EACH ROW
     EXECUTE PROCEDURE audit_full();
-
-COPY activity_type (id, name, description) FROM stdin;
-call	rpc call	A call to a registered rpc
-register	register	Register an rpc so it can be called
-publish	publish	Publish a message
-subscribe	subscribe	Subscribe to a message
-start	begin a session	Begin a new autobahn session
-end	end a session	End an existing autobahn session
-admin	Admin Domain	Rule over this space
-\.
 

@@ -35,9 +35,9 @@ from sqlbridge.twisted.dbengine import DB
 from twisted.internet import defer
 from autobahn.twisted.wamp import ApplicationSession
 
-from .twisted.userdb import UserDb
-from .twisted.sessiondb import SessionDb
-from .twisted.authorizerouter import AuthorizeRouter, AuthorizeSession
+from sqlauth.twisted.userdb import UserDb
+from sqlauth.twisted.sessiondb import SessionDb
+from sqlauth.twisted.authorizerouter import AuthorizeRouter, AuthorizeSession
 
 class SessionData(ApplicationSession):
     def __init__(self, c, sd):

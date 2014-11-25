@@ -199,8 +199,7 @@ class MyRouterSession(RouterSession):
         return
 
 
-if __name__ == '__main__':
-
+def run():
     import sys, argparse
     from twisted.python import log
     from twisted.internet.endpoints import serverFromString
@@ -298,3 +297,7 @@ if __name__ == '__main__':
     ## now enter the Twisted reactor loop
     ##
     reactor.run()
+
+if __name__ == '__main__':
+    run()
+

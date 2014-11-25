@@ -9,17 +9,16 @@ T=temp_autobahn
 all: PG.sql MYSQL.sql SQLITE.sql
 	echo 'done'
 
+clean: autobahn.yaml
+	rm -f autobahn.yaml
+	rm -f PG.sql
+
 # this produces a version number in $(VNUM) file
 $(VNUM): $(VFILE)
 	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"'; echo $$nv > $(VNUM))
 
 
-# construct postgres database 
-# we do this by dropping the temp work database
-# then create a temp work database
-# populate it with the basic table definition
-# merge in specialize functions and customizations
-# augment it (more customization)
+# construct postgres database structure.
 autobahn.yaml : PGfunc.sql augment.yaml PGbase.sql
 	-dropdb $U $T
 	createdb $U $T
@@ -28,6 +27,7 @@ autobahn.yaml : PGfunc.sql augment.yaml PGbase.sql
 	dbaugment $U $T augment.yaml -o autobahn.yaml
 	dropdb $U $T
 
+# this builds the database structure and fills it with initialized content
 PG.sql : autobahn.yaml PGinit.sql
 	-dropdb $U $T
 	createdb $U $T

@@ -41,6 +41,13 @@ type_id TEXT REFERENCES activity_type (id),
 allow BOOLEAN
 );
 
+CREATE TABLE topic
+(
+id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+name TEXT,
+description TEXT
+);
+
 CREATE TABLE topicrole
 (
 id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
@@ -57,11 +64,10 @@ login_id INTEGER REFERENCES login (id),
 role_id INTEGER REFERENCES role (id)
 );
 
-CREATE TABLE topic
+CREATE TABLE sqlauth
 (
-id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
-name TEXT,
-description TEXT
+version TEXT,
+profile JSONB
 );
 
 CREATE UNIQUE INDEX session_ab_session_id ON session (ab_session_id);

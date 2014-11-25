@@ -44,6 +44,14 @@ allow BOOLEAN,
 PRIMARY KEY (id)
 );
 
+CREATE TABLE topic
+(
+id INTEGER NOT NULL AUTO_INCREMENT,
+name TEXT,
+description TEXT,
+PRIMARY KEY (id)
+);
+
 CREATE TABLE topicrole
 (
 id INTEGER NOT NULL AUTO_INCREMENT,
@@ -62,12 +70,10 @@ role_id INTEGER,
 PRIMARY KEY (id)
 );
 
-CREATE TABLE topic
+CREATE TABLE sqlauth
 (
-id INTEGER NOT NULL AUTO_INCREMENT,
-name TEXT,
-description TEXT,
-PRIMARY KEY (id)
+version TEXT,
+profile JSONB
 );
 
 CREATE UNIQUE INDEX session_ab_session_id ON session (ab_session_id);

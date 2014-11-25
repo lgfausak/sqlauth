@@ -99,7 +99,7 @@
         <uid><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></uid>
     </SQLTable>
     <SQLComment>
-        <name><![CDATA[Comment2]]></name>
+        <name><![CDATA[Comment2_2]]></name>
         <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
         <location>
             <x>1734.00</x>
@@ -516,6 +516,52 @@
         <uid><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></uid>
     </SQLTable>
     <SQLTable>
+        <name><![CDATA[sqlauth]]></name>
+        <schema><![CDATA[]]></schema>
+        <location>
+            <x>2080.00</x>
+            <y>892.00</y>
+        </location>
+        <size>
+            <width>200.00</width>
+            <height>100.00</height>
+        </size>
+        <zorder>14</zorder>
+        <SQLField>
+            <name><![CDATA[version]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <uid><![CDATA[5820752B-A592-4DE0-9779-D70A0D23A2AF]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[profile]]></name>
+            <type><![CDATA[JSONB]]></type>
+            <uid><![CDATA[AA14E009-D869-47E6-BAD8-CC94BE05B44F]]></uid>
+        </SQLField>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[DB53F091-56BB-435D-89D6-BD7389AEECAE]]></uid>
+    </SQLTable>
+    <SQLComment>
+        <name><![CDATA[Comment2]]></name>
+        <comment><![CDATA[this contains the version number and then a profile which is undefined json text.]]></comment>
+        <location>
+            <x>1997.00</x>
+            <y>800.00</y>
+        </location>
+        <size>
+            <width>184.00</width>
+            <height>85.00</height>
+        </size>
+        <zorder>15</zorder>
+        <commentTitle><![CDATA[sqlauth]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
+        <uid><![CDATA[E8313FE7-4129-453E-BFF7-171A1AE659BC]]></uid>
+    </SQLComment>
+    <SQLTable>
         <name><![CDATA[activity_type]]></name>
         <schema><![CDATA[]]></schema>
         <location>
@@ -773,7 +819,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[postgres]]></exportDialect>
+        <exportDialect><![CDATA[SQLite]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>
@@ -785,9 +831,9 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <snapToGrid><![CDATA[0]]></snapToGrid>
         <SourceSidebarWidth><![CDATA[868.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[1159.000000]]></windowHeight>
+        <windowHeight><![CDATA[1214.000000]]></windowHeight>
         <windowLocationX><![CDATA[2586.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[258.000000]]></windowLocationY>
+        <windowLocationY><![CDATA[203.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[2300.000000]]></windowWidth>
     </SQLDocumentInfo>

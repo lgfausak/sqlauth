@@ -28,9 +28,11 @@ autobahn.yaml : PGfunc.sql augment.yaml PGbase.sql
 	dropdb $U $T
 
 # this builds the database structure and fills it with initialized content
-PG.sql : autobahn.yaml PGinit.sql
+PG.sql : autobahn.yaml PGinit.sql $(VNUM)
 	-dropdb $U $T
 	createdb $U $T
-	yamltodb $U $T autobahn.yaml > PG.sql
-	cat PGinit.sql >> PG.sql
+	yamltodb $U $T autobahn.yaml > $(TFILE)
+	cat PGinit.sql >> $(TFILE)
+	echo "insert into $(MODULE) (version) values ('"` cat $(VNUM)`"');" >> $(TFILE)
+	mv $(TFILE) PG.sql
 

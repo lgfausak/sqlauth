@@ -33,6 +33,6 @@ PG.sql : autobahn.yaml PGinit.sql $(VNUM)
 	createdb $U $T
 	yamltodb $U $T autobahn.yaml > $(TFILE)
 	cat PGinit.sql >> $(TFILE)
-	echo "insert into $(MODULE) (version) values ('"` cat $(VNUM)`"');" >> $(TFILE)
+	echo "insert into $(MODULE) (component,version) values ('database','"` cat $(VNUM)`"');" >> $(TFILE)
 	mv $(TFILE) PG.sql
 

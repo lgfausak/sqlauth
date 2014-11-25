@@ -32,6 +32,8 @@ admin	Admin Domain	Rule over this space
 
 COPY login (id, login, fullname, password, tzname, modified_by_user, modified_timestamp) FROM stdin;
 0	sys	System Admin	123test	America/Chicago	0	2014-11-25 16:39:11.141461-06
+2	db	DB Admin	123test	America/Chicago	0	2014-11-25 16:47:09.463401-06
+3	greg	Greg Fausak	123test	America/Chicago	0	2014-11-25 17:20:48.85132-06
 \.
 
 
@@ -62,7 +64,7 @@ SELECT pg_catalog.setval('activity_id_seq', 1, false);
 -- Name: login_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('login_id_seq', 1, true);
+SELECT pg_catalog.setval('login_id_seq', 3, true);
 
 
 --
@@ -72,6 +74,8 @@ SELECT pg_catalog.setval('login_id_seq', 1, true);
 COPY role (id, name, description, modified_by_user, modified_timestamp) FROM stdin;
 1	sysadmin	System Admin	0	2014-11-25 12:54:50.715127-06
 2	self	Permissions granted to self	0	2014-11-25 12:54:54.368095-06
+4	dbadmin	Database Administrator Access	0	2014-11-25 16:52:00.892507-06
+5	dbuser	Database User Access	0	2014-11-25 17:13:51.684417-06
 \.
 
 
@@ -82,6 +86,10 @@ COPY role (id, name, description, modified_by_user, modified_timestamp) FROM std
 COPY loginrole (id, login_id, role_id, modified_by_user, modified_timestamp) FROM stdin;
 1	0	1	0	2014-11-25 16:40:27.358583-06
 2	0	2	0	2014-11-25 16:41:37.57475-06
+8	2	2	0	2014-11-25 17:00:27.238068-06
+9	2	4	0	2014-11-25 17:05:24.62864-06
+10	3	2	0	2014-11-25 17:23:28.316645-06
+11	3	5	0	2014-11-25 17:24:17.706538-06
 \.
 
 
@@ -89,14 +97,14 @@ COPY loginrole (id, login_id, role_id, modified_by_user, modified_timestamp) FRO
 -- Name: loginrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('loginrole_id_seq', 5, true);
+SELECT pg_catalog.setval('loginrole_id_seq', 11, true);
 
 
 --
 -- Name: role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('role_id_seq', 3, true);
+SELECT pg_catalog.setval('role_id_seq', 5, true);
 
 
 --
@@ -112,6 +120,8 @@ SELECT pg_catalog.setval('session_id_seq', 1, false);
 
 COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM stdin;
 1	sys	All things system, including authentication and authorization	0	2014-11-25 12:59:21.890086-06
+2	sys.db	DB Administration	0	2014-11-25 17:06:40.391797-06
+3	user.db	User DB Access	0	2014-11-25 17:15:03.700403-06
 \.
 
 
@@ -119,7 +129,7 @@ COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM st
 -- Name: topic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topic_id_seq', 1, true);
+SELECT pg_catalog.setval('topic_id_seq', 3, true);
 
 
 --
@@ -132,6 +142,13 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 3	1	1	publish	t	0	2014-11-25 13:11:58.806129-06
 4	1	1	subscribe	t	0	2014-11-25 13:12:14.718075-06
 5	1	1	admin	t	0	2014-11-25 13:12:29.087589-06
+6	2	4	call	t	0	2014-11-25 17:08:48.530811-06
+7	2	4	register	t	0	2014-11-25 17:09:28.036604-06
+8	2	4	publish	t	0	2014-11-25 17:09:44.33833-06
+9	2	4	subscribe	t	0	2014-11-25 17:09:51.953135-06
+10	2	4	admin	t	0	2014-11-25 17:12:32.738286-06
+11	3	5	call	t	0	2014-11-25 17:16:42.03835-06
+12	3	5	subscribe	t	0	2014-11-25 17:17:39.320429-06
 \.
 
 
@@ -139,7 +156,7 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 -- Name: topicrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topicrole_id_seq', 1, false);
+SELECT pg_catalog.setval('topicrole_id_seq', 12, true);
 
 
 --

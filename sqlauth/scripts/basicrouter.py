@@ -17,6 +17,8 @@
 ##
 ###############################################################################
 
+from __future__ import absolute_import
+
 import json
 import six
 
@@ -29,7 +31,7 @@ from autobahn.wamp import types
 from autobahn.wamp.interfaces import IRouter
 from autobahn.twisted.wamp import Router
 from autobahn.twisted.wamp import RouterSession
-from autobahn.twisted.dbengine import DB
+from sqlbridge.twisted.dbengine import DB
 from twisted.internet import defer
 from autobahn.twisted.wamp import ApplicationSession
 

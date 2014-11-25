@@ -1,0 +1,123 @@
+augmenter:
+  audit_columns:
+    fullmodified:
+      columns:
+      - modified_by_user
+      - modified_timestamp
+      triggers:
+      - audit_fullmodified
+    full:
+      columns:
+      - created_by_user
+      - created_timestamp
+      - modified_by_user
+      - modified_timestamp
+      triggers:
+      - audit_full
+  columns:
+    created_by_user:
+      not_null: true
+      type: integer
+    created_timestamp:
+      not_null: true
+      type: timestamp with time zone
+    modified_by_user:
+      not_null: true
+      type: integer
+    modified_timestamp:
+      not_null: true
+      type: timestamp with time zone
+  function_templates:
+    functempl_audit_fullmodified: |2-
+
+      DECLARE
+        user_id integer := private.get_session_variable('audit_user',
+          '0')::integer;
+        rv record;
+      BEGIN
+        if TG_OP = 'INSERT' or TG_OP = 'UPDATE' THEN
+          NEW.{{modified_timestamp}} = CURRENT_TIMESTAMP;
+          NEW.{{modified_by_user}} = user_id;
+          rv = NEW;
+        else
+          rv = OLD;
+        END IF;
+        perform pg_notify(TG_TABLE_NAME || '_change',
+          json_build_object('operation',TG_OP,'pk',rv.id,'id',user_id)::text);
+        RETURN rv;
+      END
+    functempl_audit_full: |2-
+
+      DECLARE
+        user_id integer := private.get_session_variable('audit_user',
+          '0')::integer;
+        rv record;
+      BEGIN
+        IF TG_OP = 'INSERT' THEN
+          NEW.{{created_timestamp}} = CURRENT_TIMESTAMP;
+          NEW.{{created_by_user}} = user_id;
+          NEW.{{modified_timestamp}} = CURRENT_TIMESTAMP;
+          NEW.{{modified_by_user}} = user_id;
+          rv = NEW;
+        ELSIF TG_OP = 'UPDATE' THEN
+          NEW.{{created_timestamp}} = OLD.created_timestamp;
+          NEW.{{created_by_user}} = OLD.created_by_user;
+          NEW.{{modified_timestamp}} = CURRENT_TIMESTAMP;
+          NEW.{{modified_by_user}} = user_id;
+          rv = NEW;
+        ELSE
+          rv = OLD;
+        END IF;
+        perform pg_notify(TG_TABLE_NAME || '_change',
+          json_build_object('operation',TG_OP,'pk',rv.id,'id',user_id)::text);
+        RETURN rv;
+      END
+  functions:
+    audit_fullmodified():
+      description: |-
+        Provides created values for audit columns.
+      language: plpgsql
+      returns: trigger
+      security_definer: true
+      source: '{{functempl_audit_fullmodified}}'
+    audit_full():
+      description: |-
+        Provides created/modified values for audit columns.
+      language: plpgsql
+      returns: trigger
+      security_definer: true
+      source: '{{functempl_audit_full}}'
+  triggers:
+    audit_fullmodified:
+      events:
+      - insert
+      - update
+      - delete
+      level: row
+      name: '{{table_name}}_20_audit_fullmodified'
+      procedure: audit_fullmodified()
+      timing: before
+    audit_full:
+      events:
+      - insert
+      - update
+      - delete
+      level: row
+      name: '{{table_name}}_20_audit_full'
+      procedure: audit_full()
+      timing: before
+schema public:
+  table login:
+    audit_columns: fullmodified
+  table loginrole:
+    audit_columns: fullmodified
+  table role:
+    audit_columns: fullmodified
+  table session:
+    audit_columns: full
+  table activity:
+    audit_columns: fullmodified
+  table topicrole:
+    audit_columns: fullmodified
+  table topic:
+    audit_columns: fullmodified

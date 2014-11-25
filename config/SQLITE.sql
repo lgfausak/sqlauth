@@ -17,16 +17,9 @@ password TEXT,
 tzname TEXT
 );
 
-CREATE TABLE loginrole
-(
-id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
-login_id INTEGER REFERENCES login (id),
-role_id INTEGER UNIQUE
-);
-
 CREATE TABLE role
 (
-id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT  REFERENCES loginrole (role_id),
+id INTEGER UNIQUE,
 name TEXT,
 description TEXT
 );
@@ -37,13 +30,6 @@ id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
 login_id INTEGER REFERENCES login (id),
 ab_session_id BIGINT UNIQUE,
 tzname TEXT
-);
-
-CREATE TABLE topic
-(
-id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
-name TEXT,
-description TEXT
 );
 
 CREATE TABLE activity
@@ -64,8 +50,22 @@ type_id TEXT NOT NULL REFERENCES activity_type (id),
 allow BOOLEAN
 );
 
-CREATE UNIQUE INDEX loginrole_login_id_role_id ON loginrole (login_id,role_id);
+CREATE TABLE loginrole
+(
+id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+login_id INTEGER REFERENCES login (id),
+role_id INTEGER REFERENCES role (id)
+);
+
+CREATE TABLE topic
+(
+id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+name TEXT,
+description TEXT
+);
 
 CREATE UNIQUE INDEX session_ab_session_id ON session (ab_session_id);
 
-CREATE UNIQUE INDEX topicrole_topic_id_role_id_type_id ON topicrole (topic_id,role_id,allow);
+CREATE UNIQUE INDEX topicrole_topic_id_role_id_type_id ON topicrole (topic_id,role_id,type_id,allow);
+
+CREATE UNIQUE INDEX loginrole_login_id_role_id ON loginrole (login_id,role_id);

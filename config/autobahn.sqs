@@ -60,7 +60,15 @@
         <SQLField>
             <name><![CDATA[role_id]]></name>
             <type><![CDATA[INTEGER]]></type>
-            <forcedUnique><![CDATA[1]]></forcedUnique>
+            <referencesField>id</referencesField>
+            <referencesTable>role</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[role]]></referencesTable>
+            <sourceCardinality>0</sourceCardinality>
+            <destinationCardinality>0</destinationCardinality>
+            <referencesFieldUID><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
+            <forcedUnique><![CDATA[0]]></forcedUnique>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></uid>
             <unique><![CDATA[0]]></unique>
@@ -140,7 +148,7 @@
             <y>637.00</y>
         </location>
         <size>
-            <width>426.00</width>
+            <width>457.00</width>
             <height>140.00</height>
         </size>
         <zorder>6</zorder>
@@ -177,7 +185,7 @@
             <referencesTable><![CDATA[role]]></referencesTable>
             <sourceCardinality>0</sourceCardinality>
             <destinationCardinality>0</destinationCardinality>
-            <referencesFieldUID><![CDATA[7ABE65C4-7B82-4EA4-8836-CC74D3A23498]]></referencesFieldUID>
+            <referencesFieldUID><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></referencesFieldUID>
             <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
             <notNull><![CDATA[1]]></notNull>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
@@ -209,6 +217,7 @@
             <name><![CDATA[topicrole_topic_id_role_id_type_id]]></name>
             <fieldName><![CDATA[topic_id]]></fieldName>
             <fieldName><![CDATA[role_id]]></fieldName>
+            <fieldName><![CDATA[type_id]]></fieldName>
             <fieldName><![CDATA[allow]]></fieldName>
             <SQLIndexEntry>
                 <name><![CDATA[topic_id]]></name>
@@ -219,6 +228,11 @@
                 <name><![CDATA[role_id]]></name>
                 <prefixSize><![CDATA[]]></prefixSize>
                 <fieldUid><![CDATA[DFA4A4AA-39A8-490A-81D9-6204BA5E7573]]></fieldUid>
+            </SQLIndexEntry>
+            <SQLIndexEntry>
+                <name><![CDATA[type_id]]></name>
+                <prefixSize><![CDATA[]]></prefixSize>
+                <fieldUid><![CDATA[E739030C-857D-410D-BD1A-7E3B14DA24C1]]></fieldUid>
             </SQLIndexEntry>
             <SQLIndexEntry>
                 <name><![CDATA[allow]]></name>
@@ -370,31 +384,19 @@
         <name><![CDATA[role]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1445.00</x>
-            <y>894.00</y>
+            <x>1401.00</x>
+            <y>908.00</y>
         </location>
         <size>
-            <width>183.00</width>
+            <width>229.00</width>
             <height>80.00</height>
         </size>
         <zorder>1</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
             <type><![CDATA[INTEGER]]></type>
-            <primaryKey>1</primaryKey>
-            <referencesField>role_id</referencesField>
-            <referencesTable>loginrole</referencesTable>
-            <referencesField><![CDATA[role_id]]></referencesField>
-            <referencesTable><![CDATA[loginrole]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
-            <referencesFieldUID><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></referencesFieldUID>
-            <referencesTableUID><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></referencesTableUID>
-            <autoIncrement><![CDATA[1]]></autoIncrement>
             <forcedUnique><![CDATA[1]]></forcedUnique>
-            <notNull><![CDATA[1]]></notNull>
-            <temporaryOriginalName><![CDATA[id]]></temporaryOriginalName>
-            <uid><![CDATA[7ABE65C4-7B82-4EA4-8836-CC74D3A23498]]></uid>
+            <uid><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></uid>
         </SQLField>
         <SQLField>
             <name><![CDATA[name]]></name>
@@ -771,7 +773,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[mysql]]></exportDialect>
+        <exportDialect><![CDATA[postgres]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>
@@ -781,13 +783,13 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <PageGridVisible><![CDATA[0]]></PageGridVisible>
         <sidebarIndex><![CDATA[0]]></sidebarIndex>
         <snapToGrid><![CDATA[0]]></snapToGrid>
-        <SourceSidebarWidth><![CDATA[388.000000]]></SourceSidebarWidth>
+        <SourceSidebarWidth><![CDATA[868.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[842.000000]]></windowHeight>
-        <windowLocationX><![CDATA[441.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[35.000000]]></windowLocationY>
-        <windowScrollOrigin><![CDATA[{1244, 0}]]></windowScrollOrigin>
-        <windowWidth><![CDATA[954.000000]]></windowWidth>
+        <windowHeight><![CDATA[1159.000000]]></windowHeight>
+        <windowLocationX><![CDATA[2586.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[258.000000]]></windowLocationY>
+        <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
+        <windowWidth><![CDATA[2300.000000]]></windowWidth>
     </SQLDocumentInfo>
     <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>
     <containerName><![CDATA[model controller orginal container]]></containerName>

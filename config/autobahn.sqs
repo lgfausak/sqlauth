@@ -17,7 +17,7 @@
         <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
         <labelName><![CDATA[comments]]></labelName>
         <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
-        <labelWindowIndex><![CDATA[6]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[Comment4]]></temporaryOriginalName>
         <uid><![CDATA[0AEEA148-9288-44BE-B3CF-78846ACEBD2B]]></uid>
     </SQLComment>
@@ -115,7 +115,7 @@
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[4]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
         <uid><![CDATA[1EA7360E-8F45-47A3-A84F-A5E2BC864545]]></uid>
     </SQLComment>
@@ -136,7 +136,7 @@
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[7]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
         <uid><![CDATA[203FCF6D-C8F5-46D1-9BB6-60EF4AF3B998]]></uid>
     </SQLComment>
@@ -312,7 +312,7 @@
             <temporaryOriginalName><![CDATA[publish_1]]></temporaryOriginalName>
             <uid><![CDATA[D50B5B3C-5AA3-490E-BB98-05198D675B9D]]></uid>
         </SQLField>
-        <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[10]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[auto.activity]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[401A249C-BCE5-42F0-A0B0-2B53AE64FB8E]]></uid>
@@ -334,7 +334,7 @@
         <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
         <labelName><![CDATA[authentication]]></labelName>
         <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
-        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[3]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[login authentication]]></temporaryOriginalName>
         <uid><![CDATA[51C474B7-790F-4D09-9CFB-1F6B05EAF083]]></uid>
     </SQLComment>
@@ -355,7 +355,7 @@
         <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
         <labelName><![CDATA[authentication]]></labelName>
         <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
-        <labelWindowIndex><![CDATA[4]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[6]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[user authentication]]></temporaryOriginalName>
         <uid><![CDATA[53E73D9A-DFD7-44C6-AB61-2211B0730E67]]></uid>
     </SQLComment>
@@ -376,7 +376,7 @@
         <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
         <labelName><![CDATA[comments]]></labelName>
         <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
-        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[Comment3]]></temporaryOriginalName>
         <uid><![CDATA[5F736E38-1514-420F-A732-A9E5DE4C7B1B]]></uid>
     </SQLComment>
@@ -528,6 +528,11 @@
         </size>
         <zorder>14</zorder>
         <SQLField>
+            <name><![CDATA[component]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <uid><![CDATA[B6DA2066-50BB-4258-84A8-19664CFA14E4]]></uid>
+        </SQLField>
+        <SQLField>
             <name><![CDATA[version]]></name>
             <type><![CDATA[TEXT]]></type>
             <uid><![CDATA[5820752B-A592-4DE0-9779-D70A0D23A2AF]]></uid>
@@ -537,18 +542,19 @@
             <type><![CDATA[JSONB]]></type>
             <uid><![CDATA[AA14E009-D869-47E6-BAD8-CC94BE05B44F]]></uid>
         </SQLField>
+        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[DB53F091-56BB-435D-89D6-BD7389AEECAE]]></uid>
     </SQLTable>
     <SQLComment>
         <name><![CDATA[Comment2]]></name>
-        <comment><![CDATA[this contains the version number and then a profile which is undefined json text.]]></comment>
+        <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
         <location>
             <x>1997.00</x>
             <y>800.00</y>
         </location>
         <size>
-            <width>184.00</width>
+            <width>288.00</width>
             <height>85.00</height>
         </size>
         <zorder>15</zorder>
@@ -595,7 +601,7 @@
             <temporaryOriginalName><![CDATA[desc]]></temporaryOriginalName>
             <uid><![CDATA[F8319815-1811-4330-B319-2FC081C235E3]]></uid>
         </SQLField>
-        <labelWindowIndex><![CDATA[7]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[9]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[auto.activity_type]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></uid>
@@ -660,7 +666,7 @@
             <indexType><![CDATA[UNIQUE]]></indexType>
             <uid><![CDATA[09DA758C-A206-4EB8-AD8C-38081D6108F5]]></uid>
         </SQLIndex>
-        <labelWindowIndex><![CDATA[3]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[auto.session]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[EA0931D6-E3B7-4381-988E-3E4B9AD0D8B7]]></uid>
@@ -831,9 +837,9 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <snapToGrid><![CDATA[0]]></snapToGrid>
         <SourceSidebarWidth><![CDATA[868.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[1214.000000]]></windowHeight>
-        <windowLocationX><![CDATA[2586.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[203.000000]]></windowLocationY>
+        <windowHeight><![CDATA[1269.000000]]></windowHeight>
+        <windowLocationX><![CDATA[2612.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[112.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[2300.000000]]></windowWidth>
     </SQLDocumentInfo>

@@ -45,14 +45,6 @@ allow BOOLEAN,
 PRIMARY KEY (id)
 );
 
-CREATE TABLE topic
-(
-id SERIAL NOT NULL,
-name TEXT,
-description TEXT,
-PRIMARY KEY (id)
-);
-
 CREATE TABLE topicrole
 (
 id SERIAL NOT NULL,
@@ -73,8 +65,17 @@ PRIMARY KEY (id)
 
 CREATE TABLE sqlauth
 (
+component TEXT,
 version TEXT,
 profile JSONB
+);
+
+CREATE TABLE topic
+(
+id SERIAL NOT NULL,
+name TEXT,
+description TEXT,
+PRIMARY KEY (id)
 );
 
 ALTER TABLE session ADD CONSTRAINT session_ab_session_id UNIQUE (ab_session_id);

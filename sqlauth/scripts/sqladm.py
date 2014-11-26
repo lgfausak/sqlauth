@@ -121,10 +121,7 @@ class Component(ApplicationSession):
             log.msg("db:onJoin error {}".format(err))
 
         if len(rv) > 0:
-            
-	    print tabulate([rv[i].values() for i in rv],
-                rv.itervalues().next().keys(),
-                headers="firstrow", tablefmt="simple")
+	    print tabulate(rv, headers="firstrow", tablefmt="simple")
 	else:
 	    print "no results?"
 

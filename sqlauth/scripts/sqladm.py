@@ -87,7 +87,6 @@ class Component(ApplicationSession):
         else:
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
-    @inlineCallbacks
     def session_rpc(self):
         log.msg("session_rpc")
         log.msg("topic_base: {}".format(self.svar['topic_base']))
@@ -95,12 +94,14 @@ class Component(ApplicationSession):
         log.msg("action: {}".format(self.svar['action']))
 
         try:
-            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+            rv = self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                 self.svar['action'])
-            log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
             defer.returnValue(rv)
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
+
+        log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
+
 
     @inlineCallbacks
     def onJoin(self, details):
@@ -109,7 +110,6 @@ class Component(ApplicationSession):
         try:
             if self.svar['command'] == 'session':
                 rv = yield self.session_rpc()
-                defer.returnValue(rv)
                 log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))

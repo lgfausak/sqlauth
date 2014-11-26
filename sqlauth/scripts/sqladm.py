@@ -27,6 +27,7 @@ from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
 
 from autobahn.twisted.wamp import ApplicationRunner,ApplicationSession
+from autobahn.wamp import auth
 from autobahn.wamp import types
 
 from autobahn import util

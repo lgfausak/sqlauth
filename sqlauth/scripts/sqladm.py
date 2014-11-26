@@ -20,6 +20,7 @@
 from __future__ import absolute_import
 
 import sys, os, argparse, six, json
+import tabulate
 
 import twisted
 from twisted.python import log
@@ -114,6 +115,13 @@ class Component(ApplicationSession):
                 log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
+
+        if len(rv) > 0:
+            table_headers = rv[0].keys()
+            table_values = [ i.values() for i in rv ]
+	    print tabulate(table_values, table_headers, tablefmt="simple")
+	else:
+	    print "no results?"
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

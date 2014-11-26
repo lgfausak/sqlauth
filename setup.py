@@ -59,7 +59,7 @@ setup(
    author_email = 'lgfausak@gmail.com',
    url = 'https://github.com/lgfausak/sqlauth',
    platforms = 'Any',
-   install_requires = ['autobahn>=0.9.2', 'twisted>=14.0.2', 'sqlbridge>=0.1.44'],
+   install_requires = ['autobahn>=0.9.2', 'twisted>=14.0.2', 'sqlbridge>=0.1.44', 'tabulate>=0.7.3'],
    extras_require = {
       ## Twisted/txpostgres needed for PostgreSQL support
       ## mysql needs the python import libraries

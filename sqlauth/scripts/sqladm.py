@@ -108,7 +108,7 @@ class Component(ApplicationSession):
 
         try:
             if self.svar['command'] == 'session':
-                rv = yield self.session_rpc(self)
+                rv = yield self.session_rpc()
                 defer.returnValue(rv)
                 log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:

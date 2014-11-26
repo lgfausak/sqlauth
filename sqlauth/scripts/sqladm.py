@@ -104,9 +104,9 @@ class Component(ApplicationSession):
         log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
 
         if len(rv) > 0:
-            defer.returnValue(rv.itervalues().next().keys(), [ rv[i].values() for i in rv ])
+            defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
         else:
-            defer.returnValue([], [])
+            defer.returnValue([])
 
 
     @inlineCallbacks
@@ -115,13 +115,13 @@ class Component(ApplicationSession):
 
         try:
             if self.svar['command'] == 'session':
-                hv,rv = yield self.session_rpc()
+                rv = yield self.session_rpc()
                 log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 
         if len(rv) > 0:
-	    print tabulate(rv, hv, tablefmt="simple")
+	    print tabulate(rv[1], rv[0], tablefmt="simple")
 	else:
 	    print "no results?"
 

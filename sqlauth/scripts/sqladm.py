@@ -25,6 +25,7 @@ import twisted
 from twisted.python import log
 from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
+from twisted.internet import defer
 
 from autobahn.twisted.wamp import ApplicationRunner,ApplicationSession
 from autobahn.wamp import auth
@@ -87,21 +88,33 @@ class Component(ApplicationSession):
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
     @inlineCallbacks
-    def onJoin(self, details):
-        log.msg("db:onJoin session attached {}".format(details))
-        dcon = False
+    def session_rpc(self):
+        log.msg("session_rpc")
+        log.msg("topic_base: {}".format(self.svar['topic_base']))
+        log.msg("command: {}".format(self.svar['command']))
+        log.msg("action: {}".format(self.svar['action']))
 
         try:
-            log.msg("topic_base: {}".format(self.svar['topic_base']))
-            log.msg("command: {}".format(self.svar['command']))
-            log.msg("action: {}".format(self.svar['action']))
             rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                    self.svar['action'], self.svar['action_args'])
+                self.svar['action'])
             log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
+            defer.returnValue(rv)
+        except Exception as err:
+            log.msg("session_rpc error {}".format(err))
+
+    @inlineCallbacks
+    def onJoin(self, details):
+        log.msg("onJoin session attached {}".format(details))
+
+        try:
+            if self.svar['command'] == 'session':
+                rv = yield self.session_rpc(self)
+                defer.returnValue(rv)
+                log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 
-        log.msg("db:onJoin disconnecting : {}")
+        log.msg("onJoin disconnecting : {}")
         self.disconnect()
 
     def onLeave(self, details):

@@ -19,7 +19,7 @@
 
 from __future__ import absolute_import
 
-import sys, os, argparse, six
+import sys, os, argparse, six, json
 
 import twisted
 from twisted.python import log
@@ -48,7 +48,7 @@ class Component(ApplicationSession):
         log.msg("got args {}, kwargs {}".format(args,kwargs))
 
         # reap init variables meant only for us
-        for i in ( 'command', 'action', 'debug', 'authinfo', 'topic_base', ):
+        for i in ( 'command', 'action', 'action_args', 'debug', 'authinfo', 'topic_base', ):
             if i in kwargs:
                 if kwargs[i] is not None:
                     self.svar[i] = kwargs[i]
@@ -93,10 +93,11 @@ class Component(ApplicationSession):
 
         try:
             log.msg("topic_base: {}".format(self.svar['topic_base']))
-            log.msg("command: {}".format(self.svar['db_call']))
-            log.msg("action: {}".format(self.svar['db_query']))
-            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'],
-                    self.svar['db_query'], self.svar['db_args'])
+            log.msg("command: {}".format(self.svar['command']))
+            log.msg("action: {}".format(self.svar['action']))
+            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+                    self.svar['action'], self.svar['action_args'])
+            log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 
@@ -131,6 +132,7 @@ def run():
     def_secret = '123test'
     def_realm = 'realm1'
     def_topic_base = 'adm'
+    def_action_args = '{}'
 
     # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text
     p = argparse.ArgumentParser(description="db admin manager for autobahn", formatter_class=SmartFormatter)
@@ -149,11 +151,14 @@ def run():
                         help='if you specify --dsn then you will need a topic to root it on, the default ' + def_topic_base + ' is fine.')
     sp = p.add_subparsers(dest='command')
     session_p = sp.add_parser('session')
-    session_choices=['list','get','kill']
-    session_p.add_argument('action', choices=session_choices, help='Session management commands')
+    session_p.add_argument('action', choices=['list','get','kill'], help='Session management commands')
+    session_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
 
     user_p = sp.add_parser('user')
     user_p.add_argument('action', choices=['list', 'get', 'update', 'delete'], help='Session management commands')
+    user_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
 
     args = p.parse_args()
     if args.verbose:
@@ -168,7 +173,7 @@ def run():
 
     mdb = Component(config=component_config,
             authinfo=ai,topic_base=args.topic_base,debug=args.verbose,
-            command=args.command,action=args.action)
+            command=args.command,action=args.action,action_args=json.loads(args.action_args))
     runner = ApplicationRunner(args.wsocket, args.realm)
     runner.run(lambda _: mdb)
 

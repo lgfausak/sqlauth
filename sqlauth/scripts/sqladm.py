@@ -119,14 +119,14 @@ class Component(ApplicationSession):
         self.disconnect()
 
     def onLeave(self, details):
-        print("onLeave: {}").format(details)
+        log.msg("onLeave: {}").format(details))
 
         self.disconnect()
 
         return
 
     def onDisconnect(self):
-        print("onDisconnect:")
+        log.msg("onDisconnect:")
         reactor.stop()
 
 # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text

@@ -96,11 +96,12 @@ class Component(ApplicationSession):
         try:
             rv = self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                 self.svar['action'])
-            defer.returnValue(rv)
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
 
         log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
+
+        return rv
 
 
     @inlineCallbacks

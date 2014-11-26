@@ -102,6 +102,9 @@ class Component(ApplicationSession):
 
         log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
 
+        if len(rv) > 0:
+            return [ rv.itervalues().next().keys(), [rv[i].values() for i in rv] ]
+
         return rv
 
 
@@ -117,9 +120,10 @@ class Component(ApplicationSession):
             log.msg("db:onJoin error {}".format(err))
 
         if len(rv) > 0:
-            table_headers = rv[0].keys()
-            table_values = [ i.values() for i in rv ]
-	    print tabulate(table_values, table_headers, tablefmt="simple")
+            
+	    print tabulate([rv[i].values() for i in rv],
+                rv.itervalues().next().keys(),
+                headers="firstrow", tablefmt="simple")
 	else:
 	    print "no results?"
 

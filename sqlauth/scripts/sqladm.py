@@ -119,7 +119,7 @@ class Component(ApplicationSession):
         self.disconnect()
 
     def onLeave(self, details):
-        log.msg("onLeave: {}").format(details))
+        log.msg("onLeave: {}".format(details))
 
         self.disconnect()
 

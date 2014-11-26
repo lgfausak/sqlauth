@@ -88,6 +88,7 @@ class Component(ApplicationSession):
         else:
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
+    @inlineCallbacks
     def session_rpc(self):
         log.msg("session_rpc")
         log.msg("topic_base: {}".format(self.svar['topic_base']))
@@ -95,7 +96,7 @@ class Component(ApplicationSession):
         log.msg("action: {}".format(self.svar['action']))
 
         try:
-            rv = self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                 self.svar['action'])
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
@@ -103,9 +104,9 @@ class Component(ApplicationSession):
         log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
 
         if len(rv) > 0:
-            return [ rv.itervalues().next().keys(), [rv[i].values() for i in rv] ]
-
-        return rv
+            defer.returnValue([ rv.itervalues().next().keys(), [rv[i].values() for i in rv] ])
+        else:
+            defer.returnValue(rv)
 
 
     @inlineCallbacks

@@ -98,7 +98,7 @@ class Component(ApplicationSession):
 
         try:
             rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                self.svar['action'], CallOptions(timeout=2000,discloseMe = True))
+                self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
 

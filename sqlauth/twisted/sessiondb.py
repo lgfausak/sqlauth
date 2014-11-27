@@ -140,20 +140,23 @@ class SessionDb(object):
                      and s.ab_session_id is not null""",
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
-        log.msg("SessionDb.list():qv:{}".format(qv))
         sidkeys =  self._sessiondb.keys()
-        log.msg("SessionDb.list:sidkeys({})".format(sidkeys))
         for k in qv:
 	    sid = int(k['ab_session_id'])
             log.msg("SessionDb.list:qv.key({})".format(sid))
 	    if sid in sidkeys:
-	        k['mem'] = 'Y'
+	        k['warning'] = ''
+	        rv[sid] = k
 	    else:
-	        k['mem'] = 'N'
-	    rv[sid] = k
+	        k['warning'] = '!'
+                log.warning("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid))
+                #uncomment this if we want to see invalid sessions, they were probably left there
+                #after an unplanned stop of the Autobahn router.  These should be set to null
+                #before starting the router, with the statement:
+                #update session set ab_session_id = null wher ab_session_id is not null
+                #after that, then start the router.
+	        #rv[sid] = k
         rvkeys = rv.keys()
-        log.msg("SessionDb.list():rvkeys:{}".format(rvkeys))
-        log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
 	    if k in rvkeys:
 	        continue
@@ -166,7 +169,7 @@ class SessionDb(object):
 		      'login':'.',
 		      'fullname':'.',
 		      'txname':'.',
-		      'mem': '.'}
+		      'warning': '*'}
 
         defer.returnValue(rv)
 

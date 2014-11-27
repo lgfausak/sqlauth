@@ -33,7 +33,7 @@ create or replace function private.set_session(ab_sid bigint) returns void as $$
   declare
     srec record;
   begin
-    select * into strict srec from auto.session where ab_session_id = ab_sid;
+    select * into strict srec from session where ab_session_id = ab_sid;
     perform pg_catalog.set_config('private.audit_user', srec.login_id::text, false);
     perform pg_catalog.set_config('private.audit_session', srec.id::text, false);
     if srec.tzname is not null then

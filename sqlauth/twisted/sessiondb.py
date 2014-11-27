@@ -72,13 +72,6 @@ class SessionDb(object):
     def set_session(self, app_session):
         log.msg("SessionDb:set_session()")
         self.app_session = app_session
-        log.msg("SessionDb:set_session():clear any (potentially) existing sessions")
-        yield self.app_session.call(self.operation,
-                """update session
-		      set ab_session_id = null
-		    where ab_session_id is null""",
-                { },
-                options=types.CallOptions(timeout=2000,discloseMe=True))
 
         return
  

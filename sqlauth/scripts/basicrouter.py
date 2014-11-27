@@ -60,11 +60,11 @@ class SessionData(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin: {}".format(details))
 
-        def list_data():
+        def list_data(details = None):
             log.msg("SessionData:list_data()")
             return self.sessiondb.list()
 
-        def kill_session(sid):
+        def kill_session(sid,details = None):
             log.msg("SessionData:kill_session({})".format(sid))
             ses = self.sessiondb.get(sid)
             ses._transport.sendClose(code=3000,reason=six.u('killed'))

@@ -68,7 +68,6 @@ class SessionDb(object):
 
         return
 
-    @inlineCallbacks
     def set_session(self, app_session):
         log.msg("SessionDb:set_session()")
         self.app_session = app_session

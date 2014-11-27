@@ -130,16 +130,19 @@ class SessionDb(object):
         log.msg("SessionDb.list():qv:{}".format(qv))
         for k in qv:
 	    sid = k['ab_session_id']
+            log.msg("SessionDb.list:qv.key({})".format(sid))
 	    if sid in self._sessiondb:
 	        k['mem'] = 'Y'
 	    else:
 	        k['mem'] = 'N'
 	    rv[sid] = k
-        log.msg("SessionDb.list():qv:{}".format(self._sessiondb))
+        log.msg("SessionDb.list():rv:keys:{}".format(rv.keys()))
+        log.msg("SessionDb.list():_sessiondb:{}".format(self._sessiondb))
+        log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
 	    if k in rv:
 	        continue
-            log.msg("SessionDb.list:key({})".format(k))
+            log.msg("SessionDb.list:rv.key({})".format(k))
             sib = self._sessiondb[k]
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,

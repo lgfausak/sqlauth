@@ -141,13 +141,16 @@ class SessionDb(object):
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
         sidkeys =  self._sessiondb.keys()
+        log.msg("SessionDb.list:sidkeys {}".format(sidkeys))
         for k in qv:
 	    sid = int(k['ab_session_id'])
             log.msg("SessionDb.list:qv.key({})".format(sid))
 	    if sid in sidkeys:
+                log.msg("SessionDb.list:no warning")
 	        k['warning'] = ''
 	        rv[sid] = k
 	    else:
+                log.msg("SessionDb.list:warning")
 	        k['warning'] = '!'
                 log.msg("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid),
                     logLevel=logging.WARNING)
@@ -158,9 +161,12 @@ class SessionDb(object):
                 #after that, then start the router.
 	        #rv[sid] = k
         rvkeys = rv.keys()
+        log.msg("SessionDb.list:rvkeys {}".format(rvkeys))
         for k in self._sessiondb:
 	    if k in rvkeys:
+                log.msg("SessionDb.list:continue")
 	        continue
+            log.msg("SessionDb.list:on {}".format(k))
             sib = self._sessiondb[k]
             log.msg("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid),
                 logLevel=logging.WARNING)

@@ -152,7 +152,7 @@ class SessionDb(object):
 	    else:
                 log.msg("SessionDb.list:warning")
 	        k['warning'] = '!'
-                log.msg("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid))
+                log.msg("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid,k['login_id']))
                 #uncomment this if we want to see invalid sessions, they were probably left there
                 #after an unplanned stop of the Autobahn router.  These should be set to null
                 #before starting the router, with the statement:

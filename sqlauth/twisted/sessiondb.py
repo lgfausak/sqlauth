@@ -152,7 +152,8 @@ class SessionDb(object):
 	    else:
                 log.msg("SessionDb.list:warning")
 	        k['warning'] = '!'
-                log.msg("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid,k['login_id']))
+                log.msg("SessionDb.list: db has extra sessions, should set ab_session_id null:{}, authid: {}!".format(sid,k['login_id']),
+                    logLevel = logging.WARNING)
                 #uncomment this if we want to see invalid sessions, they were probably left there
                 #after an unplanned stop of the Autobahn router.  These should be set to null
                 #before starting the router, with the statement:
@@ -167,7 +168,8 @@ class SessionDb(object):
 	        continue
             log.msg("SessionDb.list:on {}".format(k))
             sib = self._sessiondb[k]
-            log.msg("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid))
+            log.msg("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid),
+                logLevel = logging.WARNING)
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
 		      'started':'.',

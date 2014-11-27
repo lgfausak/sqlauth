@@ -138,11 +138,11 @@ class SessionDb(object):
 	    else:
 	        k['mem'] = 'N'
 	    rv[sid] = k
-        rvkeys = rv.keys():
+        rvkeys = rv.keys()
         log.msg("SessionDb.list():rvkeys:{}".format(rvkeys))
         log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
-	    if k in rv.keys():
+	    if k in rvkeys:
                 log.msg("SessionDb.list():FOUND KEY, SKIPPING {}".format(k))
 	        continue
             log.msg("SessionDb.list:rv.key({})".format(k))

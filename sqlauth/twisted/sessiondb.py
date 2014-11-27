@@ -112,6 +112,7 @@ class SessionDb(object):
         ## we return a deferred to simulate an asynchronous lookup
         return self._sessiondb.get(sessionid, {})
 
+    @inlineCallbacks
     def list(self):
         log.msg("SessionDb.list()")
         qv = yield self.app_session.call(self.query,

@@ -39,5 +39,13 @@ create or replace function private.set_session(ab_sid bigint) returns void as $$
     if srec.tzname is not null then
       perform pg_catalog.set_config('timezone', srec.tzname, false);
     end if;
+    exception
+        when NO_DATA_FOUND then
+          raise notice 'ignoring NO_DATA_FOUND setting %', ab_sid;
+        when TOO_MANY_ROWS then
+          raise notice 'ignoring TOO_MANY_ROWS setting %', ab_sid;
+        when others then
+          raise notice 'ignoring OTHER error setting %', ab_sid;
+          -- crickets
   end;
 $$ language plpgsql security definer;

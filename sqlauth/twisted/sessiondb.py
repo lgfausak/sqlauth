@@ -116,7 +116,7 @@ class SessionDb(object):
     def list(self):
         log.msg("SessionDb.list()")
         qv = yield self.app_session.call(self.query,
-                """select s.login_id,s.ab_session_id::bigint,s.tzname,
+                """select s.login_id,s.ab_session_id,s.tzname,
                           to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
                           to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,
                           l.login,
@@ -128,19 +128,22 @@ class SessionDb(object):
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
         log.msg("SessionDb.list():qv:{}".format(qv))
+        sidkeys =  self._sessiondb.keys()
+        log.msg("SessionDb.list:sidkeys({})".format(sidkeys))
         for k in qv:
-	    sid = k['ab_session_id']
+	    sid = int(k['ab_session_id'])
             log.msg("SessionDb.list:qv.key({})".format(sid))
-	    if sid in self._sessiondb.keys():
+	    if sid in sidkeys:
 	        k['mem'] = 'Y'
 	    else:
 	        k['mem'] = 'N'
 	    rv[sid] = k
-        log.msg("SessionDb.list():rv:keys:{}".format(rv.keys()))
-        log.msg("SessionDb.list():_sessiondb:{}".format(self._sessiondb))
+        rvkeys = rv.keys():
+        log.msg("SessionDb.list():rvkeys:{}".format(rvkeys))
         log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
 	    if k in rv.keys():
+                log.msg("SessionDb.list():FOUND KEY, SKIPPING {}".format(k))
 	        continue
             log.msg("SessionDb.list:rv.key({})".format(k))
             sib = self._sessiondb[k]

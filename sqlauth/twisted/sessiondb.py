@@ -141,10 +141,10 @@ class SessionDb(object):
             sib = self._sessiondb[k]
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
-		      'started':'',
-		      'duration':'',
-		      'login':'',
-		      'fullname':'',
+		      'started':'X',
+		      'duration':'X',
+		      'login':'X',
+		      'fullname':'X',
 		      'mem': 'X'}
 
         defer.returnValue(rv)

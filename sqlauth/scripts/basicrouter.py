@@ -28,6 +28,7 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn import util
 from autobahn.wamp import auth
 from autobahn.wamp import types
+from autobahn.wamp.types import RegisterOptions
 from autobahn.wamp.interfaces import IRouter
 from autobahn.twisted.wamp import Router
 from autobahn.twisted.wamp import RouterSession
@@ -69,8 +70,8 @@ class SessionData(ApplicationSession):
             ses._transport.sendClose(code=3000,reason=six.u('killed'))
             return defer.succeed({ 'killed': sid })
 
-        reg = yield self.register(list_data, 'adm.session.list')
-        reg = yield self.register(kill_session, 'adm.session.kill')
+        reg = yield self.register(list_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

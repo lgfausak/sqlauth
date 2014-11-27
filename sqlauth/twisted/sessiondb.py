@@ -145,6 +145,7 @@ class SessionDb(object):
 		      'duration':'X',
 		      'login':'X',
 		      'fullname':'X',
+		      'txname':'X',
 		      'mem': 'X'}
 
         defer.returnValue(rv)

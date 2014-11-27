@@ -114,13 +114,33 @@ class SessionDb(object):
 
     def list(self):
         log.msg("SessionDb.list()")
-        ## we return a deferred to simulate an asynchronous lookup
+        qv = yield self.app_session.call(self.query,
+                """select s.login_id,s.ab_session_id,s.tzname,
+                          to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
+                          to_char(now() - s.created_timestamp, 'HH:MI') as duration,
+                          l.login,
+                          l.fullname
+                     from session s,
+                          login l
+                   where l.id = s.login_id
+                     and s.ab_session_id is not null""",
+                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
+        for k in qv:
+	    sid = k['ab_session_id']
+	    if sid in self._sessiondb:
+	        k['mem'] = 'Y'
+	    else:
+	        k['mem'] = 'N'
+	    rv[sid] = k
         for k in self._sessiondb:
+	    if k in rv:
+	        continue
             log.msg("SessionDb.list:key({})".format(k))
-            #log.msg dir(self._sessiondb[k])
             sib = self._sessiondb[k]
-            rv[k] = { 'session_id':k, 'id': sib._authid, 'provider': sib._authprovider, 'role': sib._authrole  }
+            rv[k] = { 'ab_session_id':k,
+                      'login_id': sib._authid,
+		      'mem': 'X'}
 
         return defer.succeed(rv)
 

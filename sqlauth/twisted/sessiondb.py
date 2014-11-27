@@ -143,7 +143,7 @@ class SessionDb(object):
                       'login_id': sib._authid,
 		      'mem': 'X'}
 
-        return defer.succeed(rv)
+        defer.returnValue(rv)
 
     @inlineCallbacks
     def delete(self, sessionid):

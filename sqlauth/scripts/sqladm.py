@@ -31,6 +31,7 @@ from twisted.internet import defer
 from autobahn.twisted.wamp import ApplicationRunner,ApplicationSession
 from autobahn.wamp import auth
 from autobahn.wamp import types
+from autobahn.wamp.types import CallOptions
 
 from autobahn import util
 
@@ -97,7 +98,7 @@ class Component(ApplicationSession):
 
         try:
             rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                self.svar['action'])
+                self.svar['action'], CallOptions(timeout=2000,discloseMe = True))
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
 

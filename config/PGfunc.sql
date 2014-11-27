@@ -29,14 +29,21 @@ $$ language plpgsql security definer;
 ** relative to their time zone.
 ** if the session doesnt exist an exception is thrown.
 */
-create or replace function private.set_session(ab_sid bigint) returns void as $$
+create or replace function private.set_session(ab_sid bigint, out login_id bigint, out session_id bigint, out tzname text, out ab_session_id bigint) as $$
   declare
     srec record;
   begin
+    login_id := null;
+    session_id := null;
+    tzname := null;
+    ab_session_id := ab_sid;
     select * into strict srec from session where ab_session_id = ab_sid;
+    login_id = srec.login_id;
     perform pg_catalog.set_config('private.audit_user', srec.login_id::text, false);
+    session_id = srec.id;
     perform pg_catalog.set_config('private.audit_session', srec.id::text, false);
     if srec.tzname is not null then
+      tzname := srec.tzname;
       perform pg_catalog.set_config('timezone', srec.tzname, false);
     end if;
     exception
@@ -47,5 +54,7 @@ create or replace function private.set_session(ab_sid bigint) returns void as $$
         when others then
           raise notice 'ignoring OTHER error setting %', ab_sid;
           -- crickets
+    raise notice 'set %: audit_user:%,audit_session:%,tzname %', ab_sid,srec.login_id,srec.id,srec.tzname;
+    return;
   end;
 $$ language plpgsql security definer;

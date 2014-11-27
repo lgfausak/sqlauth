@@ -23,7 +23,7 @@
 ## the session life cycle is tracked.
 ###############################################################################
 
-import six,sys
+import six,sys,logging
 
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks
@@ -149,7 +149,8 @@ class SessionDb(object):
 	        rv[sid] = k
 	    else:
 	        k['warning'] = '!'
-                log.warning("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid))
+                log.msg("SessionDb.list: database has extra sessions, should set ab_session_id to null for:{}, authid: {}!".format(sid),
+                    logLevel=logging.WARNING)
                 #uncomment this if we want to see invalid sessions, they were probably left there
                 #after an unplanned stop of the Autobahn router.  These should be set to null
                 #before starting the router, with the statement:
@@ -161,7 +162,8 @@ class SessionDb(object):
 	    if k in rvkeys:
 	        continue
             sib = self._sessiondb[k]
-            log.warning("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid))
+            log.msg("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid),
+                logLevel=logging.WARNING)
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
 		      'started':'.',

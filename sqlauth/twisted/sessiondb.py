@@ -76,13 +76,18 @@ class SessionDb(object):
  
     @inlineCallbacks
     def add(self, authid, sessionid, session_body):
-        log.msg("SessionDb.add({},{})".format(authid,sessionid))
+        log.msg("SessionDb.add({},sessionid:{})".format(authid,sessionid))
+        log.msg("SessionDb.add({},body:{})".format(authid,session_body))
         # first, we remember the session internally in our object store
         self._sessiondb[sessionid] = session_body
         # then record the session in the database
         yield self.app_session.call(self.operation,
-                "insert into session (login_id,ab_session_id,tzname)values(%(login_id)s,%(session_id)s,(select tzname from login where id = %(login_id)s))",
-                { 'login_id': authid, 'session_id': sessionid }, options=types.CallOptions(timeout=2000,discloseMe=True))
+                """insert into session
+                     (login_id,ab_session_id,tzname)
+                   values
+                     (%(login_id)s,%(session_id)s,(select tzname from login where id = %(login_id)s))""",
+                { 'login_id': authid, 'session_id': sessionid },
+                options=types.CallOptions(timeout=2000,discloseMe=True))
 
         return
 

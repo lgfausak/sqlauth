@@ -116,7 +116,7 @@ class SessionDb(object):
     def list(self):
         log.msg("SessionDb.list()")
         qv = yield self.app_session.call(self.query,
-                """select s.login_id,s.ab_session_id,s.tzname,
+                """select s.login_id,s.ab_session_id::bigint,s.tzname,
                           to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
                           to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,
                           l.login,

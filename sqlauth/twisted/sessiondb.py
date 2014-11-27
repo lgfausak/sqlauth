@@ -127,6 +127,7 @@ class SessionDb(object):
                      and s.ab_session_id is not null""",
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
+        log.msg("SessionDb.list():qv:{}".format(qv))
         for k in qv:
 	    sid = k['ab_session_id']
 	    if sid in self._sessiondb:
@@ -134,6 +135,7 @@ class SessionDb(object):
 	    else:
 	        k['mem'] = 'N'
 	    rv[sid] = k
+        log.msg("SessionDb.list():qv:{}".format(self._sessiondb))
         for k in self._sessiondb:
 	    if k in rv:
 	        continue

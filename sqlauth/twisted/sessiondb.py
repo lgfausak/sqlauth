@@ -68,9 +68,17 @@ class SessionDb(object):
 
         return
 
+    @inlineCallbacks
     def set_session(self, app_session):
         log.msg("SessionDb:set_session()")
         self.app_session = app_session
+        log.msg("SessionDb:set_session():clear any (potentially) existing sessions")
+        yield self.app_session.call(self.operation,
+                """update session
+		      set ab_session_id = null
+		    where ab_session_id is null""",
+                { },
+                options=types.CallOptions(timeout=2000,discloseMe=True))
 
         return
  
@@ -112,6 +120,19 @@ class SessionDb(object):
         ## we return a deferred to simulate an asynchronous lookup
         return self._sessiondb.get(sessionid, {})
 
+
+    #
+    # this builds a list of sessions.  Two sources for the list are used, and
+    # it is important that those two sources are equal!  First, the database is queried
+    # for all open sessions (those that have ab_session_id not null).  Those are compared
+    # to the in memory copy (the active Autobahn session).  The session MUST be represented
+    # in both places. The list can be inconsistent if:
+    # 1) the data exists in the database but not in memory.  This can occur on
+    #    a Autobahn router restart.  The router should set all ab_session_id to null
+    #    on startup (they can get this way if the router crashed).
+    # 2) the data exists in memory but not the database.  This would indicate there is
+    #    a problem writing to the database?  I am not sure why this would happen.
+    #
     @inlineCallbacks
     def list(self):
         log.msg("SessionDb.list()")
@@ -143,10 +164,9 @@ class SessionDb(object):
         log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
 	    if k in rvkeys:
-                log.msg("SessionDb.list():FOUND KEY, SKIPPING {}".format(k))
 	        continue
-            log.msg("SessionDb.list:rv.key({})".format(k))
             sib = self._sessiondb[k]
+            log.warning("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid))
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
 		      'started':'.',

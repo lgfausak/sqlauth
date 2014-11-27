@@ -118,7 +118,7 @@ class SessionDb(object):
         qv = yield self.app_session.call(self.query,
                 """select s.login_id,s.ab_session_id,s.tzname,
                           to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
-                          to_char(now() - s.created_timestamp, 'HH:MI') as duration,
+                          to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,
                           l.login,
                           l.fullname
                      from session s,
@@ -131,7 +131,7 @@ class SessionDb(object):
         for k in qv:
 	    sid = k['ab_session_id']
             log.msg("SessionDb.list:qv.key({})".format(sid))
-	    if sid in self._sessiondb:
+	    if sid in self._sessiondb.keys():
 	        k['mem'] = 'Y'
 	    else:
 	        k['mem'] = 'N'
@@ -140,18 +140,18 @@ class SessionDb(object):
         log.msg("SessionDb.list():_sessiondb:{}".format(self._sessiondb))
         log.msg("SessionDb.list():_sessiondb:keys:{}".format(self._sessiondb.keys()))
         for k in self._sessiondb:
-	    if k in rv:
+	    if k in rv.keys():
 	        continue
             log.msg("SessionDb.list:rv.key({})".format(k))
             sib = self._sessiondb[k]
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
-		      'started':'X',
-		      'duration':'X',
-		      'login':'X',
-		      'fullname':'X',
-		      'txname':'X',
-		      'mem': 'X'}
+		      'started':'.',
+		      'duration':'.',
+		      'login':'.',
+		      'fullname':'.',
+		      'txname':'.',
+		      'mem': '.'}
 
         defer.returnValue(rv)
 

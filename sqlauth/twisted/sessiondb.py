@@ -168,7 +168,7 @@ class SessionDb(object):
 	        continue
             log.msg("SessionDb.list:on {}".format(k))
             sib = self._sessiondb[k]
-            log.msg("SessionDb.list: session in memory but not in database ab_session_id:{}, authid: {}!".format(k,sib._authid),
+            log.msg("SessionDb.list: session in memory but not in db, this can happen if sessions are deleted while running the Autobahn router, ab_session_id:{}, authid: {}!".format(k,sib._authid),
                 logLevel = logging.WARNING)
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,

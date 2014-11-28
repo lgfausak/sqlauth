@@ -54,7 +54,17 @@ create or replace function private.set_session(ab_sid bigint, out login_id bigin
         when others then
           raise notice 'ignoring OTHER error setting %', ab_sid;
           -- crickets
-    raise notice 'set %: audit_user:%,audit_session:%,tzname %', ab_sid,srec.login_id,srec.id,srec.tzname;
     return;
   end;
 $$ language plpgsql security definer;
+
+/*
+** this function for providing array aggregation.
+*/
+CREATE AGGREGATE private.array_accum (anyelement)
+(
+    sfunc = array_append,
+    stype = anyarray,
+    initcond = '{}'
+);
+

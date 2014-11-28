@@ -134,6 +134,7 @@ class Component(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
 
+        rv = {}
         try:
 	    log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
             if self.svar['command'] == 'session':

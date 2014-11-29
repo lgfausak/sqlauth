@@ -94,7 +94,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def userList(self, details):
         log.msg("userList called {}".format(details))
-        rv = yield self.call('adm.db.query',
+        qv = yield self.call('adm.db.query',
                 """
                     select
                         l.id, l.login, l.fullname, l.tzname, private.array_accum(r.name)
@@ -110,10 +110,17 @@ class Component(ApplicationSession):
 		     	l.login
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(rv) > 0:
-            defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
-        else:
-            defer.returnValue([])
+        rv = {}
+        for k in qv:
+            log.msg("userList user record: {}", k)
+            log.msg("userList keys : {}", k.keys())
+            log.msg("userList values : {}", k.values())
+
+        defer.returnValue(qv)
+        #if len(rv) > 0:
+        #    defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
+        #else:
+        #    defer.returnValue([])
 
     @inlineCallbacks
     def onJoin(self, details):

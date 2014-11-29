@@ -62,6 +62,12 @@ class SessionData(ApplicationSession):
 
         def list_session_data(details = None):
             log.msg("SessionData:list_session_data()")
+            log.msg("onJoin:list_session_data.details.caller {}".format(details.caller))
+            log.msg("onJoin:list_session_data.details.authid {}".format(details.authid))
+            log.msg("onJoin:list_session_data.details.authrole {}".format(details.authrole))
+            log.msg("onJoin:list_session_data.details.authmethod {}".format(details.authmethod))
+            log.msg("onJoin:list_session_data.details.caller_transport {}".format(details.caller_transport))
+
             return self.sessiondb.list()
 
         def kill_session(sid,details = None):

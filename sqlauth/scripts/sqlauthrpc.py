@@ -97,7 +97,7 @@ class Component(ApplicationSession):
         qv = yield self.call('adm.db.query',
                 """
                     select
-                        l.id, l.login, l.fullname, l.tzname, private.array_accum(r.name)
+                        l.id, l.login, l.fullname, l.tzname, private.array_accum(r.name) as roles
 		      from
 		        login l, loginrole lr, role r
 		     where

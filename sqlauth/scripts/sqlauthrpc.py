@@ -138,7 +138,7 @@ class Component(ApplicationSession):
         qv = yield self.call('adm.db.query',
                 """
                     select
-                        r.id, r.name, r.description, private.array_accum(l.name) as users
+                        r.id, r.name, r.description, private.array_accum(l.login) as users
 		      from
                         role r, loginrole lr, login l
 		     where

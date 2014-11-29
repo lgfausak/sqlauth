@@ -191,13 +191,18 @@ def run():
                         help='if you specify --dsn then you will need a topic to root it on, the default ' + def_topic_base + ' is fine.')
     sp = p.add_subparsers(dest='command')
     session_p = sp.add_parser('session')
-    session_p.add_argument('action', choices=['list','get','kill'], help='Session management commands')
+    session_p.add_argument('action', choices=['list','get','kill'], help='Session commands')
     session_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
     user_p = sp.add_parser('user')
-    user_p.add_argument('action', choices=['list', 'get', 'update', 'delete'], help='Session management commands')
+    user_p.add_argument('action', choices=['list', 'get', 'update', 'delete'], help='User commands')
     user_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
+    role_p = sp.add_parser('role')
+    role_p.add_argument('action', choices=['list', 'get', 'update', 'delete'], help='Role commands')
+    role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
     args = p.parse_args()

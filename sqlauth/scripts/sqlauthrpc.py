@@ -133,10 +133,53 @@ class Component(ApplicationSession):
         defer.returnValue(rv)
 
     @inlineCallbacks
+    def roleList(self, details):
+        log.msg("roleList called {}".format(details))
+        qv = yield self.call('adm.db.query',
+                """
+                    select
+                        r.id, r.name, r.description, private.array_accum(l.name) as users
+		      from
+                        role r, loginrole lr, login l
+		     where
+		        r.id = lr.role_id
+		       and
+		        lr.role_id = l.id
+		  group by
+		  	r.id
+		  order by
+		     	r.name
+		   """,
+                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            defer.returnValue([])
+            return
+        rv = []
+
+        # insert columns into array, ra and first element of rv (header)
+        # scan the entire result set, determine columns
+        #rk = {}
+        #for r in qv:
+        #    for k in r.keys():
+        #        rk[k] = True
+        #ra = rk.keys()
+        #instead, we use the first row, because the columns cannot
+        #change on a row to row basis in the same query
+        ra = qv[0].keys()
+        rv.append(ra)
+        #append a row in the array for each result, in the same order as the original row 1
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        defer.returnValue(rv)
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         reg = yield self.register(self.userList, self.svar['topic_base'] + '.user.list', RegisterOptions(details_arg = 'details'))
         log.msg("onJoin userList registered attached {}".format(details, self.svar['topic_base']+'.user.list'))
+        reg = yield self.register(self.roleList, self.svar['topic_base'] + '.role.list', RegisterOptions(details_arg = 'details'))
+        log.msg("onJoin roleList registered attached {}".format(details, self.svar['topic_base']+'.role.list'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

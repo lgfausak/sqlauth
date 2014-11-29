@@ -127,14 +127,8 @@ class Component(ApplicationSession):
         rv = []
 
         log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
-        try:
-            if self.svar['command'] == 'session':
-                rv = yield self.session_rpc()
-            elif self.svar['command'] == 'user':
-                rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                    self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
-        except Exception as err:
-            log.msg("db:onJoin error {}".format(err))
+        rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+            self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
 
         if len(rv) > 0:
             print tabulate(rv, headers="firstrow", tablefmt="simple")

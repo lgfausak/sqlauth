@@ -114,7 +114,7 @@ class Component(ApplicationSession):
         log.msg("onJoin session attached {}".format(details))
 
         try:
-	    log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
+	    log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
             if self.svar['command'] == 'session':
                 rv = yield self.session_rpc()
                 if len(rv) > 0:

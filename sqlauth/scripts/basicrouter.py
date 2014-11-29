@@ -62,12 +62,6 @@ class SessionData(ApplicationSession):
 
         def list_session_data(details = None):
             log.msg("SessionData:list_session_data()")
-            log.msg("onJoin:list_session_data.details.caller {}".format(details.caller))
-            log.msg("onJoin:list_session_data.details.authid {}".format(details.authid))
-            log.msg("onJoin:list_session_data.details.authrole {}".format(details.authrole))
-            log.msg("onJoin:list_session_data.details.authmethod {}".format(details.authmethod))
-            log.msg("onJoin:list_session_data.details.caller_transport {}".format(details.caller_transport))
-
             return self.sessiondb.list()
 
         def kill_session(sid,details = None):
@@ -75,10 +69,6 @@ class SessionData(ApplicationSession):
             ses = self.sessiondb.get(sid)
             ses._transport.sendClose(code=3000,reason=six.u('killed'))
             return defer.succeed({ 'killed': sid })
-
-        def list_user_data(details = None):
-            log.msg("SESSIONDATA:list_user_data()")
-            return self.userdb.list()
 
         reg = yield self.register(list_session_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
         reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))

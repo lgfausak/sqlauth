@@ -97,41 +97,49 @@ class Component(ApplicationSession):
         log.msg("action: {}".format(self.svar['action']))
 
         try:
-            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+            qv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                 self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
         except Exception as err:
             log.msg("session_rpc error {}".format(err))
 
-        log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
+        log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], qv))
 
-        if len(rv) > 0:
-            defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
-        else:
+        if len(qv) == 0:
             defer.returnValue([])
+            return
+
+        # this answer comes back as a dict, key is session id, then value is a dict with the name:value
+        # pairs for the record, each record can have different columnes
+        rv = []
+        rk = {}
+        for r in qv.keys():
+            for k in qv[r].keys():
+                rk[k] = True
+        ra = rk.keys()
+        rv.append(ra)
+        for r in qv.keys():
+            rv.append([qv[r].get(c,None) for c in ra])
+        defer.returnValue(rv)
 
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
+        rv = []
 
+        log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
         try:
-	    log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
             if self.svar['command'] == 'session':
                 rv = yield self.session_rpc()
-                if len(rv) > 0:
-        	    print tabulate(rv[1], rv[0], tablefmt="simple")
-        	else:
-        	    print "no results?"
             elif self.svar['command'] == 'user':
                 rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                     self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
-                log.msg("onJoin rv is {}".format(rv))
-                if len(rv) > 0:
-        	    print tabulate(rv, headers="firstrow", tablefmt="simple")
-        	else:
-        	    print "no results?"
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 
+        if len(rv) > 0:
+            print tabulate(rv, headers="firstrow", tablefmt="simple")
+        else:
+            print "no results?"
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

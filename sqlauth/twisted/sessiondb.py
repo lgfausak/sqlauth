@@ -172,11 +172,6 @@ class SessionDb(object):
                 logLevel = logging.WARNING)
             rv[k] = { 'ab_session_id':k,
                       'login_id': sib._authid,
-		      'started':'.',
-		      'duration':'.',
-		      'login':'.',
-		      'fullname':'.',
-		      'txname':'.',
 		      'warning': '*'}
 
         defer.returnValue(rv)

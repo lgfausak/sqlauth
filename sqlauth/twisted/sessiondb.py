@@ -174,6 +174,8 @@ class SessionDb(object):
                       'login_id': sib._authid,
 		      'warning': '*'}
 
+        log.msg("SessionDb.list:Ended up with {}".format(rv))
+
         defer.returnValue(rv)
 
     @inlineCallbacks

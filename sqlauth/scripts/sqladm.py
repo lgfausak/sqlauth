@@ -108,6 +108,8 @@ class Component(ApplicationSession):
             defer.returnValue([])
             return
 
+        log.msg("session_rpc:qv:{}".format(qv))
+
         # this answer comes back as a dict, key is session id, then value is a dict with the name:value
         # pairs for the record, each record can have different columnes
         rv = []
@@ -116,9 +118,13 @@ class Component(ApplicationSession):
             for k in qv[r].keys():
                 rk[k] = True
         ra = rk.keys()
+        log.msg("keys are: {}".format(ra))
         rv.append(ra)
         for r in qv.keys():
             rv.append([qv[r].get(c,None) for c in ra])
+
+        log.msg("result after massage: {}".format(rv))
+
         defer.returnValue(rv)
 
     @inlineCallbacks
@@ -131,6 +137,7 @@ class Component(ApplicationSession):
             self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
 
         if len(rv) > 0:
+            log.msg("onJoin: rv is {}".format(rv))
             print tabulate(rv, headers="firstrow", tablefmt="simple")
         else:
             print "no results?"

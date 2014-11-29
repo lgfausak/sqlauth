@@ -87,7 +87,7 @@ class SessionDb(object):
                    values
                      (%(login_id)s,%(session_id)s,(select tzname from login where id = %(login_id)s))""",
                 { 'login_id': authid, 'session_id': sessionid },
-                options=types.CallOptions(timeout=2000,discloseMe=True))
+                options=types.CallOptions(timeout=5.0,discloseMe=True))
 
         return
 
@@ -103,7 +103,7 @@ class SessionDb(object):
                    { 'topic_name': topic_name,
                       'session_id': sessionid,
                       'activity_type': activity_type,
-                      'allow': allow }, options=types.CallOptions(timeout=2000,discloseMe=True))
+                      'allow': allow }, options=types.CallOptions(timeout=5.0,discloseMe=True))
 
         return
 
@@ -138,7 +138,7 @@ class SessionDb(object):
                           login l
                    where l.id = s.login_id
                      and s.ab_session_id is not null""",
-                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+                   {}, options=types.CallOptions(timeout=5.0,discloseMe=True))
         rv = {}
         sidkeys =  self._sessiondb.keys()
         log.msg("SessionDb.list:sidkeys {}".format(sidkeys))
@@ -187,7 +187,7 @@ class SessionDb(object):
         # this terminates the session in the database
         yield self.app_session.call(self.operation,
                 "update session set ab_session_id = null where ab_session_id = %(session_id)s",
-                { 'session_id': sessionid }, options=types.CallOptions(timeout=2000,discloseMe=True))
+                { 'session_id': sessionid }, options=types.CallOptions(timeout=5.0,discloseMe=True))
         try:
             # then discard of our in memory copy
             del self._sessiondb[sessionid]

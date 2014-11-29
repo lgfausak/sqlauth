@@ -67,7 +67,7 @@ class UserDb(object):
     def get(self,authid):
         log.msg("UserDb:get({})".format(authid))
         rv = yield self.app_session.call(self.query, "select password, id from login where login = %(login)s",
-                { 'login':authid }, options=types.CallOptions(timeout=2000,discloseMe=True))
+                { 'login':authid }, options=types.CallOptions(timeout=5.0,discloseMe=True))
         if len(rv) > 0:
             defer.returnValue((None, six.u(rv[0]['password']), six.u('user'), rv[0]['id']))
         else:
@@ -95,6 +95,6 @@ class UserDb(object):
 		  order by
 		     	l.login
 		   """,
-                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+                   {}, options=types.CallOptions(timeout=5.0,discloseMe=True))
 
         defer.returnValue(rv)

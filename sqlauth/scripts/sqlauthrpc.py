@@ -16,6 +16,25 @@
 ##  limitations under the License.
 ##
 ###############################################################################
+##
+## this contains most of the sqlauth administration rpc calls.  the only one
+## that is missing is the sessiondb one, because there are two inputs
+## for that one.  the database contains one version of the current 'sessions',
+## but the more accurate one is in memory of the router process.  so the listSessions
+## code actually looks at both sources and will let you know if data exists
+## in memory but does not exist in database.
+##
+## user (list,add,delete,get)
+##   list   - show a list of users and the roles they belong to
+##   add    - add a new user
+##   delete - delete a user
+## role (list,add,delete,get)
+##   list   - show a list of roles and the users that belong to then
+##   add    - add a new role
+##   delete - delete a user
+## session (not here, in the router code)
+##
+###############################################################################
 
 from __future__ import absolute_import
 
@@ -96,14 +115,17 @@ class Component(ApplicationSession):
         log.msg("userList called {}".format(details))
         qv = yield self.call('adm.db.query',
                 """
+                    with user_roles as (
+                        select lr.role_id, lr.login_id, r.name
+                          from loginrole lr, role r
+                         where lr.role_id = r.id
+                        )
                     select
-                        l.id, l.login, l.fullname, l.tzname, private.array_accum(r.name) as roles
+                        l.id, l.login, l.fullname, l.tzname, private.array_accum(u.name) as roles
 		      from
-		        login l, loginrole lr, role r
-		     where
-		        l.id = lr.login_id
-		       and
-		        lr.role_id = r.id
+		        login l
+           left outer join
+                        user_roles u on l.id = u.login_id
 		  group by
 		  	l.id
 		  order by
@@ -137,14 +159,17 @@ class Component(ApplicationSession):
         log.msg("roleList called {}".format(details))
         qv = yield self.call('adm.db.query',
                 """
+                    with role_users as (
+                        select lr.role_id, lr.login_id, l.login
+                          from loginrole lr, login l
+                         where lr.login_id = l.id
+                        )
                     select
                         r.id, r.name, r.description, private.array_accum(l.login) as users
 		      from
-                        role r, loginrole lr, login l
-		     where
-		        r.id = lr.role_id
-		       and
-		        lr.login_id = l.id
+                        role r
+           left outer join
+                        role_users l on l.role_id = r.id
 		  group by
 		  	r.id
 		  order by

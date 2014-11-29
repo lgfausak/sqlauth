@@ -146,8 +146,6 @@ class SessionDb(object):
 	    sid = int(k['ab_session_id'])
             log.msg("SessionDb.list:qv.key({})".format(sid))
 	    if sid in sidkeys:
-                log.msg("SessionDb.list:no warning")
-	        k['warning'] = ''
 	        rv[sid] = k
 	    else:
                 log.msg("SessionDb.list:warning")

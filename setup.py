@@ -70,6 +70,7 @@ setup(
       'console_scripts': [
          'sqlpginit = sqlauth.scripts.sqlPGinit:run',
          'sqladm = sqlauth.scripts.sqladm:run',
+         'sqlauthrpc = sqlauth.scripts.sqlauthrpc:run',
          'sqlauthrouter = sqlauth.scripts.basicrouter:run',
       ]},
    packages = find_packages(),

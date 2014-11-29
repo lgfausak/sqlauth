@@ -110,27 +110,6 @@ class Component(ApplicationSession):
             defer.returnValue([])
 
     @inlineCallbacks
-    def user_rpc(self):
-        log.msg("user_rpc")
-        log.msg("topic_base: {}".format(self.svar['topic_base']))
-        log.msg("command: {}".format(self.svar['command']))
-        log.msg("action: {}".format(self.svar['action']))
-
-        try:
-            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
-        except Exception as err:
-            log.msg("user_rpc error {}".format(err))
-
-        log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
-
-        if len(rv) > 0:
-            defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
-        else:
-            defer.returnValue([])
-
-
-    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
 
@@ -140,7 +119,8 @@ class Component(ApplicationSession):
             if self.svar['command'] == 'session':
                 rv = yield self.session_rpc()
             elif self.svar['command'] == 'user':
-                rv = yield self.user_rpc()
+                rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+                    self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 

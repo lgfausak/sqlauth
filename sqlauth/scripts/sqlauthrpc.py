@@ -110,17 +110,24 @@ class Component(ApplicationSession):
 		     	l.login
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        rv = {}
-        for k in qv:
-            log.msg("userList user record: {}", k)
-            log.msg("userList keys : {}", k.keys())
-            log.msg("userList values : {}", k.values())
+        rv = []
 
-        defer.returnValue(qv)
-        #if len(rv) > 0:
-        #    defer.returnValue([rv.itervalues().next().keys(), [ rv[i].values() for i in rv ]])
-        #else:
-        #    defer.returnValue([])
+        # insert columns into array, ra and first element of rv (header)
+        # scan the entire result set, determine columns
+        #rk = {}
+        #for r in qv:
+        #    for k in r.keys():
+        #        rk[k] = True
+        #ra = rk.keys()
+        #instead, we use the first row, because the columns cannot
+        #change on a row to row basis in the same query
+        ra = qv[0].keys()
+        rv.append(ra)
+        #append a row in the array for each result, in the same order as the original row 1
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        defer.returnValue(rv)
 
     @inlineCallbacks
     def onJoin(self, details):

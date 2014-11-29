@@ -29,10 +29,16 @@
 ##   add    - add a new user
 ##   delete - delete a user
 ## role (list,add,delete,get)
-##   list   - show a list of roles and the users that belong to then
+##   list   - show a list of roles and the users that belong to them
 ##   add    - add a new role
 ##   delete - delete a user
+## topic (list,add,delete,get)
+##   list   - show a list of topics and the roles that belong to them
+##   add    - add a new topic
+##   delete - delete a topic
 ## session (not here, in the router code)
+##   list   - list all sessions
+##   kill   - kill a session
 ##
 ###############################################################################
 
@@ -199,12 +205,48 @@ class Component(ApplicationSession):
         defer.returnValue(rv)
 
     @inlineCallbacks
+    def topicList(self, details):
+        log.msg("topicList called {}".format(details))
+        qv = yield self.call('adm.db.query',
+                """
+                    with topic_roles as (
+                        select lr.role_id, lr.topic_id, r.name
+                          from topicrole lr, role r
+                         where lr.role_id = r.id
+                        )
+                    select
+                        t.id, t.name, t.description, private.array_accum(u.name) as roles
+		      from
+		        topic t
+           left outer join
+                        topic_roles u on t.id = u.topic_id
+		  group by
+		  	t.id
+		  order by
+		     	t.login
+		   """,
+                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            defer.returnValue([])
+            return
+
+        ra = qv[0].keys()
+        rv = []
+        rv.append(ra)
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        defer.returnValue(rv)
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         reg = yield self.register(self.userList, self.svar['topic_base'] + '.user.list', RegisterOptions(details_arg = 'details'))
         log.msg("onJoin userList registered attached {}".format(details, self.svar['topic_base']+'.user.list'))
         reg = yield self.register(self.roleList, self.svar['topic_base'] + '.role.list', RegisterOptions(details_arg = 'details'))
         log.msg("onJoin roleList registered attached {}".format(details, self.svar['topic_base']+'.role.list'))
+        reg = yield self.register(self.topicList, self.svar['topic_base'] + '.topic.list', RegisterOptions(details_arg = 'details'))
+        log.msg("onJoin topicList registered attached {}".format(details, self.svar['topic_base']+'.topic.list'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

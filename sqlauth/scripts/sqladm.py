@@ -113,21 +113,25 @@ class Component(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
 
-        rv = {}
         try:
 	    log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], rv))
             if self.svar['command'] == 'session':
                 rv = yield self.session_rpc()
+                if len(rv) > 0:
+        	    print tabulate(rv[1], rv[0], tablefmt="simple")
+        	else:
+        	    print "no results?"
             elif self.svar['command'] == 'user':
                 rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
                     self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
+                log.msg("onJoin rv is {}".format(rv))
+                if len(rv) > 0:
+        	    print tabulate(rv[1], rv[0], tablefmt="simple")
+        	else:
+        	    print "no results?"
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
 
-        if len(rv) > 0:
-	    print tabulate(rv[1], rv[0], tablefmt="simple")
-	else:
-	    print "no results?"
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

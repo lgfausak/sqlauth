@@ -74,10 +74,8 @@ class SessionData(ApplicationSession):
             log.msg("SESSIONDATA:list_user_data()")
             return self.userdb.list()
 
-        reg = yield self.register(list_session_data, 'adm.session.list', options = RegisterOptions(details_arg = 'details'))
-        reg = yield self.register(kill_session, 'adm.session.kill', options = RegisterOptions(details_arg = 'details'))
-
-        reg = yield self.register(list_user_data, 'adm.user.list', options = RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

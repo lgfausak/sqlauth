@@ -70,14 +70,14 @@ class SessionData(ApplicationSession):
             ses._transport.sendClose(code=3000,reason=six.u('killed'))
             return defer.succeed({ 'killed': sid })
 
-        def list_session_data(details = None):
-            log.msg("SessionData:list_session_data()")
-            return self.sessiondb.list()
+        def list_user_data(details = None):
+            log.msg("SESSIONDATA:list_user_data()")
+            return self.userdb.list()
 
-        reg = yield self.register(list_data, 'adm.session.list', options = RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_data, 'adm.session.list', options = RegisterOptions(details_arg = 'details'))
         reg = yield self.register(kill_session, 'adm.session.kill', options = RegisterOptions(details_arg = 'details'))
 
-        reg = yield self.register(kill_session, 'adm.user.list', options = RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_user_data, 'adm.user.list', options = RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

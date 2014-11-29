@@ -156,6 +156,8 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 12	3	5	subscribe	t	0	2014-11-25 17:17:39.320429-06
 14	4	6	call	t	0	2014-11-26 08:21:46.422712-06
 15	4	6	subscribe	t	0	2014-11-26 08:23:27.206593-06
+16	4	6	register	t	0	2014-11-26 08:23:27.206593-06
+17	4	6	publish	t	0	2014-11-26 08:23:27.206593-06
 \.
 
 

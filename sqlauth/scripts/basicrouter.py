@@ -64,8 +64,6 @@ class SessionData(ApplicationSession):
             log.msg("SessionData:list_session_data()")
             qv = self.sessiondb.list()
 
-            log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], qv))
-    
             if len(qv) == 0:
                 defer.returnValue([])
                 return

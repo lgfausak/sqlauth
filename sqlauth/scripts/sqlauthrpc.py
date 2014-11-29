@@ -144,7 +144,7 @@ class Component(ApplicationSession):
 		     where
 		        r.id = lr.role_id
 		       and
-		        lr.role_id = l.id
+		        lr.login_id = l.id
 		  group by
 		  	r.id
 		  order by

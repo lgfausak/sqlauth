@@ -90,44 +90,6 @@ class Component(ApplicationSession):
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
     @inlineCallbacks
-    def session_rpc(self):
-        log.msg("session_rpc")
-        log.msg("topic_base: {}".format(self.svar['topic_base']))
-        log.msg("command: {}".format(self.svar['command']))
-        log.msg("action: {}".format(self.svar['action']))
-
-        try:
-            qv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
-        except Exception as err:
-            log.msg("session_rpc error {}".format(err))
-
-        log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], qv))
-
-        if len(qv) == 0:
-            defer.returnValue([])
-            return
-
-        log.msg("session_rpc:qv:{}".format(qv))
-
-        # this answer comes back as a dict, key is session id, then value is a dict with the name:value
-        # pairs for the record, each record can have different columnes
-        rv = []
-        rk = {}
-        for r in qv.keys():
-            for k in qv[r].keys():
-                rk[k] = True
-        ra = rk.keys()
-        log.msg("keys are: {}".format(ra))
-        rv.append(ra)
-        for r in qv.keys():
-            rv.append([qv[r].get(c,None) for c in ra])
-
-        log.msg("result after massage: {}".format(rv))
-
-        defer.returnValue(rv)
-
-    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         rv = []

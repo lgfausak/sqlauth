@@ -62,7 +62,32 @@ class SessionData(ApplicationSession):
 
         def list_session_data(details = None):
             log.msg("SessionData:list_session_data()")
-            return self.sessiondb.list()
+            qv = self.sessiondb.list()
+
+            log.msg("{}.{}.{} -> {}".format(self.svar['topic_base'],self.svar['command'],self.svar['action'], qv))
+    
+            if len(qv) == 0:
+                defer.returnValue([])
+                return
+    
+            log.msg("list_session_data:qv:{}".format(qv))
+    
+            # this answer comes back as a dict, key is session id, then value is a dict with the name:value
+            # pairs for the record, each record can have different columnes
+            rv = []
+            rk = {}
+            for r in qv.keys():
+                for k in qv[r].keys():
+                    rk[k] = True
+            ra = rk.keys()
+            log.msg("keys are: {}".format(ra))
+            rv.append(ra)
+            for r in qv.keys():
+                rv.append([qv[r].get(c,None) for c in ra])
+    
+            log.msg("result after massage: {}".format(rv))
+    
+            defer.returnValue(rv)
 
         def kill_session(sid,details = None):
             log.msg("SessionData:kill_session({})".format(sid))

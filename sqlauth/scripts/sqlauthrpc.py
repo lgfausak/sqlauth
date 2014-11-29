@@ -122,11 +122,14 @@ class Component(ApplicationSession):
         #instead, we use the first row, because the columns cannot
         #change on a row to row basis in the same query
         ra = qv[0].keys()
+        log.msg("columns are: {}".format(ra))
         rv.append(ra)
         #append a row in the array for each result, in the same order as the original row 1
         for r in qv:
+            log.msg("row is {}".format(r))
             rv.append([r.get(c,None) for c in ra])
 
+        log.msg("returnValue is {}".format(rv))
         defer.returnValue(rv)
 
     @inlineCallbacks

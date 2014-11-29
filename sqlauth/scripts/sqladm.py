@@ -126,7 +126,7 @@ class Component(ApplicationSession):
                     self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
                 log.msg("onJoin rv is {}".format(rv))
                 if len(rv) > 0:
-        	    print tabulate(rv[1], rv[0], tablefmt="simple")
+        	    print tabulate(rv, headers="firstrow", tablefmt="simple")
         	else:
         	    print "no results?"
         except Exception as err:

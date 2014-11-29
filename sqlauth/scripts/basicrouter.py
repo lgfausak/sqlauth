@@ -60,9 +60,10 @@ class SessionData(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin: {}".format(details))
 
+        @inlineCallbacks
         def list_session_data(details = None):
             log.msg("SessionData:list_session_data()")
-            qv = self.sessiondb.list()
+            qv = yield self.sessiondb.list()
 
             if len(qv) == 0:
                 defer.returnValue([])

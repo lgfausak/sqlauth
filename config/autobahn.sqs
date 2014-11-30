@@ -405,6 +405,7 @@
             <type><![CDATA[TEXT]]></type>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[8346705D-DD57-4A8F-895D-8075BCB26869]]></uid>
+            <unique><![CDATA[1]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[description]]></name>
@@ -517,6 +518,7 @@
             <type><![CDATA[TEXT]]></type>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[4164851A-16EA-4442-8303-8D1D8BBBD31D]]></uid>
+            <unique><![CDATA[1]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[description]]></name>
@@ -593,7 +595,7 @@
             <y>464.00</y>
         </location>
         <size>
-            <width>141.00</width>
+            <width>187.00</width>
             <height>80.00</height>
         </size>
         <zorder>5</zorder>
@@ -612,6 +614,7 @@
             <type><![CDATA[TEXT]]></type>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[042BF2E0-FBCE-4977-9E11-084B1EA5788B]]></uid>
+            <unique><![CDATA[0]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[description]]></name>
@@ -843,7 +846,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[SQLite]]></exportDialect>
+        <exportDialect><![CDATA[mysql]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>
@@ -855,9 +858,9 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <snapToGrid><![CDATA[0]]></snapToGrid>
         <SourceSidebarWidth><![CDATA[421.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[1379.000000]]></windowHeight>
-        <windowLocationX><![CDATA[-2104.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[61.000000]]></windowLocationY>
+        <windowHeight><![CDATA[1267.000000]]></windowHeight>
+        <windowLocationX><![CDATA[194.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[150.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[1888.000000]]></windowWidth>
     </SQLDocumentInfo>

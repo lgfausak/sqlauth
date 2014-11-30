@@ -23,7 +23,7 @@ inactive BOOLEAN
 CREATE TABLE role
 (
 id SERIAL PRIMARY KEY,
-name TEXT,
+name TEXT UNIQUE,
 description TEXT
 );
 
@@ -70,7 +70,7 @@ profile JSONB
 CREATE TABLE topic
 (
 id SERIAL NOT NULL PRIMARY KEY  AUTOINCREMENT,
-name TEXT,
+name TEXT UNIQUE,
 description TEXT
 );
 

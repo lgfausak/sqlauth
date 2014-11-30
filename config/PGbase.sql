@@ -25,7 +25,7 @@ PRIMARY KEY (id)
 CREATE TABLE role
 (
 id SERIAL,
-name TEXT,
+name TEXT UNIQUE,
 description TEXT,
 PRIMARY KEY (id)
 );
@@ -78,7 +78,7 @@ PRIMARY KEY (component)
 CREATE TABLE topic
 (
 id SERIAL NOT NULL,
-name TEXT,
+name TEXT UNIQUE,
 description TEXT,
 PRIMARY KEY (id)
 );

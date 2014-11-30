@@ -187,18 +187,8 @@ class Component(ApplicationSession):
             return
         rv = []
 
-        # insert columns into array, ra and first element of rv (header)
-        # scan the entire result set, determine columns
-        #rk = {}
-        #for r in qv:
-        #    for k in r.keys():
-        #        rk[k] = True
-        #ra = rk.keys()
-        #instead, we use the first row, because the columns cannot
-        #change on a row to row basis in the same query
         ra = qv[0].keys()
         rv.append(ra)
-        #append a row in the array for each result, in the same order as the original row 1
         for r in qv:
             rv.append([r.get(c,None) for c in ra])
 
@@ -305,14 +295,20 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
-        reg = yield self.register(self.userList, self.svar['topic_base'] + '.user.list', RegisterOptions(details_arg = 'details'))
-        log.msg("onJoin userList registered attached {}".format(details, self.svar['topic_base']+'.user.list'))
-        reg = yield self.register(self.roleList, self.svar['topic_base'] + '.role.list', RegisterOptions(details_arg = 'details'))
-        log.msg("onJoin roleList registered attached {}".format(details, self.svar['topic_base']+'.role.list'))
-        reg = yield self.register(self.topicList, self.svar['topic_base'] + '.topic.list', RegisterOptions(details_arg = 'details'))
-        log.msg("onJoin topicList registered attached {}".format(details, self.svar['topic_base']+'.topic.list'))
-        reg = yield self.register(self.activityList, self.svar['topic_base'] + '.activity.list', RegisterOptions(details_arg = 'details'))
-        log.msg("onJoin activityList registered attached {}".format(details, self.svar['activity_base']+'.activity.list'))
+        rpc_register = {
+            'user.list': {'method': self.userList },
+            'role.list': {'method': self.roleList },
+            'topic.list': {'method': self.topicList },
+            'activity.list': {'method': self.activityList }
+        }
+        #
+        # register postgres admin functions
+        #
+        for r in rpc_register.keys():
+            reg = yield self.register(rpc_register[r]['method'],
+                self.svar['topic_base'] + '.' + r,
+                RegisterOptions(details_arg = 'details'))
+            log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))
@@ -325,15 +321,6 @@ class Component(ApplicationSession):
         log.msg("onDisconnect:")
         reactor.stop()
 
-# http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text
-class SmartFormatter(argparse.HelpFormatter):
-
-    def _split_lines(self, text, width):
-        # this is the RawTextHelpFormatter._split_lines
-        if text.startswith('R|'):
-            return text[2:].splitlines()  
-        return argparse.HelpFormatter._split_lines(self, text, width)
-
 def run():
     prog = os.path.basename(__file__)
 
@@ -344,8 +331,7 @@ def run():
     def_topic_base = 'adm'
     def_action_args = '{}'
 
-    # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text
-    p = argparse.ArgumentParser(description="sqlauth backend support", formatter_class=SmartFormatter)
+    p = argparse.ArgumentParser(description="sqlauthrpc postgres backend rpc definitions")
 
     p.add_argument('-w', '--websocket', action='store', dest='wsocket', default=def_wsocket,
                         help='web socket definition, default is: '+def_wsocket)

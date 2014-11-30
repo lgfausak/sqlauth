@@ -239,6 +239,69 @@ class Component(ApplicationSession):
         defer.returnValue(rv)
 
     @inlineCallbacks
+    def activityList(self, details):
+        log.msg("activityList called {}".format(details))
+	av = yield self.call('adm.session.list', options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(av) == 0:
+            defer.returnValue([])
+            return
+
+        idx = 0
+        try:
+            idx = av[0].index('id')
+        except:
+            log.msg("activityList: can't find id field in session list: {}, returning".format(av[0]))
+            defer.returnValue([])
+            return
+
+        # this array contains the session_id for all of the active sessions
+        active_sessions = [a[idx] for a in av[1:]]
+            
+        # this query picks up active activity, for which there is a current session
+        # call, register, publish, subscribe are the interesting activities.
+        # this activity could be bound to a session that no longer exists, that is why we
+        # pick up the adm.session.list from above, that returns just the
+        # active sessions. we use that to filter the list we get back from
+        # this query.  if the database is in sync with the router, then these two will
+        # be identical.  otherwise, if the router has crashed and cleanup hasn't happened,
+        # or is multiple routers are sharing the same sqlauth installation, then there
+        # could be more entries in the database than there is in the router.
+        qv = yield self.call('adm.db.query',
+                """
+                    select
+                        a.id, a.session_id, a.type_id, l.name
+		      from
+		        activity a,
+                        session s,
+                        login l
+                     where
+                        a.session_id = s.id
+                       and
+                        a.allow = true
+                       and
+                        a.type_id in ( 'call', 'register', 'subscribe', 'publish' )
+                       and
+                        s.login_id = l.id
+                       and
+                        s.ab_session_id is not null
+		  order by
+		     	a.id
+		   """,
+                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            defer.returnValue([])
+            return
+
+        ra = qv[0].keys()
+        rv = []
+        rv.append(ra)
+        for r in qv:
+            if r['session_id'] in active_sessions:
+                rv.append([r.get(c,None) for c in ra])
+
+        defer.returnValue(rv)
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         reg = yield self.register(self.userList, self.svar['topic_base'] + '.user.list', RegisterOptions(details_arg = 'details'))
@@ -247,6 +310,8 @@ class Component(ApplicationSession):
         log.msg("onJoin roleList registered attached {}".format(details, self.svar['topic_base']+'.role.list'))
         reg = yield self.register(self.topicList, self.svar['topic_base'] + '.topic.list', RegisterOptions(details_arg = 'details'))
         log.msg("onJoin topicList registered attached {}".format(details, self.svar['topic_base']+'.topic.list'))
+        reg = yield self.register(self.activityList, self.svar['topic_base'] + '.activity.list', RegisterOptions(details_arg = 'details'))
+        log.msg("onJoin activityList registered attached {}".format(details, self.svar['activity_base']+'.activity.list'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

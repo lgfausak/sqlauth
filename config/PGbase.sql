@@ -15,6 +15,7 @@ id SERIAL,
 login TEXT UNIQUE,
 fullname TEXT,
 password TEXT,
+salt TEXT,
 tzname TEXT,
 PRIMARY KEY (id)
 );

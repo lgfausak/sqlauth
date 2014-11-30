@@ -30,11 +30,11 @@ admin	Admin Domain	Rule over this space
 -- Data for Name: login; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY login (id, login, fullname, password, tzname, modified_by_user, modified_timestamp) FROM stdin;
-0	sys	System Admin	123test	America/Chicago	0	2014-11-25 16:39:11.141461-06
-2	db	DB Admin	123test	America/Chicago	0	2014-11-25 16:47:09.463401-06
-3	greg	Greg Fausak	123test	America/Chicago	0	2014-11-25 17:20:48.85132-06
-4	adm	Public System Administrator	123test	America/Chicago	0	2014-11-26 08:05:27.067997-06
+COPY login (id, login, fullname, password, salt, tzname, modified_by_user, modified_timestamp) FROM stdin;
+0	sys	System Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 16:39:11.141461-06
+2	db	DB Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 16:47:09.463401-06
+3	greg	Greg Fausak	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 17:20:48.85132-06
+4	adm	Public System Administrator	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-26 08:05:27.067997-06
 \.
 
 

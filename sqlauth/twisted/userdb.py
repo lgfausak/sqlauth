@@ -66,10 +66,10 @@ class UserDb(object):
     @inlineCallbacks
     def get(self,authid):
         log.msg("UserDb:get({})".format(authid))
-        rv = yield self.app_session.call(self.query, "select password, id from login where login = %(login)s",
+        rv = yield self.app_session.call(self.query, "select password, salt, id from login where login = %(login)s",
                 { 'login':authid }, options=types.CallOptions(timeout=2000,discloseMe=True))
         if len(rv) > 0:
-            defer.returnValue((None, six.u(rv[0]['password']), six.u('user'), rv[0]['id']))
+            defer.returnValue((six.u(rv[0]['salt']), six.u(rv[0]['password']), six.u('user'), rv[0]['id']))
         else:
             defer.returnValue((None, None, None, None))
         return

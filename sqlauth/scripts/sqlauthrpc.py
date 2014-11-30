@@ -269,7 +269,8 @@ class Component(ApplicationSession):
         qv = yield self.call('adm.db.query',
                 """
                     select
-                        a.id, a.session_id, a.type_id, l.name
+                        a.id, a.session_id, a.type_id, l.login,
+                        to_char(a.modified_timestamp,'YYYY-MM-DD HH24:MI:SS') as action_timestamp
 		      from
 		        activity a,
                         session s,

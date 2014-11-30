@@ -20,6 +20,7 @@
 from __future__ import absolute_import
 
 import sys, os, argparse, six, json
+import types as vtypes
 from tabulate import tabulate
 
 import twisted
@@ -95,14 +96,26 @@ class Component(ApplicationSession):
         rv = []
 
         log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
-        rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+        nv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
             self.svar['action'], action_args=self.svar['action_args'], options = CallOptions(timeout=2000,discloseMe = True))
 
-        if len(rv) > 0:
-            log.msg("onJoin: rv is {}".format(rv))
-            print tabulate(rv, headers="firstrow", tablefmt="simple")
-        else:
-            print "no results?"
+        drv = {}
+        if isinstance(nv, vtypes.ListType):
+            drv[0] = {
+                'title':'',
+                'result':nv
+            }
+
+        for i in drv:
+            log.msg("onJoin: result index {}: title {}".format(i,drv[i]['title']))
+            rv = drv[i]['result']
+     
+            if len(rv) > 0:
+                log.msg("onJoin: rv is {}".format(rv))
+                print "Result set {} {}", i + 1, drv[i]['title']
+                print tabulate(rv, headers="firstrow", tablefmt="simple")
+            else:
+                print "Result set {} {}, zero length", i + 1, drv[i]['title']
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

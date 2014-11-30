@@ -46,6 +46,7 @@ from __future__ import absolute_import
 
 import sys, os, argparse, six, json
 from tabulate import tabulate
+import types as vtypes
 
 import twisted
 from twisted.python import log
@@ -236,14 +237,19 @@ class Component(ApplicationSession):
 		    """
                    ],
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
-        # qv[0] contains the result
-        
-        if isinstance(qv, types.DictType):
+        # qv[0] contains the results as an array of dicts, one dict for each query that ran
+
+        if isinstance(qv, vtypes.DictType):
+            # this will never happen for this query.
             defer.returnValue(self._columnize(qv))
         else:
-            rv = []
-            for r in qv:
-                rv.extend(self._columnize(r))
+            # this case will always happen
+            rv = {}
+            ri in range(len(qv)):
+                rv[ri] = {}
+                rv[ri]['result'] = self._columnize(qv[ri])
+            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
+            # the array of results, first row is header, second row - end is data.
             defer.returnValue(rv)
 
     @inlineCallbacks

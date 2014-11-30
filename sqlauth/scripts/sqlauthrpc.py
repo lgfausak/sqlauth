@@ -338,9 +338,9 @@ class Component(ApplicationSession):
                     delete
                         role
                      where
-                        name = %(name)s
+                        "name" = %(name)s
                  returning
-                        id, name, description
+                        id, "name", description
 		    """
                    ],
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))

@@ -150,6 +150,8 @@ class Component(ApplicationSession):
 		        login l
            left outer join
                         user_roles u on l.id = u.login_id
+                     where
+                        l.login is not null
 		  group by
 		  	l.id
 		  order by
@@ -199,6 +201,50 @@ class Component(ApplicationSession):
         # qv[0] contains the result
         
         defer.returnValue(self._columnize(qv))
+
+    # the account isn't deleted, rather, its login name is nulled
+    # and its groups are removed
+    @inlineCallbacks
+    def userDelete(self, *args, **kwargs):
+        log.msg("userDelete called {}".format(kwargs))
+        qa = kwargs['action_args']
+        qv = yield self.call('adm.db.query',
+                [
+                    """
+                    delete
+                      from
+                        loginrole
+                     where
+                       login_id = (
+                           select id from login where login = %(login)s
+                       )
+                 returning
+                        *
+		    """,
+                    """
+                    update
+                        login
+                       set
+                        login = null,
+                        salt = 'shutdown',
+                        password = 'inactive',
+                        old_login = %(login)s
+                     where
+                        login = %(login)s
+                 returning
+                        *
+		    """
+                   ],
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        if isinstance(qv, types.DictType):
+            defer.returnValue(self._columnize(qv))
+        else:
+            rv = []
+            for r in qv:
+                rv.extend(self._columnize(r))
+            defer.returnValue(rv)
 
     @inlineCallbacks
     def roleList(self, *args, **kwargs):
@@ -319,6 +365,7 @@ class Component(ApplicationSession):
             'user.list': {'method': self.userList },
             'user.get': {'method': self.userGet },
             'user.add': {'method': self.userAdd },
+            'user.delete': {'method': self.userDelete },
             'role.list': {'method': self.roleList },
             'topic.list': {'method': self.topicList },
             'activity.list': {'method': self.activityList }

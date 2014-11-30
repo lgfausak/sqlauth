@@ -160,7 +160,7 @@ class Component(ApplicationSession):
 
     @inlineCallbacks
     def userGet(self, *args, **kwargs):
-        log.msg("userList called {}".format(kwargs))
+        log.msg("userGet called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     select
@@ -174,8 +174,35 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
+    def userAdd(self, *args, **kwargs):
+        log.msg("userAdd called {}".format(kwargs))
+        salt = os.urandom(32).encode('base_64')
+        qa = kwargs['action_args']
+        password = auth.derive_key(qa['secret'].encode('utf8'), salt.encode('utf8')).decode('ascii')
+        qa['salt'] = salt
+        qa['password'] = password
+        qv = yield self.call('adm.db.query',
+                """
+                    insert into
+                        login
+                    (
+                        login, fullname, password, salt, tzname
+                    )
+                    values
+                    (
+                        %(login)s, %(fullname)s, %(key)s, %(salt)s, %(tzname)s
+                    )
+                    returning
+                        *
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._columnize(qv))
+
+    @inlineCallbacks
     def roleList(self, *args, **kwargs):
-        log.msg("userList called {}".format(kwargs))
+        log.msg("roleList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     with role_users as (
@@ -199,7 +226,7 @@ class Component(ApplicationSession):
 
     @inlineCallbacks
     def topicList(self, *args, **kwargs):
-        log.msg("userList called {}".format(kwargs))
+        log.msg("topicList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     with topic_roles as (
@@ -291,6 +318,7 @@ class Component(ApplicationSession):
         rpc_register = {
             'user.list': {'method': self.userList },
             'user.get': {'method': self.userGet },
+            'user.add': {'method': self.userAdd },
             'role.list': {'method': self.roleList },
             'topic.list': {'method': self.topicList },
             'activity.list': {'method': self.activityList }

@@ -109,14 +109,14 @@ class Component(ApplicationSession):
 
         for i in range(len(drv)):
             log.msg("onJoin: result index {}: title {}".format(i,drv[i]['title']))
-            rv = drv[i]['result']
+            rv = drv[str(i)]['result']
      
             if len(rv) > 0:
                 log.msg("onJoin: rv is {}".format(rv))
-                print "Result set {} {}".format(i + 1, drv[i]['title'])
+                print "Result set {} {}".format(i + 1, drv[str(i)]['title'])
                 print tabulate(rv, headers="firstrow", tablefmt="simple")
             else:
-                print "Result set {} {}, zero length".format(i + 1, drv[i]['title'])
+                print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

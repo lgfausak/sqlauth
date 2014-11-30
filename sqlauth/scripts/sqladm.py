@@ -106,6 +106,8 @@ class Component(ApplicationSession):
                 'title':'',
                 'result':nv
             }
+        else:
+            log.msg("onJoin: we got: {}".format(drv))
 
         for i in drv:
             log.msg("onJoin: result index {}: title {}".format(i,drv[i]['title']))

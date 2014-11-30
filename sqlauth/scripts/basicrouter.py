@@ -61,7 +61,7 @@ class SessionData(ApplicationSession):
         log.msg("onJoin: {}".format(details))
 
         @inlineCallbacks
-        def list_session_data(details = None):
+        def list_session_data(*args, **kwargs):
             log.msg("SessionData:list_session_data()")
             qv = yield self.sessiondb.list()
 
@@ -88,14 +88,15 @@ class SessionData(ApplicationSession):
     
             defer.returnValue(rv)
 
-        def kill_session(sid,details = None):
+        def kill_session(*args, **kwargs):
+            sid = kwargs['sid']
             log.msg("SessionData:kill_session({})".format(sid))
             ses = self.sessiondb.get(sid)
             ses._transport.sendClose(code=3000,reason=six.u('killed'))
             return defer.succeed({ 'killed': sid })
 
         reg = yield self.register(list_session_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
-        reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
+        #reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

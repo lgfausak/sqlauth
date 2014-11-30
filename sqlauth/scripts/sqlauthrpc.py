@@ -135,8 +135,8 @@ class Component(ApplicationSession):
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
     @inlineCallbacks
-    def userList(self, details):
-        log.msg("userList called {}".format(details))
+    def userList(self, *args, **kwargs):
+        log.msg("userList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     with user_roles as (
@@ -159,8 +159,8 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
-    def userGet(self, details):
-        log.msg("userGet called {}".format(details))
+    def userGet(self, *args, **kwargs):
+        log.msg("userList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     select
@@ -174,8 +174,8 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
-    def roleList(self, details):
-        log.msg("roleList called {}".format(details))
+    def roleList(self, *args, **kwargs):
+        log.msg("userList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     with role_users as (
@@ -198,8 +198,8 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
-    def topicList(self, details):
-        log.msg("topicList called {}".format(details))
+    def topicList(self, *args, **kwargs):
+        log.msg("userList called {}".format(kwargs))
         qv = yield self.call('adm.db.query',
                 """
                     with topic_roles as (
@@ -222,8 +222,8 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
-    def activityList(self, details):
-        log.msg("activityList called {}".format(details))
+    def activityList(self, *args, **kwargs):
+        log.msg("activityList called {}".format(kwargs))
 	av = yield self.call('adm.session.list', options=types.CallOptions(timeout=2000,discloseMe=True))
         if len(av) == 0:
             defer.returnValue([])

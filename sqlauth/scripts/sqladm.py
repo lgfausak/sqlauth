@@ -96,7 +96,7 @@ class Component(ApplicationSession):
 
         log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
         rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-            self.svar['action'], options = CallOptions(timeout=2000,discloseMe = True))
+            self.svar['action'], action_args=self.svar['action_args'], options = CallOptions(timeout=2000,discloseMe = True))
 
         if len(rv) > 0:
             log.msg("onJoin: rv is {}".format(rv))

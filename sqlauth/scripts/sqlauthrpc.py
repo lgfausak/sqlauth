@@ -290,6 +290,7 @@ class Component(ApplicationSession):
         log.msg("onJoin session attached {}".format(details))
         rpc_register = {
             'user.list': {'method': self.userList },
+            'user.get': {'method': self.userGet },
             'role.list': {'method': self.roleList },
             'topic.list': {'method': self.topicList },
             'activity.list': {'method': self.activityList }

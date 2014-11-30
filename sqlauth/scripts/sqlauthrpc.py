@@ -220,7 +220,7 @@ class Component(ApplicationSession):
                            select id from login where login = %(login)s
                        )
                  returning
-                        *
+                        id, login_id, role_id
 		    """,
                     """
                     update
@@ -233,7 +233,7 @@ class Component(ApplicationSession):
                      where
                         login = %(login)s
                  returning
-                        *
+                        id, old_login as login, password, salt
 		    """
                    ],
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))

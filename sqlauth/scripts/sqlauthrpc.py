@@ -170,7 +170,7 @@ class Component(ApplicationSession):
 		     where
 		     	login = %(login)s
 		   """,
-                   qargs, options=types.CallOptions(timeout=2000,discloseMe=True))
+                   kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks

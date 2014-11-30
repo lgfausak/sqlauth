@@ -196,7 +196,7 @@ class Component(ApplicationSession):
                         %(login)s, %(fullname)s, %(password)s, %(salt)s, %(tzname)s
                     )
                     returning
-                        *
+                        id, login, fullname
 		   """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result

@@ -99,8 +99,9 @@ class Component(ApplicationSession):
         nv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
             self.svar['action'], action_args=self.svar['action_args'], options = CallOptions(timeout=2000,discloseMe = True))
 
-        drv = {}
+        drv = nv
         if isinstance(nv, vtypes.ListType):
+            drv = {}
             drv[0] = {
                 'title':'',
                 'result':nv

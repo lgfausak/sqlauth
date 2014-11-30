@@ -14,6 +14,7 @@ id SERIAL PRIMARY KEY  AUTOINCREMENT,
 login TEXT UNIQUE,
 fullname TEXT,
 password TEXT,
+salt TEXT,
 tzname TEXT
 );
 

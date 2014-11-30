@@ -14,6 +14,7 @@ id SERIAL AUTO_INCREMENT COMMENT 'Primary Key for the user',
 login TEXT UNIQUE,
 fullname TEXT,
 password TEXT,
+salt TEXT,
 tzname TEXT,
 PRIMARY KEY (id)
 );

@@ -102,14 +102,12 @@ class Component(ApplicationSession):
         drv = nv
         if isinstance(nv, vtypes.ListType):
             drv = {}
-            drv[0] = {
+            drv['0'] = {
                 'title':'',
                 'result':nv
             }
-        else:
-            log.msg("onJoin: we got: {}".format(drv))
 
-        for i in drv:
+        for i in range(len(drv)):
             log.msg("onJoin: result index {}: title {}".format(i,drv[i]['title']))
             rv = drv[i]['result']
      

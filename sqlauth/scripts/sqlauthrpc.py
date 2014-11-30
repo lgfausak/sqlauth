@@ -247,6 +247,7 @@ class Component(ApplicationSession):
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
+                rv[ri]['title'] = ''
                 rv[ri]['result'] = self._columnize(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.

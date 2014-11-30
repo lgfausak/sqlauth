@@ -112,10 +112,10 @@ class Component(ApplicationSession):
      
             if len(rv) > 0:
                 log.msg("onJoin: rv is {}".format(rv))
-                print "Result set {} {}", i + 1, drv[i]['title']
+                print "Result set {} {}".format(i + 1, drv[i]['title'])
                 print tabulate(rv, headers="firstrow", tablefmt="simple")
             else:
-                print "Result set {} {}, zero length", i + 1, drv[i]['title']
+                print "Result set {} {}, zero length".format(i + 1, drv[i]['title'])
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

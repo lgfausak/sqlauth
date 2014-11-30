@@ -223,7 +223,7 @@ class Component(ApplicationSession):
 		  group by
 		  	t.id
 		  order by
-		     	t.login
+		     	t.name
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         if len(qv) == 0:

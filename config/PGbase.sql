@@ -17,6 +17,8 @@ fullname TEXT,
 password TEXT,
 salt TEXT,
 tzname TEXT,
+old_login TEXT,
+inactive BOOLEAN,
 PRIMARY KEY (id)
 );
 

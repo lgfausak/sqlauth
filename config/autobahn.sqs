@@ -342,8 +342,8 @@
         <name><![CDATA[Comment1_1]]></name>
         <comment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></comment>
         <location>
-            <x>1220.00</x>
-            <y>195.00</y>
+            <x>1232.00</x>
+            <y>309.00</y>
         </location>
         <size>
             <width>276.00</width>
@@ -429,7 +429,7 @@
         </location>
         <size>
             <width>193.00</width>
-            <height>140.00</height>
+            <height>180.00</height>
         </size>
         <zorder>0</zorder>
         <SQLField>
@@ -471,6 +471,16 @@
             <type><![CDATA[TEXT]]></type>
             <temporaryOriginalName><![CDATA[tzname]]></temporaryOriginalName>
             <uid><![CDATA[A5104793-AF91-4431-9685-0D0EFD2ADEDF]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[old_login]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <uid><![CDATA[05F29EC2-0D55-4602-B338-A129F91F3F74]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[inactive]]></name>
+            <type><![CDATA[BOOLEAN]]></type>
+            <uid><![CDATA[5BE6641D-A0D9-4199-B3A9-F90E005D2E0C]]></uid>
         </SQLField>
         <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
         <labelName><![CDATA[authentication]]></labelName>
@@ -833,7 +843,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[mysql]]></exportDialect>
+        <exportDialect><![CDATA[SQLite]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>

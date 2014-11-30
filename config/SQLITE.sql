@@ -15,7 +15,9 @@ login TEXT UNIQUE,
 fullname TEXT,
 password TEXT,
 salt TEXT,
-tzname TEXT
+tzname TEXT,
+old_login TEXT,
+inactive BOOLEAN
 );
 
 CREATE TABLE role

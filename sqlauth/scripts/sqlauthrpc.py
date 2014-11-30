@@ -87,6 +87,24 @@ class Component(ApplicationSession):
         log.msg("sending to super.init args {}, kwargs {}".format(args,kwargs))
         ApplicationSession.__init__(self, *args, **kwargs)
 
+    # simple function to change a dictionary from each row
+    # to an array of arrays, first row contains the column names
+    # second+ rows contain the data.  this routine assumes that each
+    # row will have the same names.
+
+    def _columnize(self, qv):
+        rv = []
+        if len(qv) == 0:
+            return rv
+
+        ra = qv[0].keys()
+        rv.append(ra)
+        #append a row in the array for each result, in the same order as the original row 1
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        return rv
+
     def onConnect(self):
         log.msg("onConnect")
         auth_type = 'none'
@@ -138,27 +156,22 @@ class Component(ApplicationSession):
 		     	l.login
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(qv) == 0:
-            defer.returnValue([])
-            return
-        rv = []
+        defer.returnValue(self._columnize(qv))
 
-        # insert columns into array, ra and first element of rv (header)
-        # scan the entire result set, determine columns
-        #rk = {}
-        #for r in qv:
-        #    for k in r.keys():
-        #        rk[k] = True
-        #ra = rk.keys()
-        #instead, we use the first row, because the columns cannot
-        #change on a row to row basis in the same query
-        ra = qv[0].keys()
-        rv.append(ra)
-        #append a row in the array for each result, in the same order as the original row 1
-        for r in qv:
-            rv.append([r.get(c,None) for c in ra])
-
-        defer.returnValue(rv)
+    @inlineCallbacks
+    def userGet(self, details):
+        log.msg("userGet called {}".format(details))
+        qv = yield self.call('adm.db.query',
+                """
+                    select
+                        password, salt, login, fullname, tzname, id
+                      from
+                        login
+		     where
+		     	login = %(login)s
+		   """,
+                   qargs, options=types.CallOptions(timeout=2000,discloseMe=True))
+        defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
     def roleList(self, details):
@@ -182,17 +195,7 @@ class Component(ApplicationSession):
 		     	r.name
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(qv) == 0:
-            defer.returnValue([])
-            return
-        rv = []
-
-        ra = qv[0].keys()
-        rv.append(ra)
-        for r in qv:
-            rv.append([r.get(c,None) for c in ra])
-
-        defer.returnValue(rv)
+        defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
     def topicList(self, details):
@@ -216,17 +219,7 @@ class Component(ApplicationSession):
 		     	t.name
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(qv) == 0:
-            defer.returnValue([])
-            return
-
-        ra = qv[0].keys()
-        rv = []
-        rv.append(ra)
-        for r in qv:
-            rv.append([r.get(c,None) for c in ra])
-
-        defer.returnValue(rv)
+        defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
     def activityList(self, details):

@@ -210,7 +210,7 @@ class Component(ApplicationSession):
         qv = yield self.call('adm.db.query',
                 """
                     with topic_roles as (
-                        select lr.role_id, lr.topic_id, r.name
+                        select distinct lr.role_id, lr.topic_id, r.name
                           from topicrole lr, role r
                          where lr.role_id = r.id
                         )

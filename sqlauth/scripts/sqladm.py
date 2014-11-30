@@ -108,7 +108,7 @@ class Component(ApplicationSession):
             }
 
         for i in range(len(drv)):
-            log.msg("onJoin: result index {}: title {}".format(i,drv[i]['title']))
+            log.msg("onJoin: result index {}: title {}".format(i,drv[str(i)]['title']))
             rv = drv[str(i)]['result']
      
             if len(rv) > 0:

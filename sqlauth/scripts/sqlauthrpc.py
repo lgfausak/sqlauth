@@ -190,7 +190,7 @@ class Component(ApplicationSession):
                     )
                     values
                     (
-                        %(login)s, %(fullname)s, %(key)s, %(salt)s, %(tzname)s
+                        %(login)s, %(fullname)s, %(password)s, %(salt)s, %(tzname)s
                     )
                     returning
                         *

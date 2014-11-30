@@ -245,7 +245,7 @@ class Component(ApplicationSession):
         else:
             # this case will always happen
             rv = {}
-            ri in range(len(qv)):
+            for ri in range(len(qv)):
                 rv[ri] = {}
                 rv[ri]['result'] = self._columnize(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are

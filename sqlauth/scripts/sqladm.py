@@ -95,28 +95,32 @@ class Component(ApplicationSession):
         log.msg("onJoin session attached {}".format(details))
         rv = []
 
-        log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
-        nv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-            self.svar['action'], action_args=self.svar['action_args'], options = CallOptions(timeout=2000,discloseMe = True))
+        try:
+            log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
+            nv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
+                self.svar['action'], action_args=self.svar['action_args'],
+                options = CallOptions(timeout=2000,discloseMe = True))
 
-        drv = nv
-        if isinstance(nv, vtypes.ListType):
-            drv = {}
-            drv['0'] = {
-                'title':'',
-                'result':nv
-            }
-
-        for i in range(len(drv)):
-            log.msg("onJoin: result index {}: title {}".format(i,drv[str(i)]['title']))
-            rv = drv[str(i)]['result']
-     
-            if len(rv) > 0:
-                log.msg("onJoin: rv is {}".format(rv))
-                print "Result set {} {}".format(i + 1, drv[str(i)]['title'])
-                print tabulate(rv, headers="firstrow", tablefmt="simple")
-            else:
-                print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
+            drv = nv
+            if isinstance(nv, vtypes.ListType):
+                drv = {}
+                drv['0'] = {
+                    'title':'',
+                    'result':nv
+                }
+    
+            for i in range(len(drv)):
+                log.msg("onJoin: result index {}: title {}".format(i,drv[str(i)]['title']))
+                rv = drv[str(i)]['result']
+         
+                if len(rv) > 0:
+                    log.msg("onJoin: rv is {}".format(rv))
+                    print "Result set {} {}".format(i + 1, drv[str(i)]['title'])
+                    print tabulate(rv, headers="firstrow", tablefmt="simple")
+                else:
+                    print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
+        except Exception as e:
+            log.msg("onJoin error {}".format(e))
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()
@@ -125,7 +129,6 @@ class Component(ApplicationSession):
         log.msg("onLeave: {}".format(details))
 
         self.disconnect()
-
         return
 
     def onDisconnect(self):

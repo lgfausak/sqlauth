@@ -317,7 +317,11 @@ def run():
     ## start the server from an endpoint
     ##
     server = serverFromString(reactor, args.endpoint)
-    server.listen(transport_factory)
+    try:
+        server.listen(transport_factory)
+    except Exception as e:
+        sys.stderr.write("Error: {} \n".format(e))
+        sys.exit(1)
 
 
     ## now enter the Twisted reactor loop

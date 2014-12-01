@@ -120,7 +120,7 @@ class Component(ApplicationSession):
                 else:
                     print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
         except Exception as e:
-            sys.stderr.write("ERROR: {}".format(e))
+            sys.stderr.write("ERROR: {}\n".format(e))
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

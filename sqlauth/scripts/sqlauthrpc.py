@@ -209,6 +209,10 @@ class Component(ApplicationSession):
     def userDelete(self, *args, **kwargs):
         log.msg("userDelete called {}".format(kwargs))
         qa = kwargs['action_args']
+        rtitle = [
+            "Login to role association",
+            "Login"
+        ]
         qv = yield self.call('adm.db.query',
                 [
                     """
@@ -247,7 +251,7 @@ class Component(ApplicationSession):
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
-                rv[ri]['title'] = ''
+                rv[ri]['title'] = rtitle[ri]
                 rv[ri]['result'] = self._columnize(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.
@@ -321,6 +325,10 @@ class Component(ApplicationSession):
     def roleDelete(self, *args, **kwargs):
         log.msg("roleDelete called {}".format(kwargs))
         qa = kwargs['action_args']
+        rtitle = [
+            "Role to topic association",
+            "Role"
+        ]
         qv = yield self.call('adm.db.query',
                 [
                     """
@@ -355,7 +363,7 @@ class Component(ApplicationSession):
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
-                rv[ri]['title'] = ''
+                rv[ri]['title'] = rtitle[ri]
                 rv[ri]['result'] = self._columnize(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.
@@ -429,16 +437,10 @@ class Component(ApplicationSession):
     def topicDelete(self, *args, **kwargs):
         log.msg("topicDelete called {}".format(kwargs))
         qa = kwargs['action_args']
-        qa['__meta__'] = {
-            "query": {
-                "0": {
-                    "title":"Topic to role association"
-                },
-                "1": {
-                    "title":"Role"
-                }
-            }
-        }
+        rtitle = [
+            "Topic to role association",
+            "Role"
+        ]
         qv = yield self.call('adm.db.query',
                 [
                     """
@@ -472,7 +474,7 @@ class Component(ApplicationSession):
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
-                rv[ri]['title'] = ''
+                rv[ri]['title'] = rtitle[ri]
                 rv[ri]['result'] = self._columnize(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.

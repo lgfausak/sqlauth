@@ -24,7 +24,6 @@ import six
 
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks
-from twisted.internet.error import CannotListenError
 
 from autobahn import util
 from autobahn.wamp import auth
@@ -322,7 +321,7 @@ def run():
     def ListenFailed(reason):
         log.msg("On Startup Listen Failed with {}".format(reason))
         reactor.stop()
-        sys.exit(1)
+        #sys.exit(1)
     srv.addErrback(ListenFailed)
 
     reactor.run()

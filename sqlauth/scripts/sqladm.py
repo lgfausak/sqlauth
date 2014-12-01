@@ -18,7 +18,6 @@
 ###############################################################################
 
 from __future__ import absolute_import
-from __future__ import print_function
 
 import sys, os, argparse, six, json
 import types as vtypes
@@ -121,7 +120,7 @@ class Component(ApplicationSession):
                 else:
                     print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
         except Exception as e:
-            print("ERROR: {}".format(e), file=sys.stderr)
+            sys.stderr.write("ERROR: {}".format(e))
 
         log.msg("onJoin disconnecting : {}")
         self.disconnect()

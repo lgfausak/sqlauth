@@ -24,6 +24,7 @@ import six
 
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks
+from twisted.internet.error import CannotListenError
 
 from autobahn import util
 from autobahn.wamp import auth
@@ -318,12 +319,14 @@ def run():
     ##
     server = serverFromString(reactor, args.endpoint)
     try:
-        server.listen(transport_factory)
+        srv = server.listen(transport_factory)
     except Exception as e:
         sys.stderr.write("Error: {} \n".format(e))
         sys.exit(1)
 
-    log.msg("GOT HERE")
+    log.msg("GOT HERE {}", srv)
+    if srv == CannotListenError:
+        log.msg("AND GOT HERE {}", srv)
 
 
     ## now enter the Twisted reactor loop

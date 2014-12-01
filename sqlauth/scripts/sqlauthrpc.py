@@ -456,6 +456,7 @@ class Component(ApplicationSession):
 		    """,
                     """
                     delete
+                      from
                         topic
                      where
                         name = %(name)s

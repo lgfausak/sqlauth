@@ -574,7 +574,7 @@ class Component(ApplicationSession):
                 log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
             except Exception as e:
                 log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
-                self.leave(log_message=u'test')
+                self.leave(log_message=six.u('test'))
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))

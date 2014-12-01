@@ -325,7 +325,7 @@ def run():
         sys.exit(1)
 
     log.msg("GOT HERE {}", srv)
-    if srv == CannotListenError:
+    if isinstance(srv,CannotListenError):
         log.msg("AND GOT HERE {}", srv)
 
 

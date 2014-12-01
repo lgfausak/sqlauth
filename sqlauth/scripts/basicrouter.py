@@ -322,7 +322,11 @@ def run():
 
     ## now enter the Twisted reactor loop
     ##
-    reactor.run()
+    try:
+        reactor.run()
+    except Exception as e:
+        sys.stderr.write("Error: {} \n".format(e))
+        sys.exit(1)
 
 if __name__ == '__main__':
     run()

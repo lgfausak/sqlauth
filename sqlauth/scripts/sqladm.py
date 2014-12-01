@@ -118,7 +118,7 @@ class Component(ApplicationSession):
                     print "Result set {} {}".format(i + 1, drv[str(i)]['title'])
                     print tabulate(rv, headers="firstrow", tablefmt="simple")
                 else:
-                    print "Result set {} {}, zero length".format(i + 1, drv[str(i)]['title'])
+                    print "Result set {} {}, [no results]".format(i + 1, drv[str(i)]['title'])
         except Exception as e:
             sys.stderr.write("ERROR: {}\n".format(e))
 

@@ -318,24 +318,14 @@ def run():
     ## start the server from an endpoint
     ##
     server = serverFromString(reactor, args.endpoint)
-    try:
-        srv = server.listen(transport_factory)
-    except Exception as e:
-        sys.stderr.write("Error: {} \n".format(e))
+    srv = server.listen(transport_factory)
+    def ListenFailed(reason):
+        log.msg("On Startup Listen Failed with {}".format(reason))
+        reactor.stop()
         sys.exit(1)
+    srv.addErrback(ListenFailed)
 
-    log.msg("GOT HERE {}", srv)
-    if isinstance(srv,CannotListenError):
-        log.msg("AND GOT HERE {}", srv)
-
-
-    ## now enter the Twisted reactor loop
-    ##
-    try:
-        reactor.run()
-    except Exception as e:
-        sys.stderr.write("Error: {} \n".format(e))
-        sys.exit(1)
+    reactor.run()
 
 if __name__ == '__main__':
     run()

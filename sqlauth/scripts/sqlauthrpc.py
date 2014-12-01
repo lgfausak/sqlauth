@@ -567,10 +567,14 @@ class Component(ApplicationSession):
         # register postgres admin functions
         #
         for r in rpc_register.keys():
-            reg = yield self.register(rpc_register[r]['method'],
-                self.svar['topic_base'] + '.' + r,
-                RegisterOptions(details_arg = 'details'))
-            log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
+            try:
+                reg = yield self.register(rpc_register[r]['method'],
+                    self.svar['topic_base'] + '.' + r,
+                    RegisterOptions(details_arg = 'details'))
+                log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
+            except Exception as e:
+                log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r), e)
+                self.leave()
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

@@ -577,6 +577,7 @@ class Component(ApplicationSession):
                 self.leave(log_message=u'test')
 
     def onLeave(self, details):
+        sys.stderr.write("Leaving realm : {}\n".format(details))
         log.msg("onLeave: {}".format(details))
 
         self.disconnect()

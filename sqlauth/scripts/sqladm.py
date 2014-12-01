@@ -105,7 +105,7 @@ class Component(ApplicationSession):
             if isinstance(nv, vtypes.ListType):
                 drv = {}
                 drv['0'] = {
-                    'title':'',
+                    'title':self.svar['command'],
                     'result':nv
                 }
     

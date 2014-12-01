@@ -386,6 +386,99 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
+    def topicGet(self, *args, **kwargs):
+        log.msg("topicGet called {}".format(kwargs))
+        qv = yield self.call('adm.db.query',
+                """
+                    select
+                        name, description, id
+                      from
+                        topic
+		     where
+		     	name = %(name)s
+		   """,
+                   kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
+        defer.returnValue(self._columnize(qv))
+
+    @inlineCallbacks
+    def topicAdd(self, *args, **kwargs):
+        log.msg("topicAdd called {}".format(kwargs))
+        qa = kwargs['action_args']
+        qv = yield self.call('adm.db.query',
+                """
+                    insert into
+                        topic
+                    (
+                        name, description
+                    )
+                    values
+                    (
+                        %(name)s, %(description)s
+                    )
+                    returning
+                        id, name, description
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._columnize(qv))
+
+    # the account isn't deleted, rather, its login name is nulled
+    # and its groups are removed
+    @inlineCallbacks
+    def topicDelete(self, *args, **kwargs):
+        log.msg("topicDelete called {}".format(kwargs))
+        qa = kwargs['action_args']
+        qa['__meta__'] = {
+            "query": {
+                "0": {
+                    "title":"Topic to role association"
+                },
+                "1": {
+                    "title":"Role"
+                }
+            }
+        }
+        qv = yield self.call('adm.db.query',
+                [
+                    """
+                    delete
+                      from
+                        topicrole
+                     where
+                       topic_id = (
+                           select id from topic where name = %(name)s
+                       )
+                 returning
+                        id, topic_id, role_id
+		    """,
+                    """
+                    delete
+                        topic
+                     where
+                        name = %(name)s
+                 returning
+                        id, name, description
+		    """
+                   ],
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the results as an array of dicts, one dict for each query that ran
+
+        if isinstance(qv, vtypes.DictType):
+            # this will never happen for this query.
+            defer.returnValue(self._columnize(qv))
+        else:
+            # this case will always happen
+            rv = {}
+            for ri in range(len(qv)):
+                rv[ri] = {}
+                rv[ri]['title'] = ''
+                rv[ri]['result'] = self._columnize(qv[ri])
+            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
+            # the array of results, first row is header, second row - end is data.
+            defer.returnValue(rv)
+
+    @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
 	av = yield self.call('adm.session.list', options=types.CallOptions(timeout=2000,discloseMe=True))
@@ -462,6 +555,9 @@ class Component(ApplicationSession):
             'role.add': {'method': self.roleAdd },
             'role.delete': {'method': self.roleDelete },
             'topic.list': {'method': self.topicList },
+            'topic.get': {'method': self.topicGet },
+            'topic.add': {'method': self.topicAdd },
+            'topic.delete': {'method': self.topicDelete },
             'activity.list': {'method': self.activityList }
         }
         #

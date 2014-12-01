@@ -316,14 +316,18 @@ def run():
 
     ## start the server from an endpoint
     ##
+    ## this address clash detection was a goody I got from stackoverflow:
+    ## http://stackoverflow.com/questions/12007316/exiting-twisted-application-after-listenfailure
     server = serverFromString(reactor, args.endpoint)
-    srv = server.listen(transport_factory)
-    def ListenFailed(reason):
-        log.msg("On Startup Listen Failed with {}".format(reason))
-        reactor.stop()
+    def listen():
+        srv = server.listen(transport_factory)
+        def ListenFailed(reason):
+            log.msg("On Startup Listen Failed with {}".format(reason))
+            reactor.stop()
         #sys.exit(1)
-    srv.addErrback(ListenFailed)
+        srv.addErrback(ListenFailed)
 
+    reactor.callWhenRunning(listen)
     reactor.run()
 
 if __name__ == '__main__':

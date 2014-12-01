@@ -323,6 +323,8 @@ def run():
         sys.stderr.write("Error: {} \n".format(e))
         sys.exit(1)
 
+    log.msg("GOT HERE")
+
 
     ## now enter the Twisted reactor loop
     ##

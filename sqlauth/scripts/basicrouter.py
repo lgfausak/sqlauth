@@ -95,7 +95,7 @@ class SessionData(ApplicationSession):
 
             log.msg("list_session_data:qv:{}".format(qv))
 
-            returnValue(qv)
+            defer.returnValue(qv)
 
         def kill_session(*args, **kwargs):
             sid = kwargs['sid']

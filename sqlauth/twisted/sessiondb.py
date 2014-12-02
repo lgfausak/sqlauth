@@ -82,15 +82,9 @@ class SessionDb(object):
         # then record the session in the database
         log.msg("SessionDb.add({}session:{})".format(authid,sessionid))
         rv = yield self.app_session.call('sys.session.add',
-             action_args={ 'login_id':authid, 'session_id':sessionid },
+             action_args={ 'login_id':authid, 'ab_session_id':sessionid },
              options = types.CallOptions(timeout=2000,discloseMe = True))
         log.msg("SessionDb.add({},body:{})".format(authid,session_body))
-        #        """insert into session
-        #             (login_id,ab_session_id,tzname)
-        #           values
-        #             (%(login_id)s,%(session_id)s,(select tzname from login where id = %(login_id)s))""",
-        #        { 'login_id': authid, 'session_id': sessionid },
-        #        options=types.CallOptions(timeout=2000,discloseMe=True))
 
         return
 
@@ -193,10 +187,15 @@ class SessionDb(object):
     @inlineCallbacks
     def delete(self, sessionid):
         log.msg("SessionDb.delete({})".format(sessionid))
-        # this terminates the session in the database
-        yield self.app_session.call(self.operation,
-                "update session set ab_session_id = null where ab_session_id = %(session_id)s",
-                { 'session_id': sessionid }, options=types.CallOptions(timeout=2000,discloseMe=True))
+        rv = yield self.app_session.call('sys.session.delete',
+             action_args={ 'ab_session_id':sessionid },
+             options = types.CallOptions(timeout=2000,discloseMe = True))
+
+        ## this terminates the session in the database
+        #yield self.app_session.call(self.operation,
+        #        "update session set ab_session_id = null where ab_session_id = %(session_id)s",
+        #        { 'session_id': sessionid }, options=types.CallOptions(timeout=2000,discloseMe=True))
+
         try:
             # then discard of our in memory copy
             del self._sessiondb[sessionid]

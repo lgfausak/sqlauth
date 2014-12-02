@@ -649,6 +649,25 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(qv))
 
     @inlineCallbacks
+    def sessionDelete(self, *args, **kwargs):
+        log.msg("sessionDelete called {}".format(kwargs))
+        qa = kwargs['action_args']
+        qv = yield self.call(self.query,
+                """
+                    update
+                        session
+                       set
+                        ab_session_id = null
+                     where
+                        ab_session_id = %(ab_session_id)s
+                    returning
+                        id, login_id
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+
+        defer.returnValue(self._columnize(qv))
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         #
@@ -662,8 +681,9 @@ class Component(ApplicationSession):
         #
         log.msg("onJoin add our session record {}:{},{}".format(
             self.svar['topic_base']+'.session.add', details.authid, details.session))
-        rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'session_id':details.session })
+        rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':details.session })
         log.msg("onJoin added late session record {}".format(rv))
+
         rpc_register = {
             'user.list': {'method': self.userList },
             'user.get': {'method': self.userGet },
@@ -680,6 +700,7 @@ class Component(ApplicationSession):
             'activity.list': {'method': self.activityList },
             'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },
+            'session.delete': {'method': self.sessionDelete },
         }
         #
         # register postgres admin functions
@@ -693,20 +714,6 @@ class Component(ApplicationSession):
             except Exception as e:
                 log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
                 self.leave(reason=six.u(e.__class__.__name__),log_message=six.u('test'))
-
-        #
-        # ok, now this is a bit goofy, but, we need to
-        # call the sessionAdd method to add our session.
-        # normally, the session is recorded when the authentication is
-        # done.  but, since we authenticate before we register these
-        # routines that record the session, we need to do this now. make sense?
-        #
-        #log.msg("onJoin add our session record {}:{},{}".format(
-        #    self.svar['topic_base']+'.session.add', details.authid, details.session))
-        #rv = yield self.call('sys.session.add',
-        #     action_args={ 'login_id':details.authid, 'session_id':details.session },
-        #     options = types.CallOptions(timeout=2000,discloseMe = True))
-        #log.msg("onJoin added late session record {}".format(rv))
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))

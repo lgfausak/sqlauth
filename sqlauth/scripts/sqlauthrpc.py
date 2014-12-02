@@ -559,7 +559,7 @@ class Component(ApplicationSession):
     #    a problem writing to the database?  I am not sure why this would happen.
     #
     @inlineCallbacks
-    def sessionList(self):
+    def sessionList(self, *args, **kwargs):
         log.msg("sessionList()")
         sidkeys = yield self.call('adm.session.listid')
         log.msg("sessionList:sidkeys {}".format(sidkeys))

@@ -578,7 +578,7 @@ class Component(ApplicationSession):
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
         rv = {}
         for k in qv:
-	    sid = int(k['ab_session_id'])
+	    sid = k['ab_session_id']
             log.msg("sessionList:qv.key({})".format(sid))
 	    if sid in sidkeys:
 	        rv[sid] = k

@@ -80,11 +80,11 @@ class SessionDb(object):
         # first, we remember the session internally in our object store
         self._sessiondb[sessionid] = session_body
         # then record the session in the database
+        log.msg("SessionDb.add({}session:{})".format(authid,sessionid))
         rv = yield self.app_session.call('sys.session.add',
              action_args={ 'login_id':authid, 'session_id':sessionid },
              options = types.CallOptions(timeout=2000,discloseMe = True))
         log.msg("SessionDb.add({},body:{})".format(authid,session_body))
-        #yield self.app_session.call(self.operation,
         #        """insert into session
         #             (login_id,ab_session_id,tzname)
         #           values

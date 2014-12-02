@@ -681,6 +681,20 @@ class Component(ApplicationSession):
                 log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
                 self.leave(reason=six.u(e.__class__.__name__),log_message=six.u('test'))
 
+        #
+        # ok, now this is a bit goofy, but, we need to
+        # call the sessionAdd method to add our session.
+        # normally, the session is recorded when the authentication is
+        # done.  but, since we authenticate before we register these
+        # routines that record the session, we need to do this now. make sense?
+        #
+        log.msg("onJoin add our session record {}:{},{}".format(
+            self.svar['topic_base']+'.session.add', details.authid, details.session))
+        rv = yield self.call('sys.session.add',
+             action_args={ 'login_id':details.authid, 'session_id':details.session },
+             options = types.CallOptions(timeout=2000,discloseMe = True))
+        log.msg("onJoin added late session record {}".format(rv))
+
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))
         log.msg("onLeave: {}".format(details))

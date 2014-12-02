@@ -669,6 +669,8 @@ class Component(ApplicationSession):
 
     @inlineCallbacks
     def onJoin(self, details):
+        self.my_session_id = details.session
+        self.my_authid = details.authid
         log.msg("onJoin session attached {}".format(details))
         #
         # ok, now this is a bit goofy, but, we need to
@@ -717,11 +719,12 @@ class Component(ApplicationSession):
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))
-        log.msg("onLeave: {}".format(details))
+        log.msg("onLeave: X{}".format(details))
 
+        # attempt to clean up our session, no guarantees
         log.msg("onLeave delete our session record {}:{}".format(
-            self.svar['topic_base']+'.session.delete', details.session))
-        rv = self.sessionDelete( action_args={ 'ab_session_id':details.session })
+            self.svar['topic_base']+'.session.delete', self.my_session_id, self.my_authid))
+        rv = self.sessionDelete( action_args={ 'ab_session_id':self.my_session_id })
         log.msg("onLeave delete late session record {}".format(rv))
 
         self.disconnect()

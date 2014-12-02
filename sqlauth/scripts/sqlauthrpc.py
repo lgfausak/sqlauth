@@ -638,7 +638,7 @@ class Component(ApplicationSession):
                     )
                     values
                     (
-                        %(login_id)s, %(session_id)s,
+                        %(login_id)s, %(ab_session_id)s,
                         ( select tzname from login where id = %(login_id)s )
                     )
                     returning

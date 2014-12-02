@@ -564,7 +564,7 @@ class Component(ApplicationSession):
         sidkeys = yield self.call('adm.session.listid')
         log.msg("sessionList:sidkeys {}".format(sidkeys))
 
-        qv = yield self.call(self.query,
+        qv = yield self.call('adm.db.query',
                 """select s.login_id,s.ab_session_id,s.tzname,
                           to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
                           to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,

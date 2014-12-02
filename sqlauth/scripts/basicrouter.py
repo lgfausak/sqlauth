@@ -105,7 +105,7 @@ class SessionData(ApplicationSession):
             return defer.succeed({ 'killed': sid })
 
         # this call returns a dictionary, keys are session id, value is a dictionary with at least 'authid' in it
-        reg = yield self.register(list_session_id, self.topic_base + '.listid', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_id, 'sys.session.listid', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))

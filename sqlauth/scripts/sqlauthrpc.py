@@ -651,6 +651,19 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
+        #
+        # ok, now this is a bit goofy, but, we need to
+        # call the sessionAdd method to add our session.
+        # normally, the session is recorded when the authentication is
+        # done.  but, since we authenticate before we register these
+        # routines that record the session, we need to do this now. make sense?
+        # also, we want to do this before we do any actions, like register, so
+        # that our activity tracker will work.
+        #
+        log.msg("onJoin add our session record {}:{},{}".format(
+            self.svar['topic_base']+'.session.add', details.authid, details.session))
+        rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'session_id':details.session })
+        log.msg("onJoin added late session record {}".format(rv))
         rpc_register = {
             'user.list': {'method': self.userList },
             'user.get': {'method': self.userGet },
@@ -688,12 +701,12 @@ class Component(ApplicationSession):
         # done.  but, since we authenticate before we register these
         # routines that record the session, we need to do this now. make sense?
         #
-        log.msg("onJoin add our session record {}:{},{}".format(
-            self.svar['topic_base']+'.session.add', details.authid, details.session))
-        rv = yield self.call('sys.session.add',
-             action_args={ 'login_id':details.authid, 'session_id':details.session },
-             options = types.CallOptions(timeout=2000,discloseMe = True))
-        log.msg("onJoin added late session record {}".format(rv))
+        #log.msg("onJoin add our session record {}:{},{}".format(
+        #    self.svar['topic_base']+'.session.add', details.authid, details.session))
+        #rv = yield self.call('sys.session.add',
+        #     action_args={ 'login_id':details.authid, 'session_id':details.session },
+        #     options = types.CallOptions(timeout=2000,discloseMe = True))
+        #log.msg("onJoin added late session record {}".format(rv))
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))

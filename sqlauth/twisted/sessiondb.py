@@ -74,7 +74,7 @@ class SessionDb(object):
 
         return
  
-    @inlineCallbacks
+    #@inlineCallbacks
     def add(self, authid, sessionid, session_body):
         log.msg("SessionDb.add({},sessionid:{})".format(authid,sessionid))
         log.msg("SessionDb.add({},body:{})".format(authid,session_body))

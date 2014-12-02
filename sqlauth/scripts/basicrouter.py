@@ -105,7 +105,7 @@ class SessionData(ApplicationSession):
             return defer.succeed({ 'killed': sid })
 
         reg = yield self.register(list_session_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
-        reg = yield self.register(list_session_id, 'adm.session.id', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_id, 'adm.session.listid', RegisterOptions(details_arg = 'details'))
         #reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):

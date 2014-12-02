@@ -175,6 +175,11 @@ def run():
     session_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
+    ses_p = sp.add_parser('ses')
+    ses_p.add_argument('action', choices=['list','get','kill'], help='Ses commands')
+    ses_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
     user_p = sp.add_parser('user')
     user_p.add_argument('action', choices=['list', 'get', 'add', 'update', 'delete'], help='User commands')
     user_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,

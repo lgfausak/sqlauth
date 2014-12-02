@@ -38,6 +38,7 @@
 ##   delete - delete a topic
 ## session (list,add,delete,get)
 ##   list   - list all sessions
+##   add    - add a new session
 ##
 ###############################################################################
 
@@ -504,75 +505,10 @@ class Component(ApplicationSession):
             defer.returnValue(rv)
 
     @inlineCallbacks
-    def activityListold(self, *args, **kwargs):
-        log.msg("activityList called {}".format(kwargs))
-	av = yield self.call('adm.session.list', options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(av) == 0:
-            defer.returnValue([])
-            return
-
-        idx = 0
-        try:
-            idx = av[0].index('id')
-        except:
-            log.msg("activityList: can't find id field in session list: {}, returning".format(av[0]))
-            defer.returnValue([])
-            return
-
-        # this array contains the session_id for all of the active sessions
-        active_sessions = [a[idx] for a in av[1:]]
-            
-        # this query picks up active activity, for which there is a current session
-        # call, register, publish, subscribe are the interesting activities.
-        # this activity could be bound to a session that no longer exists, that is why we
-        # pick up the X.session.list from above, that returns just the
-        # active sessions. we use that to filter the list we get back from
-        # this query.  if the database is in sync with the router, then these two will
-        # be identical.  otherwise, if the router has crashed and cleanup hasn't happened,
-        # or is multiple routers are sharing the same sqlauth installation, then there
-        # could be more entries in the database than there is in the router.
-        qv = yield self.call(self.query,
-                """
-                    select
-                        a.id, a.session_id, s.ab_session_id, a.type_id, a.topic_name, l.login,
-                        to_char(a.modified_timestamp,'YYYY-MM-DD HH24:MI:SS') as action_timestamp
-		      from
-		        activity a,
-                        session s,
-                        login l
-                     where
-                        a.session_id = s.id
-                       and
-                        a.allow = true
-                       and
-                        a.type_id in ( 'call', 'register', 'subscribe', 'publish' )
-                       and
-                        s.login_id = l.id
-                       and
-                        s.ab_session_id is not null
-		  order by
-		     	a.id
-		   """,
-                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        if len(qv) == 0:
-            defer.returnValue([])
-            return
-
-        ra = qv[0].keys()
-        rv = []
-        rv.append(ra)
-        for r in qv:
-            if r['session_id'] in active_sessions:
-                rv.append([r.get(c,None) for c in ra])
-
-        defer.returnValue(rv)
-
-    @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
 	av = yield self.call(self.svar['topic_base'] + '.session.listid',
             options=types.CallOptions(timeout=2000,discloseMe=True))
-        log.msg("activityList av {}".format(av))
         if len(av) == 0:
             defer.returnValue([])
             return
@@ -615,8 +551,6 @@ class Component(ApplicationSession):
             defer.returnValue([])
             return
 
-        log.msg("activityList query qv {}".format(qv))
-
         ra = qv[0].keys()
         rv = []
         rv.append(ra)
@@ -624,7 +558,6 @@ class Component(ApplicationSession):
             if r['ab_session_id'] in active_sessions:
                 rv.append([r.get(c,None) for c in ra])
 
-        log.msg("activityList returning rv {}".format(rv))
         defer.returnValue(rv)
 
     #
@@ -693,6 +626,29 @@ class Component(ApplicationSession):
         defer.returnValue(self._columnize(rv.values(), fullscan=True))
 
     @inlineCallbacks
+    def sessionAdd(self, *args, **kwargs):
+        log.msg("sessionAdd called {}".format(kwargs))
+        qa = kwargs['action_args']
+        qv = yield self.call(self.query,
+                """
+                    insert into
+                        session
+                    (
+                        login_id, ab_session_id, tzname
+                    )
+                    values
+                    (
+                        %(login_id)s, %(session_id)s,
+                        ( select tzname from login where id = %(login_id)s )
+                    )
+                    returning
+                        id, login_id, ab_session_id, tzname
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+
+        defer.returnValue(self._columnize(qv))
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         rpc_register = {
@@ -709,7 +665,8 @@ class Component(ApplicationSession):
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
             'activity.list': {'method': self.activityList },
-            'session.list': {'method': self.sessionList }
+            'session.list': {'method': self.sessionList },
+            'session.add': {'method': self.sessionAdd },
         }
         #
         # register postgres admin functions

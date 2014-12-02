@@ -572,6 +572,7 @@ class Component(ApplicationSession):
         log.msg("activityList called {}".format(kwargs))
 	active_sessions = yield self.call(self.svar['topic_base'] + '.session.list',
             options=types.CallOptions(timeout=2000,discloseMe=True))
+        log.msg("activityList active_sessions {}".format(active_sessions))
         if len(active_sessions) == 0:
             defer.returnValue([])
             return
@@ -616,7 +617,7 @@ class Component(ApplicationSession):
         rv = []
         rv.append(ra)
         for r in qv:
-            if r['session_id'] in active_sessions:
+            if int(r['session_id']) in active_sessions:
                 rv.append([r.get(c,None) for c in ra])
 
         defer.returnValue(rv)

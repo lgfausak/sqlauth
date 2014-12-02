@@ -94,12 +94,47 @@ class Component(ApplicationSession):
     # second+ rows contain the data.  this routine assumes that each
     # row will have the same names.
 
-    def _columnize(self, qv):
+    def _columnizeold(self, qv):
         rv = []
         if len(qv) == 0:
             return rv
 
         ra = qv[0].keys()
+        rv.append(ra)
+        #append a row in the array for each result, in the same order as the original row 1
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        return rv
+
+    # simple function to change a dictionary from each row
+    # to an array of arrays, first row contains the column names
+    # second+ rows contain the data.  this routine does not assume
+    # that each row has the same keys, so it loops through the
+    # entire result set looking for all the unique keys if
+    # fullscan=True is in kwargs
+    def _columnize(self, *args, **kwargs):
+        if len(args) < 1:
+            raise Exception("must supply list of dictionaries")
+        if not isinstance(args[0], vtypes.ListType):
+            raise Exception("fist argument must be list of dictionaries")
+        qv = args[0]
+        if len(qv) == 0:
+            return []
+        kv = {}
+        # pass argument fullscan=True to consider all rows for column headers
+        fs = kwargs.get('fullscan', False)
+
+        for r in qv:
+            for k in r.keys():
+                kv[k] = True
+            # here we only consider the first row if is fullscan is not set.
+            # in other words, every row contains the same column keys
+            if not fs:
+                break
+
+        rv = []
+        ra = kv.keys()
         rv.append(ra)
         #append a row in the array for each result, in the same order as the original row 1
         for r in qv:
@@ -609,7 +644,7 @@ class Component(ApplicationSession):
 
         log.msg("sessionList:Ended up with {}".format(rv))
 
-        defer.returnValue(rv)
+        defer.returnValue(self._columnize(rv, fullscan=True))
 
     @inlineCallbacks
     def onJoin(self, details):

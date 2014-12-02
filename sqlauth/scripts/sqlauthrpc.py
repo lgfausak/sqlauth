@@ -38,8 +38,6 @@
 ##   delete - delete a topic
 ## session (list,add,delete,get)
 ##   list   - list all sessions
-##   add    - add a new session
-##   delete - delete a session
 ##
 ###############################################################################
 
@@ -85,27 +83,15 @@ class Component(ApplicationSession):
                 if kwargs[i] is not None:
                     self.svar[i] = kwargs[i]
                 del kwargs[i]
+        if not 'topic_base' in self.svar:
+            raise Exception("topic_base is mandatory")
+        self.query = self.svar['topic_base'] + '.query'
+        self.operation = self.svar['topic_base'] + '.operation'
+        self.watch = self.svar['topic_base'] + '.watch'
+        self.info = self.svar['topic_base'] + '.info'
 
         log.msg("sending to super.init args {}, kwargs {}".format(args,kwargs))
         ApplicationSession.__init__(self, *args, **kwargs)
-
-    # simple function to change a dictionary from each row
-    # to an array of arrays, first row contains the column names
-    # second+ rows contain the data.  this routine assumes that each
-    # row will have the same names.
-
-    def _columnizeold(self, qv):
-        rv = []
-        if len(qv) == 0:
-            return rv
-
-        ra = qv[0].keys()
-        rv.append(ra)
-        #append a row in the array for each result, in the same order as the original row 1
-        for r in qv:
-            rv.append([r.get(c,None) for c in ra])
-
-        return rv
 
     # simple function to change a dictionary from each row
     # to an array of arrays, first row contains the column names
@@ -174,7 +160,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def userList(self, *args, **kwargs):
         log.msg("userList called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     with user_roles as (
                         select lr.role_id, lr.login_id, r.name
@@ -200,7 +186,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def userGet(self, *args, **kwargs):
         log.msg("userGet called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     select
                         password, salt, login, fullname, tzname, id
@@ -220,7 +206,7 @@ class Component(ApplicationSession):
         password = auth.derive_key(qa['secret'].encode('utf8'), salt.encode('utf8')).decode('ascii')
         qa['salt'] = salt
         qa['password'] = password
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     insert into
                         login
@@ -249,7 +235,7 @@ class Component(ApplicationSession):
             "Login to role association",
             "Login"
         ]
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 [
                     """
                     delete
@@ -296,7 +282,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def roleList(self, *args, **kwargs):
         log.msg("roleList called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     with role_users as (
                         select lr.role_id, lr.login_id, l.login
@@ -320,7 +306,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def roleGet(self, *args, **kwargs):
         log.msg("roleGet called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     select
                         name, description, id
@@ -336,7 +322,7 @@ class Component(ApplicationSession):
     def roleAdd(self, *args, **kwargs):
         log.msg("roleAdd called {}".format(kwargs))
         qa = kwargs['action_args']
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     insert into
                         role
@@ -365,7 +351,7 @@ class Component(ApplicationSession):
             "Role to topic association",
             "Role"
         ]
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 [
                     """
                     delete
@@ -408,7 +394,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def topicList(self, *args, **kwargs):
         log.msg("topicList called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     with topic_roles as (
                         select distinct lr.role_id, lr.topic_id, r.name
@@ -432,7 +418,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def topicGet(self, *args, **kwargs):
         log.msg("topicGet called {}".format(kwargs))
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     select
                         name, description, id
@@ -448,7 +434,7 @@ class Component(ApplicationSession):
     def topicAdd(self, *args, **kwargs):
         log.msg("topicAdd called {}".format(kwargs))
         qa = kwargs['action_args']
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     insert into
                         topic
@@ -477,7 +463,7 @@ class Component(ApplicationSession):
             "Topic to role association",
             "Role"
         ]
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 [
                     """
                     delete
@@ -545,7 +531,7 @@ class Component(ApplicationSession):
         # be identical.  otherwise, if the router has crashed and cleanup hasn't happened,
         # or is multiple routers are sharing the same sqlauth installation, then there
         # could be more entries in the database than there is in the router.
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """
                     select
                         a.id, a.session_id, s.ab_session_id, a.type_id, a.topic_name, l.login,
@@ -596,10 +582,10 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def sessionList(self, *args, **kwargs):
         log.msg("sessionList()")
-        sidkeys = yield self.call('adm.session.listid')
+        sidkeys = yield self.call('sys.session.listid')
         log.msg("sessionList:sidkeys {}".format(sidkeys))
 
-        qv = yield self.call('adm.db.query',
+        qv = yield self.call(self.query,
                 """select s.login_id,s.ab_session_id,s.tzname,
                           to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
                           to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,
@@ -663,7 +649,7 @@ class Component(ApplicationSession):
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
             'activity.list': {'method': self.activityList },
-            'ses.list': {'method': self.sessionList }
+            'session.list': {'method': self.sessionList }
         }
         #
         # register postgres admin functions

@@ -570,12 +570,14 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
-	active_sessions = yield self.call(self.svar['topic_base'] + '.session.list',
+	av = yield self.call(self.svar['topic_base'] + '.session.list',
             options=types.CallOptions(timeout=2000,discloseMe=True))
-        log.msg("activityList active_sessions {}".format(active_sessions))
-        if len(active_sessions) == 0:
+        log.msg("activityList av {}".format(av))
+        if len(av) == 0:
             defer.returnValue([])
             return
+
+        active_sessions = av.keys()
 
         # this query picks up active activity, for which there is a current session
         # call, register, publish, subscribe are the interesting activities.
@@ -617,7 +619,7 @@ class Component(ApplicationSession):
         rv = []
         rv.append(ra)
         for r in qv:
-            if int(r['session_id']) in active_sessions:
+            if r['session_id'] in active_sessions:
                 rv.append([r.get(c,None) for c in ra])
 
         defer.returnValue(rv)

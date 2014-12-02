@@ -148,7 +148,7 @@ def run():
     prog = os.path.basename(__file__)
 
     def_wsocket = 'ws://127.0.0.1:8080/ws'
-    def_user = 'adm'
+    def_user = 'sys'
     def_secret = '123test'
     def_realm = 'realm1'
     def_topic_base = 'adm'

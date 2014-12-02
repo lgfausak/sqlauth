@@ -719,6 +719,11 @@ class Component(ApplicationSession):
         sys.stderr.write("Leaving realm : {}\n".format(details))
         log.msg("onLeave: {}".format(details))
 
+        log.msg("onLeave delete our session record {}:{}".format(
+            self.svar['topic_base']+'.session.delete', details.session))
+        rv = self.sessionDelete( action_args={ 'ab_session_id':details.session })
+        log.msg("onLeave delete late session record {}".format(rv))
+
         self.disconnect()
 
         return

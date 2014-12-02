@@ -151,7 +151,7 @@ def run():
     def_user = 'sys'
     def_secret = '123test'
     def_realm = 'realm1'
-    def_topic_base = 'adm'
+    def_topic_base = 'sys'
     def_action_args = '{}'
 
     # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text

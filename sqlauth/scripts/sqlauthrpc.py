@@ -615,6 +615,8 @@ class Component(ApplicationSession):
             defer.returnValue([])
             return
 
+        log.msg("activityList query qv {}".format(qv))
+
         ra = qv[0].keys()
         rv = []
         rv.append(ra)
@@ -622,6 +624,7 @@ class Component(ApplicationSession):
             if r['session_id'] in active_sessions:
                 rv.append([r.get(c,None) for c in ra])
 
+        log.msg("activityList returning rv {}".format(rv))
         defer.returnValue(rv)
 
     #

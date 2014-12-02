@@ -570,7 +570,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
-	av = yield self.call(self.svar['topic_base'] + '.session.list',
+	av = yield self.call(self.svar['topic_base'] + '.session.listid',
             options=types.CallOptions(timeout=2000,discloseMe=True))
         log.msg("activityList av {}".format(av))
         if len(av) == 0:

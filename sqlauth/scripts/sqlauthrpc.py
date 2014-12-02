@@ -85,10 +85,10 @@ class Component(ApplicationSession):
                 del kwargs[i]
         if not 'topic_base' in self.svar:
             raise Exception("topic_base is mandatory")
-        self.query = self.svar['topic_base'] + '.query'
-        self.operation = self.svar['topic_base'] + '.operation'
-        self.watch = self.svar['topic_base'] + '.watch'
-        self.info = self.svar['topic_base'] + '.info'
+        self.query = self.svar['topic_base'] + '.db.query'
+        self.operation = self.svar['topic_base'] + '.db.operation'
+        self.watch = self.svar['topic_base'] + '.db.watch'
+        self.info = self.svar['topic_base'] + '.db.info'
 
         log.msg("sending to super.init args {}, kwargs {}".format(args,kwargs))
         ApplicationSession.__init__(self, *args, **kwargs)
@@ -683,7 +683,7 @@ def run():
     def_user = 'adm'
     def_secret = '123test'
     def_realm = 'realm1'
-    def_topic_base = 'adm'
+    def_topic_base = 'sys'
     def_action_args = '{}'
 
     p = argparse.ArgumentParser(description="sqlauthrpc postgres backend rpc definitions")

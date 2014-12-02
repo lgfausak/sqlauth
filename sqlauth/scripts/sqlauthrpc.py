@@ -595,16 +595,16 @@ class Component(ApplicationSession):
 	        #rv[sid] = k
         rvkeys = rv.keys()
         log.msg("sessionList:rvkeys {}".format(rvkeys))
-        for k in self._sessiondb:
+        for k in sidkeys:
 	    if k in rvkeys:
                 log.msg("sessionList:continue")
 	        continue
             log.msg("sessionList:on {}".format(k))
-            sib = self._sessiondb[k]
-            log.msg("sessionList: session in memory but not in db, this can happen if sessions are deleted while running the Autobahn router, ab_session_id:{}, authid: {}!".format(k,sib._authid),
+            sib = sidkeys[k]
+            log.msg("sessionList: session in memory but not in db, this can happen if sessions are deleted while running the Autobahn router, ab_session_id:{}, authid: {}!".format(k,sib['authid']),
                 logLevel = logging.WARNING)
             rv[k] = { 'ab_session_id':k,
-                      'login_id': sib._authid,
+                      'login_id': sib['authid'],
 		      'warning': '*'}
 
         log.msg("sessionList:Ended up with {}".format(rv))

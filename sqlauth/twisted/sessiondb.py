@@ -181,10 +181,11 @@ class SessionDb(object):
     # build an array of live sessions
     #
     def listid(self):
+        s = {}
         log.msg("SessionDb.listid()")
-        sidkeys =  self._sessiondb.keys()
-        log.msg("SessionDb.list:sidkeys {}".format(sidkeys))
-        return(sidkeys)
+        for k in self._sessiondb.keys():
+            s[k] = { 'authid': self._sessiondb[k]._authid ]
+        return(s)
 
     @inlineCallbacks
     def delete(self, sessionid):

@@ -621,7 +621,7 @@ class Component(ApplicationSession):
         rv = []
         rv.append(ra)
         for r in qv:
-            if r['session_id'] in active_sessions:
+            if r['ab_session_id'] in active_sessions:
                 rv.append([r.get(c,None) for c in ra])
 
         log.msg("activityList returning rv {}".format(rv))

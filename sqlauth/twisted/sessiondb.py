@@ -184,7 +184,7 @@ class SessionDb(object):
         s = {}
         log.msg("SessionDb.listid()")
         for k in self._sessiondb.keys():
-            s[k] = { 'authid': self._sessiondb[k]._authid ]
+            s[k] = { 'authid': self._sessiondb[k]._authid }
         return(s)
 
     @inlineCallbacks

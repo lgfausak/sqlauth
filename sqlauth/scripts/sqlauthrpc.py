@@ -642,9 +642,9 @@ class Component(ApplicationSession):
                       'login_id': sib['authid'],
 		      'warning': '*'}
 
-        log.msg("sessionList:Ended up with {}".format(rv))
+        log.msg("sessionList:Ended up with {}".format(rv.values()))
 
-        defer.returnValue(self._columnize(rv, fullscan=True))
+        defer.returnValue(self._columnize(rv.values(), fullscan=True))
 
     @inlineCallbacks
     def onJoin(self, details):

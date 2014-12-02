@@ -217,14 +217,9 @@ class MyRouterSession(RouterSession):
             ## deny client
             return types.Deny(message = u"no pending authentication")
 
-    @defer.inlineCallbacks
     def onJoin(self, details):
         log.msg("MyRouterSession.onJoin: {}".format(details))
         self.factory.sessiondb.add(details.authid, details.session, self)
-        rv = yield self.call('sys.session.add',
-             action_args={ 'login_id':details.authid, 'session_id':details.session },
-             options = CallOptions(timeout=2000,discloseMe = True))
-        log.msg("MyRouterSession.onJoin: rv:{}".format(rv))
         self.factory.sessiondb.activity(details.session, details.session, 'start', True)
         return
 

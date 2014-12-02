@@ -88,6 +88,15 @@ class SessionData(ApplicationSession):
     
             defer.returnValue(rv)
 
+        @inlineCallbacks
+        def list_session_id(*args, **kwargs):
+            log.msg("SessionData:list_session_data()")
+            qv = yield self.sessiondb.listid()
+
+            log.msg("list_session_data:qv:{}".format(qv))
+
+            returnValue(qv)
+
         def kill_session(*args, **kwargs):
             sid = kwargs['sid']
             log.msg("SessionData:kill_session({})".format(sid))
@@ -96,6 +105,7 @@ class SessionData(ApplicationSession):
             return defer.succeed({ 'killed': sid })
 
         reg = yield self.register(list_session_data, 'adm.session.list', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_id, 'adm.session.id', RegisterOptions(details_arg = 'details'))
         #reg = yield self.register(kill_session, 'adm.session.kill', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):

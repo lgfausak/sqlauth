@@ -36,9 +36,10 @@
 ##   list   - show a list of topics and the roles that belong to them
 ##   add    - add a new topic
 ##   delete - delete a topic
-## session (not here, in the router code)
+## session (list,add,delete,get)
 ##   list   - list all sessions
-##   kill   - kill a session
+##   add    - add a new session
+##   delete - delete a session
 ##
 ###############################################################################
 
@@ -545,6 +546,71 @@ class Component(ApplicationSession):
 
         defer.returnValue(rv)
 
+    #
+    # this builds a list of sessions.  Two sources for the list are used, and
+    # it is important that those two sources are equal!  First, the database is queried
+    # for all open sessions (those that have ab_session_id not null).  Those are compared
+    # to the in memory copy (the active Autobahn session).  The session MUST be represented
+    # in both places. The list can be inconsistent if:
+    # 1) the data exists in the database but not in memory.  This can occur on
+    #    a Autobahn router restart.  The router should set all ab_session_id to null
+    #    on startup (they can get this way if the router crashed).
+    # 2) the data exists in memory but not the database.  This would indicate there is
+    #    a problem writing to the database?  I am not sure why this would happen.
+    #
+    @inlineCallbacks
+    def sessionList(self):
+        log.msg("sessionList()")
+        sidkeys = yield self.call('adm.session.listid')
+        log.msg("sessionList:sidkeys {}".format(sidkeys))
+
+        qv = yield self.call(self.query,
+                """select s.login_id,s.ab_session_id,s.tzname,
+                          to_char(s.created_timestamp,'YYYY-MM-DD HH24:MI:SS') as started,
+                          to_char(now() - s.created_timestamp, 'HH24:MI:SS') as duration,
+                          s.id,
+                          l.login,
+                          l.fullname
+                     from session s,
+                          login l
+                   where l.id = s.login_id
+                     and s.ab_session_id is not null""",
+                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
+        rv = {}
+        for k in qv:
+	    sid = int(k['ab_session_id'])
+            log.msg("sessionList:qv.key({})".format(sid))
+	    if sid in sidkeys:
+	        rv[sid] = k
+	    else:
+                log.msg("sessionList:warning")
+	        k['warning'] = '!'
+                log.msg("sessionList: db has extra sessions, should set ab_session_id null:{}, authid: {}!".format(sid,k['login_id']),
+                    logLevel = logging.WARNING)
+                #uncomment this if we want to see invalid sessions, they were probably left there
+                #after an unplanned stop of the Autobahn router.  These should be set to null
+                #before starting the router, with the statement:
+                #update session set ab_session_id = null wher ab_session_id is not null
+                #after that, then start the router.
+	        #rv[sid] = k
+        rvkeys = rv.keys()
+        log.msg("sessionList:rvkeys {}".format(rvkeys))
+        for k in self._sessiondb:
+	    if k in rvkeys:
+                log.msg("sessionList:continue")
+	        continue
+            log.msg("sessionList:on {}".format(k))
+            sib = self._sessiondb[k]
+            log.msg("sessionList: session in memory but not in db, this can happen if sessions are deleted while running the Autobahn router, ab_session_id:{}, authid: {}!".format(k,sib._authid),
+                logLevel = logging.WARNING)
+            rv[k] = { 'ab_session_id':k,
+                      'login_id': sib._authid,
+		      'warning': '*'}
+
+        log.msg("sessionList:Ended up with {}".format(rv))
+
+        defer.returnValue(rv)
+
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
@@ -561,7 +627,8 @@ class Component(ApplicationSession):
             'topic.get': {'method': self.topicGet },
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
-            'activity.list': {'method': self.activityList }
+            'activity.list': {'method': self.activityList },
+            'ses.list': {'method': self.sessionList }
         }
         #
         # register postgres admin functions

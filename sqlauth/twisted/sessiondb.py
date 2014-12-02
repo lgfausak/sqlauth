@@ -177,6 +177,16 @@ class SessionDb(object):
 
         defer.returnValue(rv)
 
+    #
+    # build an array of live sessions
+    #
+    @inlineCallbacks
+    def listid(self):
+        log.msg("SessionDb.listid()")
+        sidkeys =  self._sessiondb.keys()
+        log.msg("SessionDb.list:sidkeys {}".format(sidkeys))
+        defer.returnValue(sidkeys)
+
     @inlineCallbacks
     def delete(self, sessionid):
         log.msg("SessionDb.delete({})".format(sessionid))

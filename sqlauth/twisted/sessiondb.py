@@ -110,19 +110,37 @@ class SessionDb(object):
         return
 
     @inlineCallbacks
-    def activity(self, sessionid, topic_name, activity_type, allow):
-        log.msg("SessionDb.activity({},{},{},{})".format(sessionid,topic_name,activity_type,allow))
-        # then record the session in the database
-        yield self.app_session.call(self.operation,
-                """insert into activity (session_id,topic_name,type_id,allow)
-                   values(
-                    (select id from session where ab_session_id = %(session_id)s),
-                     %(topic_name)s, %(activity_type)s, %(allow)s)""",
-                   { 'topic_name': topic_name,
-                      'session_id': sessionid,
-                      'activity_type': activity_type,
-                      'allow': allow }, options=types.CallOptions(timeout=2000,discloseMe=True))
+    def activity(self, ab_session_id, topic_name, type_id, allow):
+        log.msg("SessionDb.activity({},{},{},{})".format(ab_session_id,
+            topic_name,type_id,allow))
 
+        try:
+            rv = yield self.app_session.call(self.topic_base+'.activity.add',
+                action_args={ 'ab_session_id':ab_session_id,
+                    'topic_name':topic_name,
+                    'type_id':type_id,
+                    'allow':allow},
+                options = types.CallOptions(timeout=2000,discloseMe = True))
+        except Exception as e:
+            # if we get an error we don't really care, it just means that the activity
+            # isn't recorded in the database.  maybe the database doesn't exist yet.
+            log.msg("SessionDb.activity({},error{})".format(ab_session_id,e))
+            pass
+        log.msg("SessionDb.activity({},done)".format(ab_session_id))
+#    @inlineCallbacks
+#    def activity(self, sessionid, topic_name, activity_type, allow):
+#        log.msg("SessionDb.activity({},{},{},{})".format(sessionid,topic_name,activity_type,allow))
+#        # then record the session in the database
+#        yield self.app_session.call(self.operation,
+#                """insert into activity (session_id,topic_name,type_id,allow)
+#                   values(
+#                    (select id from session where ab_session_id = %(session_id)s),
+#                     %(topic_name)s, %(activity_type)s, %(allow)s)""",
+#                   { 'topic_name': topic_name,
+#                      'session_id': sessionid,
+#                      'activity_type': activity_type,
+#                      'allow': allow }, options=types.CallOptions(timeout=2000,discloseMe=True))
+#
         return
 
     # return a dictionary of all of the in memory sessions. this is used

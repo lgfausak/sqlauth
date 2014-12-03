@@ -31,21 +31,22 @@
 ## belong in here, not in the basicrouter, I will probably move them
 ## so the database connection and the database calls are all in one file.
 ##
-## user (list,add,delete,get)
+## user (list,add,delete)
 ##   list   - show a list of users and the roles they belong to
 ##   add    - add a new user
 ##   delete - delete a user
-## role (list,add,delete,get)
+## role (list,add,delete)
 ##   list   - show a list of roles and the users that belong to them
 ##   add    - add a new role
 ##   delete - delete a user
-## topic (list,add,delete,get)
+## topic (list,add,delete)
 ##   list   - show a list of topics and the roles that belong to them
 ##   add    - add a new topic
 ##   delete - delete a topic
-## activity (list,add,delete,get)
+## activity (list,add)
 ##   list   - show a list of activities that belong to active sessions
-## session (list,add,delete,get)
+##   add    - add a new activity
+## session (list,add,delete)
 ##   list   - list all sessions
 ##   add    - add a new session
 ##   delete - delete a session
@@ -571,6 +572,42 @@ class Component(ApplicationSession):
 
         defer.returnValue(rv)
 
+    # activityAdd
+    #  ab_session_id  -> the autobahn session id
+    #  topic_name     -> com.db, sys.whatever, etc..
+    #  type_id        -> one of call,register,publish,subscribe,admin,start,end
+    #  allow          -> boolean, is the activity allowed or denied (true or false)
+    @inlineCallbacks
+    def activityAdd(self, *args, **kwargs):
+        log.msg("activityAdd called {}".format(kwargs))
+        qa = kwargs['action_args']
+        yield self.call(self.query,
+                """
+                    insert into
+                        activity
+                    (
+                        session_id,topic_name,type_id,allow
+                    )
+                    values
+                    (
+                        (
+                            select
+                                    id
+                              from
+                                    session
+                             where
+                                    ab_session_id = %(ab_session_id)s
+                        ),
+                        %(topic_name)s, %(type_id)s, %(allow)s
+                    )
+                    returning
+                        id,session_id,topic_name,type_id,allow,%(ab_session_db)s as ab_session_id
+                """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+
+        defer.returnValue(self._columnize(qv))
+
+
     #
     # this builds a list of sessions.  Two sources for the list are used, and
     # it is important that those two sources are equal!  First, the database is queried
@@ -721,6 +758,7 @@ class Component(ApplicationSession):
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
             'activity.list': {'method': self.activityList },
+            'activity.add': {'method': self.activityAdd },
             'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },
             'session.delete': {'method': self.sessionDelete },

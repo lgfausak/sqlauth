@@ -231,7 +231,8 @@ def run():
 
     def_wsocket = 'ws://127.0.0.1:8080/ws'
     def_realm = 'realm1'
-    def_topic_base = 'sys.db'
+    #def_topic_base = 'sys.db'
+    def_topic_base = 'sys'
     def_dsn = 'dbname=autobahn host=localhost user=autouser'
     def_endpoint='tcp:8080'
     def_engine = 'PG9_4'
@@ -266,8 +267,8 @@ def run():
     log.msg("Running on reactor {}".format(reactor))
 
     # database workers...
-    userdb = UserDb(topic_base=args.topic_base,debug=args.verbose)
-    sessiondb = SessionDb(topic_base=args.topic_base,debug=args.verbose)
+    userdb = UserDb(topic_base=args.topic_base+'.db',debug=args.verbose)
+    sessiondb = SessionDb(topic_base=args.topic_base+'.db',debug=args.verbose)
 
     ## create a WAMP router factory
     ##
@@ -275,9 +276,9 @@ def run():
 
     from autobahn.twisted.wamp import RouterFactory
     router_factory = RouterFactory()
-    authorization_session = AuthorizeSession(component_config,topic_base=args.topic_base,debug=args.verbose,db=sessiondb,router=AuthorizeRouter)
+    authorization_session = AuthorizeSession(component_config,
+        topic_base=args.topic_base+'.db',debug=args.verbose,db=sessiondb,router=AuthorizeRouter)
     router_factory.router = authorization_session.ret_func
-    #router_factory.router = AuthorizeRouter
 
     ## create a WAMP router session factory
     ##
@@ -298,7 +299,8 @@ def run():
 
     log.msg("session_factory")
 
-    db_session = DB(component_config, engine=args.engine, topic_base=args.topic_base, dsn=args.dsn, debug=args.verbose)
+    db_session = DB(component_config, engine=args.engine,
+        topic_base=args.topic_base+'.db', dsn=args.dsn, debug=args.verbose)
     session_factory.add(db_session)
     session_factory.userdb.set_session(db_session)
     session_factory.sessiondb.set_session(db_session)

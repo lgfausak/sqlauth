@@ -159,8 +159,7 @@ class AuthorizeRouter(Router):
         args = { 'topiclist': tuple(look), 'authid': authid, 'action': action }
         log.msg("AuthorizeRouter.check_permission: args: {}".format(args))
 
-        #rv = yield self.app_session.call(self.query, query, args, options = types.CallOptions(timeout=2000,discloseMe=True))
-        rv = yield self.call(self.query, query, args, options = types.CallOptions(timeout=2000,discloseMe=True))
+        rv = yield self.app_session.call(self.query, query, args, options = types.CallOptions(timeout=2000,discloseMe=True))
 
         log.msg("AuthorizeRouter.check_permission: rv: {}".format(rv))
 

@@ -71,7 +71,7 @@ setup(
          'sqlpginit = sqlauth.scripts.sqlPGinit:run',
          'sqladm = sqlauth.scripts.sqladm:run',
          'sqlauthrpc = sqlauth.scripts.sqlauthrpc:run',
-         'sqlauthrouter = sqlauth.scripts.basicrouter:run',
+         'sqlauthrouter = sqlauth.scripts.sqlauthrouter:run',
       ]},
    packages = find_packages(),
    include_package_data = True,

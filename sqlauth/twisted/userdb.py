@@ -73,28 +73,3 @@ class UserDb(object):
         else:
             defer.returnValue((None, None, None, None))
         return
-
-#    #
-#    # this builds a list of users.
-#    #
-#    @inlineCallbacks
-#    def list(self):
-#        log.msg("UserDb.list()")
-#        rv = yield self.app_session.call(self.query,
-#                """
-#                    select
-#                        l.id, l.login, l.fullname, l.tzname, private.array_accum(r.name)
-#		      from
-#		        login l, loginrole lr, role r
-#		     where
-#		        l.id = lr.login_id
-#		       and
-#		        lr.role_id = r.id
-#		  group by
-#		  	l.id
-#		  order by
-#		     	l.login
-#		   """,
-#                   {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-#
-#        defer.returnValue(rv)

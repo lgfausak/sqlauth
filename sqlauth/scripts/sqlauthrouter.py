@@ -280,7 +280,7 @@ def run():
 
     # database workers...
     userdb = UserDb(topic_base=args.topic_base+'.db',debug=args.verbose)
-    sessiondb = SessionDb(topic_base=args.topic_base+'.db',debug=args.verbose)
+    sessiondb = SessionDb(topic_base=args.topic_base,debug=args.verbose)
 
     ## create a WAMP router factory
     ##

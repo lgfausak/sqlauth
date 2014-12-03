@@ -48,9 +48,6 @@ class SessionDb(object):
     # it doeesn't have to be set when the object is created, you can call set_session
     # with the information later.
     #
-    # topic_base could be 'sys.db', such that 'sys.db.query' and 'sys.db.watch' and 'sys.db.operation'
-    # are all available, and the connection has already been made.
-    #
     # this only actively tracks 'active' sessions.  once terminated they are no
     # longer available through this interface (like list/get).
     #
@@ -61,30 +58,37 @@ class SessionDb(object):
         self._sessiondb = {}
         self.app_session = app_session
         self.topic_base = topic_base
-        self.query = topic_base + '.query'
-        self.operation = topic_base + '.operation'
-        self.watch = topic_base + '.watch'
+        self.operation = topic_base + '.db.operation'
         self.debug = debug
         self.system_sessions = None
 
         return
 
+    # this sets the autobahn application that we run against for call,register,publish,subscribe
     def set_session(self, app_session):
         log.msg("SessionDb:set_session()")
         self.app_session = app_session
-
         return
  
+    # there are a few sessions that start before we start recording them, this
+    # routine lets the startup routine record the unrecorded sessions.
     def set_system_sessions(self, sysses):
         log.msg("SessionDb:set_system_sessions({})".format(sysses))
         self.system_sessions = sysses
 
         return
 
+    # return the value set by set_system_sessions().
+    # this routine and the above routine are only called once per autobahn router
     def get_system_sessions(self):
         log.msg("SessionDb:get_system_sessions({})".format(self.system_sessions))
         return (self.system_sessions)
  
+    # add a new session.
+    # we have an internal session hash which lets us record each time the
+    # router has another session associated with it.  we also have a call
+    # to sys.session.add which initially doesn't exist.  this is the long
+    # term persistence, a database.
     @inlineCallbacks
     def add(self, authid, sessionid, session_body):
         log.msg("SessionDb.add({},sessionid:{})".format(authid,sessionid))
@@ -93,10 +97,12 @@ class SessionDb(object):
         # then record the session in the database
         log.msg("SessionDb.add({}session:{})".format(authid,sessionid))
         try:
-            rv = yield self.app_session.call('sys.session.add',
+            rv = yield self.app_session.call(self.topic_base+'.session.add',
                 action_args={ 'login_id':authid, 'ab_session_id':sessionid },
                 options = types.CallOptions(timeout=2000,discloseMe = True))
         except Exception as e:
+            # if we get an error we don't really care, it just means that the session
+            # isn't recorded in the database.  maybe the database doesn't exist yet.
             log.msg("SessionDb.add({}-{},error{})".format(authid,sessionid,e))
             pass
         log.msg("SessionDb.add({},body:{})".format(authid,session_body))
@@ -119,14 +125,10 @@ class SessionDb(object):
 
         return
 
-    #def get(self, sessionid):
-    #    log.msg("SessionDb.get({})".format(sessionid))
-    #    ## we return a deferred to simulate an asynchronous lookup
-    #    return self._sessiondb.get(sessionid, {})
-
-    #
-    # build an array of live sessions
-    #
+    # return a dictionary of all of the in memory sessions. this is used
+    # by the session.list call which compares its sessions with the memory
+    # ones, only the memory ones are listed.  old sessions can be in the database
+    # for a number of reasons.
     def listid(self):
         s = {}
         log.msg("SessionDb.listid()")
@@ -134,21 +136,17 @@ class SessionDb(object):
             s[k] = { 'authid': self._sessiondb[k]._authid }
         return(s)
 
+    # delete in memory and possible persistent session record.
     @inlineCallbacks
     def delete(self, sessionid):
         log.msg("SessionDb.delete({})".format(sessionid))
         try:
-            rv = yield self.app_session.call('sys.session.delete',
+            rv = yield self.app_session.call(self.topic_base+'.session.delete',
                 action_args={ 'ab_session_id':sessionid },
                 options = types.CallOptions(timeout=2000,discloseMe = True))
         except Exception as e:
             log.msg("SessionDb.delete({},error{})".format(sessionid,e))
             pass
-
-        ## this terminates the session in the database
-        #yield self.app_session.call(self.operation,
-        #        "update session set ab_session_id = null where ab_session_id = %(session_id)s",
-        #        { 'session_id': sessionid }, options=types.CallOptions(timeout=2000,discloseMe=True))
 
         try:
             # then discard of our in memory copy

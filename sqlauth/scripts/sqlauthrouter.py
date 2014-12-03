@@ -54,7 +54,7 @@ class SessionData(ApplicationSession):
                     self.svar[i] = kwargs[i]
                 del kwargs[i]
 
-        ApplicationSession.__init__(self,c,kwargs)
+        ApplicationSession.__init__(self,c)
         self.sessiondb = sd
         # we give the sessiondb a hook so it can publish add/delete
         sd.app_session = self

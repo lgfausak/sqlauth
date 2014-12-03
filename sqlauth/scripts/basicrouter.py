@@ -78,11 +78,7 @@ class SessionData(ApplicationSession):
         #
         def list_session_sys_id(*args, **kwargs):
             log.msg("SessionData:list_session_sys_id()")
-            qv = {
-                "sessiondb_component":sessiondb_component._session_id,
-                "db_session":db_session._session_id,
-                "authorization_session":authorization_session._session_id
-            }
+            qv = self.sessiondb.get_system_sessions()
             log.msg("list_session_sys_id:qv:{}".format(qv))
 
             return(qv)
@@ -333,6 +329,7 @@ def run():
             "db_session":db_session._session_id,
             "authorization_session":authorization_session._session_id
         }
+        session_factory.sessiondb.set_system_sessions(qv)
         session_factory.sessiondb.add(0, sessiondb_component._session_id, sessiondb_component)
         session_factory.sessiondb.add(0, db_session._session_id, db_session)
         session_factory.sessiondb.add(0, authorization_session._session_id, authorization_session)

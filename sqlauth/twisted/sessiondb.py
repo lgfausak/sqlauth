@@ -65,6 +65,7 @@ class SessionDb(object):
         self.operation = topic_base + '.operation'
         self.watch = topic_base + '.watch'
         self.debug = debug
+        self.system_sessions = None
 
         return
 
@@ -73,6 +74,16 @@ class SessionDb(object):
         self.app_session = app_session
 
         return
+ 
+    def set_system_sessions(self, sysses):
+        log.msg("SessionDb:set_system_sessions({})".format(sysses)
+        self.system_sessions = sysses
+
+        return
+
+    def get_system_sessions(self):
+        log.msg("SessionDb:get_system_sessions({})".format(self.system_sessions))
+        return (self.system_sessions)
  
     @inlineCallbacks
     def add(self, authid, sessionid, session_body):

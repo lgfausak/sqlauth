@@ -60,34 +60,34 @@ class SessionData(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin: {}".format(details))
 
-        @inlineCallbacks
-        def list_session_data(*args, **kwargs):
-            log.msg("SessionData:list_session_data()")
-            qv = yield self.sessiondb.list()
-
-            if len(qv) == 0:
-                defer.returnValue([])
-                return
-    
-            log.msg("list_session_data:qv:{}".format(qv))
-    
-            # this answer comes back as a dict, key is session id, then value is a dict with the name:value
-            # pairs for the record, each record can have different columnes
-            rv = []
-            rk = {}
-            for r in qv.keys():
-                for k in qv[r].keys():
-                    rk[k] = True
-            ra = rk.keys()
-            log.msg("keys are: {}".format(ra))
-            rv.append(ra)
-            for r in qv.keys():
-                rv.append([qv[r].get(c,None) for c in ra])
-    
-            log.msg("result after massage: {}".format(rv))
-    
-            defer.returnValue(rv)
-
+#        @inlineCallbacks
+#        def list_session_data(*args, **kwargs):
+#            log.msg("SessionData:list_session_data()")
+#            qv = yield self.sessiondb.list()
+#
+#            if len(qv) == 0:
+#                defer.returnValue([])
+#                return
+#    
+#            log.msg("list_session_data:qv:{}".format(qv))
+#    
+#            # this answer comes back as a dict, key is session id, then value is a dict with the name:value
+#            # pairs for the record, each record can have different columnes
+#            rv = []
+#            rk = {}
+#            for r in qv.keys():
+#                for k in qv[r].keys():
+#                    rk[k] = True
+#            ra = rk.keys()
+#            log.msg("keys are: {}".format(ra))
+#            rv.append(ra)
+#            for r in qv.keys():
+#                rv.append([qv[r].get(c,None) for c in ra])
+#    
+#            log.msg("result after massage: {}".format(rv))
+#    
+#            defer.returnValue(rv)
+#
         @inlineCallbacks
         def list_session_id(*args, **kwargs):
             log.msg("SessionData:list_session_data()")
@@ -97,12 +97,12 @@ class SessionData(ApplicationSession):
 
             defer.returnValue(qv)
 
-        def kill_session(*args, **kwargs):
-            sid = kwargs['sid']
-            log.msg("SessionData:kill_session({})".format(sid))
-            ses = self.sessiondb.get(sid)
-            ses._transport.sendClose(code=3000,reason=six.u('killed'))
-            return defer.succeed({ 'killed': sid })
+        #def kill_session(*args, **kwargs):
+        #    sid = kwargs['sid']
+        #    log.msg("SessionData:kill_session({})".format(sid))
+        #    ses = self.sessiondb.get(sid)
+        #    ses._transport.sendClose(code=3000,reason=six.u('killed'))
+        #    return defer.succeed({ 'killed': sid })
 
         # this call returns a dictionary, keys are session id, value is a dictionary with at least 'authid' in it
         reg = yield self.register(list_session_id, 'sys.session.listid', RegisterOptions(details_arg = 'details'))
@@ -288,8 +288,8 @@ def run():
 
     from autobahn.twisted.wamp import RouterFactory
     router_factory = RouterFactory()
-    lfunc = AuthorizeSession(component_config,topic_base=args.topic_base,debug=args.verbose,db=sessiondb,router=AuthorizeRouter)
-    router_factory.router = lfunc.ret_func
+    authorization_session = AuthorizeSession(component_config,topic_base=args.topic_base,debug=args.verbose,db=sessiondb,router=AuthorizeRouter)
+    router_factory.router = authorization_session.ret_func
     #router_factory.router = AuthorizeRouter
 
     ## create a WAMP router session factory
@@ -305,9 +305,9 @@ def run():
 
     log.msg("userdb, sessiondb")
 
-    component_session = SessionData(component_config,session_factory.sessiondb)
-    session_factory.add(component_session)
-    session_factory.add(lfunc)
+    sessiondb_component = SessionData(component_config,session_factory.sessiondb)
+    session_factory.add(sessiondb_component)
+    session_factory.add(authorization_session)
 
     log.msg("session_factory")
 
@@ -335,7 +335,11 @@ def run():
             reactor.stop()
         srv.addErrback(ListenFailed)
 
+    def addsession():
+        log.msg("here are three sessions {} {} {}".format(authorization_session, sessiondb_component, db_session))
+
     reactor.callWhenRunning(listen)
+    reactor.callWhenRunning(addsession)
     reactor.run()
 
 if __name__ == '__main__':

@@ -685,6 +685,16 @@ class Component(ApplicationSession):
             self.svar['topic_base']+'.session.add', details.authid, details.session))
         rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':details.session })
         log.msg("onJoin added late session record {}".format(rv))
+        #
+        # just a little more goofiness, there are a few sessions set up by the authentication, authorization,
+        # and database components connected to the main router.  We now query for those sessions
+        # and create a database entry for them.
+        #
+        sysses = yield self.call('sys.session.listsysid')
+        log.msg("onJoin :sysses {}".format(sysses))
+        for dt in sysses.values():
+            rv = self.sessionAdd( action_args={ 'login_id':0, 'ab_session_id':dt })
+
 
         rpc_register = {
             'user.list': {'method': self.userList },

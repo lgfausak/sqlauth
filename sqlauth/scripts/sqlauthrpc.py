@@ -743,6 +743,8 @@ class Component(ApplicationSession):
         for dt in sysses.values():
             rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':dt })
 
+        reg = yield self.register(self.activityAdd, self.svar['topic_base'+'.activity.add',
+                    RegisterOptions(details_arg = 'details'))
 
         rpc_register = {
             'user.list': {'method': self.userList },
@@ -758,7 +760,7 @@ class Component(ApplicationSession):
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
             'activity.list': {'method': self.activityList },
-            'activity.add': {'method': self.activityAdd },
+#            'activity.add': {'method': self.activityAdd },
             'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },
             'session.delete': {'method': self.sessionDelete },

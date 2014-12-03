@@ -51,8 +51,6 @@ class UserDb(object):
         self.app_session = app_session
         self.topic_base = topic_base
         self.query = topic_base + '.query'
-        self.operation = topic_base + '.operation'
-        self.watch = topic_base + '.watch'
         self.debug = debug
 
         return

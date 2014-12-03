@@ -74,7 +74,7 @@ SELECT pg_catalog.setval('login_id_seq', 4, true);
 
 COPY role (id, name, description, modified_by_user, modified_timestamp) FROM stdin;
 1	sysadmin	System Admin	0	2014-11-25 12:54:50.715127-06
-2	self	Permissions granted to self	0	2014-11-25 12:54:54.368095-06
+2	public	Permissions granted to everyone	0	2014-11-25 12:54:54.368095-06
 4	dbadmin	Database Administrator Access	0	2014-11-25 16:52:00.892507-06
 5	dbuser	Database User Access	0	2014-11-25 17:13:51.684417-06
 6	adm	Public System Administrator	0	2014-11-26 08:06:47.807554-06

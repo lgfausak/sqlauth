@@ -58,7 +58,6 @@ class SessionDb(object):
         self._sessiondb = {}
         self.app_session = app_session
         self.topic_base = topic_base
-        self.operation = topic_base + '.db.operation'
         self.debug = debug
         self.system_sessions = None
 
@@ -131,20 +130,7 @@ class SessionDb(object):
         else:
             defer.returnValue([])
         log.msg("SessionDb.activity({},done)".format(ab_session_id))
-#    @inlineCallbacks
-#    def activity(self, sessionid, topic_name, activity_type, allow):
-#        log.msg("SessionDb.activity({},{},{},{})".format(sessionid,topic_name,activity_type,allow))
-#        # then record the session in the database
-#        yield self.app_session.call(self.operation,
-#                """insert into activity (session_id,topic_name,type_id,allow)
-#                   values(
-#                    (select id from session where ab_session_id = %(session_id)s),
-#                     %(topic_name)s, %(activity_type)s, %(allow)s)""",
-#                   { 'topic_name': topic_name,
-#                      'session_id': sessionid,
-#                      'activity_type': activity_type,
-#                      'allow': allow }, options=types.CallOptions(timeout=2000,discloseMe=True))
-#
+
         return
 
     # return a dictionary of all of the in memory sessions. this is used

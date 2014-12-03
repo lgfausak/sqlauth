@@ -100,6 +100,7 @@ class SessionDb(object):
             rv = yield self.app_session.call(self.topic_base+'.session.add',
                 action_args={ 'login_id':authid, 'ab_session_id':sessionid },
                 options = types.CallOptions(timeout=2000,discloseMe = True))
+            returnValue(rv)
         except Exception as e:
             # if we get an error we don't really care, it just means that the session
             # isn't recorded in the database.  maybe the database doesn't exist yet.
@@ -113,19 +114,22 @@ class SessionDb(object):
     def activity(self, ab_session_id, topic_name, type_id, allow):
         log.msg("SessionDb.activity({},{},{},{})".format(ab_session_id,
             topic_name,type_id,allow))
-
-        try:
-            rv = yield self.app_session.call(self.topic_base+'.activity.add',
-                action_args={ 'ab_session_id':ab_session_id,
-                    'topic_name':topic_name,
-                    'type_id':type_id,
-                    'allow':allow},
-                options = types.CallOptions(timeout=2000,discloseMe = True))
-        except Exception as e:
-            # if we get an error we don't really care, it just means that the activity
-            # isn't recorded in the database.  maybe the database doesn't exist yet.
-            log.msg("SessionDb.activity({},error{})".format(ab_session_id,e))
-            pass
+        if topic_name != self.topic_base+'.activity.add'
+            try:
+                rv = yield self.app_session.call(self.topic_base+'.activity.add',
+                    action_args={ 'ab_session_id':ab_session_id,
+                        'topic_name':topic_name,
+                        'type_id':type_id,
+                        'allow':allow},
+                    options = types.CallOptions(timeout=2000,discloseMe = True))
+                returnValue(rv)
+            except Exception as e:
+                # if we get an error we don't really care, it just means that the activity
+                # isn't recorded in the database.  maybe the database doesn't exist yet.
+                log.msg("SessionDb.activity({},error{})".format(ab_session_id,e))
+                pass
+        else:
+            returnValue([])
         log.msg("SessionDb.activity({},done)".format(ab_session_id))
 #    @inlineCallbacks
 #    def activity(self, sessionid, topic_name, activity_type, allow):

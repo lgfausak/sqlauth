@@ -41,7 +41,7 @@ from sqlauth.twisted.sessiondb import SessionDb
 from sqlauth.twisted.authorizerouter import AuthorizeRouter, AuthorizeSession
 
 class SessionData(ApplicationSession):
-    def __init__(self, *args, **kwargs
+    def __init__(self, *args, **kwargs)
         log.msg("SessionData:__init__")
         self.svar = {}
         c = args[0]

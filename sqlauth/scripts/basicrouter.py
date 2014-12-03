@@ -329,9 +329,9 @@ def run():
 
     def addsession():
         log.msg("here are three sessions {} {} {}".format(authorization_session, sessiondb_component, db_session))
-        session_factory.sessiondb.add(0, sessiondb_component._sessionid, self)
-        session_factory.sessiondb.add(0, db_session._sessionid, self)
-        session_factory.sessiondb.add(0, authorization_session._sessionid, self)
+        session_factory.sessiondb.add(0, sessiondb_component._session_id, self)
+        session_factory.sessiondb.add(0, db_session._session_id, self)
+        session_factory.sessiondb.add(0, authorization_session._session_id, self)
 
     reactor.callWhenRunning(listen)
     reactor.callWhenRunning(addsession)

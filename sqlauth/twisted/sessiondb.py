@@ -114,7 +114,7 @@ class SessionDb(object):
     def activity(self, ab_session_id, topic_name, type_id, allow):
         log.msg("SessionDb.activity({},{},{},{})".format(ab_session_id,
             topic_name,type_id,allow))
-        if topic_name != self.topic_base+'.activity.add'
+        if topic_name != self.topic_base+'.activity.add':
             try:
                 rv = yield self.app_session.call(self.topic_base+'.activity.add',
                     action_args={ 'ab_session_id':ab_session_id,

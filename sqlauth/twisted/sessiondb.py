@@ -100,7 +100,7 @@ class SessionDb(object):
             rv = yield self.app_session.call(self.topic_base+'.session.add',
                 action_args={ 'login_id':authid, 'ab_session_id':sessionid },
                 options = types.CallOptions(timeout=2000,discloseMe = True))
-            returnValue(rv)
+            defer.returnValue(rv)
         except Exception as e:
             # if we get an error we don't really care, it just means that the session
             # isn't recorded in the database.  maybe the database doesn't exist yet.
@@ -122,14 +122,14 @@ class SessionDb(object):
                         'type_id':type_id,
                         'allow':allow},
                     options = types.CallOptions(timeout=2000,discloseMe = True))
-                returnValue(rv)
+                defer.returnValue(rv)
             except Exception as e:
                 # if we get an error we don't really care, it just means that the activity
                 # isn't recorded in the database.  maybe the database doesn't exist yet.
                 log.msg("SessionDb.activity({},error{})".format(ab_session_id,e))
                 pass
         else:
-            returnValue([])
+            defer.returnValue([])
         log.msg("SessionDb.activity({},done)".format(ab_session_id))
 #    @inlineCallbacks
 #    def activity(self, sessionid, topic_name, activity_type, allow):

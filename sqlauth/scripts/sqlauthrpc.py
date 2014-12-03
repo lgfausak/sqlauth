@@ -601,7 +601,7 @@ class Component(ApplicationSession):
                         %(topic_name)s, %(type_id)s, %(allow)s
                     )
                     returning
-                        id,session_id,topic_name,type_id,allow,%(ab_session_db)s as ab_session_id
+                        id,session_id,topic_name,type_id,allow,%(ab_session_id)s as ab_session_id
                 """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
 

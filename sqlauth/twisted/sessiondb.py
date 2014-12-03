@@ -76,7 +76,7 @@ class SessionDb(object):
         return
  
     def set_system_sessions(self, sysses):
-        log.msg("SessionDb:set_system_sessions({})".format(sysses)
+        log.msg("SessionDb:set_system_sessions({})".format(sysses))
         self.system_sessions = sysses
 
         return

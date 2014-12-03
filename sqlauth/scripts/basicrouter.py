@@ -60,42 +60,33 @@ class SessionData(ApplicationSession):
     def onJoin(self, details):
         log.msg("onJoin: {}".format(details))
 
-#        @inlineCallbacks
-#        def list_session_data(*args, **kwargs):
-#            log.msg("SessionData:list_session_data()")
-#            qv = yield self.sessiondb.list()
-#
-#            if len(qv) == 0:
-#                defer.returnValue([])
-#                return
-#    
-#            log.msg("list_session_data:qv:{}".format(qv))
-#    
-#            # this answer comes back as a dict, key is session id, then value is a dict with the name:value
-#            # pairs for the record, each record can have different columnes
-#            rv = []
-#            rk = {}
-#            for r in qv.keys():
-#                for k in qv[r].keys():
-#                    rk[k] = True
-#            ra = rk.keys()
-#            log.msg("keys are: {}".format(ra))
-#            rv.append(ra)
-#            for r in qv.keys():
-#                rv.append([qv[r].get(c,None) for c in ra])
-#    
-#            log.msg("result after massage: {}".format(rv))
-#    
-#            defer.returnValue(rv)
-#
+        #
+        # this call returns session ids that are registered in memory
+        #
         @inlineCallbacks
         def list_session_id(*args, **kwargs):
-            log.msg("SessionData:list_session_data()")
+            log.msg("SessionData:list_session_id()")
             qv = yield self.sessiondb.listid()
 
             log.msg("list_session_data:qv:{}".format(qv))
 
             defer.returnValue(qv)
+
+        #
+        # this call returns session ids for things that came into existence before
+        # we could record them in memory or on disk
+        #
+        def list_session_sys_id(*args, **kwargs):
+            log.msg("SessionData:list_session_sys_id()")
+            qv = {
+                "sessiondb_component":sessiondb_component._sessionid,
+                "db_session":db_session._sessionid,
+                "authorization_session":authorization_session._sessionid
+            }
+
+            log.msg("list_session_sys_id:qv:{}".format(qv))
+
+            return(qv)
 
         #def kill_session(*args, **kwargs):
         #    sid = kwargs['sid']
@@ -106,6 +97,7 @@ class SessionData(ApplicationSession):
 
         # this call returns a dictionary, keys are session id, value is a dictionary with at least 'authid' in it
         reg = yield self.register(list_session_id, 'sys.session.listid', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_sys_id, 'sys.session.listsysid', RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))
@@ -337,6 +329,9 @@ def run():
 
     def addsession():
         log.msg("here are three sessions {} {} {}".format(authorization_session, sessiondb_component, db_session))
+        session_factory.sessiondb.add(0, sessiondb_component._sessionid, self)
+        session_factory.sessiondb.add(0, db_session._sessionid, self)
+        session_factory.sessiondb.add(0, authorization_session._sessionid, self)
 
     reactor.callWhenRunning(listen)
     reactor.callWhenRunning(addsession)

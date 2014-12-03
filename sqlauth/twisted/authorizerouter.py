@@ -27,6 +27,7 @@
 import json
 import sys
 import six
+import types as vtypes
 
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks, returnValue
@@ -166,6 +167,12 @@ class AuthorizeRouter(Router):
         perm = False
         if len(rv) > 0:
             perm = rv[0]['allow']
+            if not isinstance(perm, vtypes.BooleanType):
+                log.msg("perm is NOT boolean {}", perm)
+                if perm == 't':
+                    perm = True
+                else:
+                    perm = False
             log.msg("perm is {}".format(perm))
 
         returnValue(perm)

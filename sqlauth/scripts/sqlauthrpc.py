@@ -581,7 +581,7 @@ class Component(ApplicationSession):
     def activityAdd(self, *args, **kwargs):
         log.msg("activityAdd called {}".format(kwargs))
         qa = kwargs['action_args']
-        yield self.call(self.query,
+        qv = yield self.call(self.query,
                 """
                     insert into
                         activity

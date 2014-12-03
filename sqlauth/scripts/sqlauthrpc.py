@@ -17,12 +17,19 @@
 ##
 ###############################################################################
 ##
-## this contains most of the sqlauth administration rpc calls.  the only one
-## that is missing is the sessiondb one, because there are two inputs
-## for that one.  the database contains one version of the current 'sessions',
-## but the more accurate one is in memory of the router process.  so the listSessions
-## code actually looks at both sources and will let you know if data exists
-## in memory but does not exist in database.
+## this contains most of the sqlauth administration rpc calls.
+## I have attempted to get
+## all initial sessions into both memory and the database, at the preset
+## time there are 4 system sessions when this module has completed
+## registering.  I can probably get that cut down, see note below.
+## all of these functions are simple front ends to database
+## updates.  the database can be updated directly if needed.
+##
+## this module is specific to the database type accessible via topic_base.
+## this is for the postgres database.
+## the more i think about it the more the database access routines
+## belong in here, not in the basicrouter, I will probably move them
+## so the database connection and the database calls are all in one file.
 ##
 ## user (list,add,delete,get)
 ##   list   - show a list of users and the roles they belong to
@@ -36,9 +43,12 @@
 ##   list   - show a list of topics and the roles that belong to them
 ##   add    - add a new topic
 ##   delete - delete a topic
+## activity (list,add,delete,get)
+##   list   - show a list of activities that belong to active sessions
 ## session (list,add,delete,get)
 ##   list   - list all sessions
 ##   add    - add a new session
+##   delete - delete a session
 ##
 ###############################################################################
 
@@ -507,6 +517,7 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
+        qa = kwargs['action_args']
 	av = yield self.call(self.svar['topic_base'] + '.session.listid',
             options=types.CallOptions(timeout=2000,discloseMe=True))
         if len(av) == 0:

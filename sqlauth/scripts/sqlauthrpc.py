@@ -693,7 +693,7 @@ class Component(ApplicationSession):
         sysses = yield self.call('sys.session.listsysid')
         log.msg("onJoin :sysses {}".format(sysses))
         for dt in sysses.values():
-            rv = self.sessionAdd( action_args={ 'login_id':0, 'ab_session_id':dt })
+            rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':dt })
 
 
         rpc_register = {

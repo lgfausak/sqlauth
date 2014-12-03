@@ -743,8 +743,14 @@ class Component(ApplicationSession):
         for dt in sysses.values():
             rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':dt })
 
+        # call the activityAdd manually, first, so we catch all of the registrations
+        # in the activity table
         reg = yield self.register(self.activityAdd, self.svar['topic_base']+'.activity.add',
                     RegisterOptions(details_arg = 'details'))
+        rv = self.activityAdd( action_args={ 'ab_session_id':details.session,
+            'topic_name':self.svar['topic_base']+'.activity.add',
+            'type_id':'register',
+            'allow':True})
 
         rpc_register = {
             'user.list': {'method': self.userList },

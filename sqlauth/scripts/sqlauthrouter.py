@@ -41,9 +41,11 @@ from sqlauth.twisted.sessiondb import SessionDb
 from sqlauth.twisted.authorizerouter import AuthorizeRouter, AuthorizeSession
 
 class SessionData(ApplicationSession):
-    def __init__(self, c, sd):
+    def __init__(self, *args, **kwargs
         log.msg("SessionData:__init__")
         self.svar = {}
+        c = args[0]
+        sd = args[1]
 
         # reap init variables meant only for us
         for i in ( 'topic_base', ):
@@ -52,7 +54,7 @@ class SessionData(ApplicationSession):
                     self.svar[i] = kwargs[i]
                 del kwargs[i]
 
-        ApplicationSession.__init__(self,c)
+        ApplicationSession.__init__(self,c,kwargs)
         self.sessiondb = sd
         # we give the sessiondb a hook so it can publish add/delete
         sd.app_session = self

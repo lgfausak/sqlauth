@@ -119,10 +119,10 @@ class SessionDb(object):
 
         return
 
-    def get(self, sessionid):
-        log.msg("SessionDb.get({})".format(sessionid))
-        ## we return a deferred to simulate an asynchronous lookup
-        return self._sessiondb.get(sessionid, {})
+    #def get(self, sessionid):
+    #    log.msg("SessionDb.get({})".format(sessionid))
+    #    ## we return a deferred to simulate an asynchronous lookup
+    #    return self._sessiondb.get(sessionid, {})
 
     #
     # build an array of live sessions

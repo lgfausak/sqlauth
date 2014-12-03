@@ -43,6 +43,15 @@ from sqlauth.twisted.authorizerouter import AuthorizeRouter, AuthorizeSession
 class SessionData(ApplicationSession):
     def __init__(self, c, sd):
         log.msg("SessionData:__init__")
+        self.svar = {}
+
+        # reap init variables meant only for us
+        for i in ( 'topic_base', ):
+            if i in kwargs:
+                if kwargs[i] is not None:
+                    self.svar[i] = kwargs[i]
+                del kwargs[i]
+
         ApplicationSession.__init__(self,c)
         self.sessiondb = sd
         # we give the sessiondb a hook so it can publish add/delete
@@ -91,8 +100,10 @@ class SessionData(ApplicationSession):
         #    return defer.succeed({ 'killed': sid })
 
         # this call returns a dictionary, keys are session id, value is a dictionary with at least 'authid' in it
-        reg = yield self.register(list_session_id, 'sys.session.listid', RegisterOptions(details_arg = 'details'))
-        reg = yield self.register(list_session_sys_id, 'sys.session.listsysid', RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_id, self.svar['topic_base']+'.session.listid',
+            RegisterOptions(details_arg = 'details'))
+        reg = yield self.register(list_session_sys_id, self.svar['topic_base']+'.session.listsysid',
+            RegisterOptions(details_arg = 'details'))
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))
@@ -231,7 +242,6 @@ def run():
 
     def_wsocket = 'ws://127.0.0.1:8080/ws'
     def_realm = 'realm1'
-    #def_topic_base = 'sys.db'
     def_topic_base = 'sys'
     def_dsn = 'dbname=autobahn host=localhost user=autouser'
     def_endpoint='tcp:8080'
@@ -293,7 +303,8 @@ def run():
 
     log.msg("userdb, sessiondb")
 
-    sessiondb_component = SessionData(component_config,session_factory.sessiondb)
+    sessiondb_component = SessionData(component_config,session_factory.sessiondb,
+        topic_base=args.topic_base)
     session_factory.add(sessiondb_component)
     session_factory.add(authorization_session)
 

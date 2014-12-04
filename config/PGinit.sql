@@ -35,10 +35,8 @@ SELECT pg_catalog.setval('login_id_seq', 2, true);
 
 COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM stdin;
 1	sys	All things system, including authentication and authorization	0	2014-11-25 12:59:21.890086-06
-2	sys.topic.delete	Delete a topic	0	2014-12-03 19:58:36.862908-06
-3	sys.topic.list	List topics	0	2014-12-03 19:58:55.580065-06
-4	sys.topic.get	Get a topic	0	2014-12-03 19:59:44.461566-06
-5	sys.topic.add	Add a topic	0	2014-12-03 20:07:45.035027-06
+2	sys.topic	Topic stuff	0	2014-12-03 19:58:36.862908-06
+3	sys.role	Add a topic	0	2014-12-03 20:07:45.035027-06
 200	adm	Administrator Space	0	2014-11-26 08:06:09.931566-06
 300	com	Community Space	0	2014-11-26 08:06:09.931566-06
 400	pub	Public Space	0	2014-11-26 08:06:09.931566-06
@@ -98,13 +96,11 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 20	400	4	admin	t	0	2014-11-25 13:12:29.087589-06
 21	2	4	call	t	0	2014-11-25 13:12:29.087589-06
 22	3	4	call	t	0	2014-11-25 13:12:29.087589-06
-23	4	4	call	t	0	2014-11-25 13:12:29.087589-06
-24	5	4	call	t	0	2014-11-25 13:12:29.087589-06
-25	500	1	admin	t	0	2014-11-25 13:12:29.087589-06
-26	501	1	admin	t	0	2014-11-25 13:12:29.087589-06
-27	502	2	admin	t	0	2014-11-25 13:12:29.087589-06
-28	503	3	admin	t	0	2014-11-25 13:12:29.087589-06
-29	504	4	admin	t	0	2014-11-25 13:12:29.087589-06
+100	500	1	admin	t	0	2014-11-25 13:12:29.087589-06
+101	501	1	admin	t	0	2014-11-25 13:12:29.087589-06
+102	502	2	admin	t	0	2014-11-25 13:12:29.087589-06
+103	503	3	admin	t	0	2014-11-25 13:12:29.087589-06
+104	504	4	admin	t	0	2014-11-25 13:12:29.087589-06
 \.
 
 
@@ -112,7 +108,7 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 -- Name: topicrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topicrole_id_seq', 19, true);
+SELECT pg_catalog.setval('topicrole_id_seq', 500, true);
 
 
 --

@@ -11,9 +11,9 @@ PRIMARY KEY (id)
 CREATE TABLE login
 (
 id SERIAL AUTO_INCREMENT COMMENT 'Primary Key for the user',
-login TEXT UNIQUE,
+login TEXT NOT NULL UNIQUE,
 fullname TEXT,
-password TEXT,
+password TEXT NOT NULL,
 salt TEXT,
 tzname TEXT,
 old_login TEXT,
@@ -24,7 +24,7 @@ PRIMARY KEY (id)
 CREATE TABLE role
 (
 id SERIAL,
-name TEXT UNIQUE,
+name TEXT NOT NULL UNIQUE,
 description TEXT,
 PRIMARY KEY (id)
 );
@@ -77,7 +77,7 @@ PRIMARY KEY (component)
 CREATE TABLE topic
 (
 id SERIAL NOT NULL AUTO_INCREMENT,
-name TEXT UNIQUE,
+name TEXT NOT NULL UNIQUE,
 description TEXT,
 PRIMARY KEY (id)
 );

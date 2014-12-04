@@ -30,11 +30,11 @@ admin	Admin Domain	Rule over this space
 -- Data for Name: login; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY login (id, login, fullname, password, salt, tzname, modified_by_user, modified_timestamp) FROM stdin;
-0	sys	System Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 16:39:11.141461-06
-2	db	DB Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 16:47:09.463401-06
-3	greg	Greg Fausak	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-25 17:20:48.85132-06
-4	adm	Public System Administrator	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	oihewuhweg98797325	America/Chicago	0	2014-11-26 08:05:27.067997-06
+COPY login (id, login, fullname, password, tzname, modified_by_user, modified_timestamp, salt, old_login, inactive) FROM stdin;
+0	sys	System Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
+2	db	DB Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
+3	greg	Greg Fausak	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
+4	adm	Public System Administrator	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
 \.
 
 
@@ -74,7 +74,7 @@ SELECT pg_catalog.setval('login_id_seq', 4, true);
 
 COPY role (id, name, description, modified_by_user, modified_timestamp) FROM stdin;
 1	sysadmin	System Admin	0	2014-11-25 12:54:50.715127-06
-2	public	Permissions granted to everyone	0	2014-11-25 12:54:54.368095-06
+2	public	Permissions granted to self	0	2014-12-03 17:06:00.894049-06
 4	dbadmin	Database Administrator Access	0	2014-11-25 16:52:00.892507-06
 5	dbuser	Database User Access	0	2014-11-25 17:13:51.684417-06
 6	adm	Public System Administrator	0	2014-11-26 08:06:47.807554-06
@@ -119,6 +119,14 @@ SELECT pg_catalog.setval('session_id_seq', 1, false);
 
 
 --
+-- Data for Name: sqlauth; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY sqlauth (component, version, profile) FROM stdin;
+\.
+
+
+--
 -- Data for Name: topic; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -127,6 +135,10 @@ COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM st
 2	sys.db	DB Administration	0	2014-11-25 17:06:40.391797-06
 3	user.db	User DB Access	0	2014-11-25 17:15:03.700403-06
 4	adm	Administrator Namespace	0	2014-11-26 08:06:09.931566-06
+5	sys.topic.delete	Delete a topic	0	2014-12-03 19:58:36.862908-06
+6	sys.topic.list	List topics	0	2014-12-03 19:58:55.580065-06
+7	sys.topic.get	Get a topic	0	2014-12-03 19:59:44.461566-06
+8	sys.topic.add	Add a topic	0	2014-12-03 20:07:45.035027-06
 \.
 
 
@@ -134,7 +146,7 @@ COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM st
 -- Name: topic_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topic_id_seq', 4, true);
+SELECT pg_catalog.setval('topic_id_seq', 8, true);
 
 
 --
@@ -154,10 +166,12 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 10	2	4	admin	t	0	2014-11-25 17:12:32.738286-06
 11	3	5	call	t	0	2014-11-25 17:16:42.03835-06
 12	3	5	subscribe	t	0	2014-11-25 17:17:39.320429-06
-14	4	6	call	t	0	2014-11-26 08:21:46.422712-06
-15	4	6	subscribe	t	0	2014-11-26 08:23:27.206593-06
-16	4	6	register	t	0	2014-11-26 08:23:27.206593-06
-17	4	6	publish	t	0	2014-11-26 08:23:27.206593-06
+13	4	6	call	t	0	2014-11-26 08:21:46.422712-06
+14	4	6	subscribe	t	0	2014-11-26 08:23:27.206593-06
+15	5	2	call	t	0	2014-12-03 20:02:38.789938-06
+16	6	2	call	t	0	2014-12-03 20:02:43.696013-06
+17	7	2	call	t	0	2014-12-03 20:02:48.043339-06
+18	8	2	call	t	0	2014-12-03 20:07:49.722207-06
 \.
 
 
@@ -165,7 +179,14 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 -- Name: topicrole_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('topicrole_id_seq', 15, true);
+SELECT pg_catalog.setval('topicrole_id_seq', 19, true);
+
+
+--
+-- Name: topicrole_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('topicrole_role_id_seq', 1, false);
 
 
 --

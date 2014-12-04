@@ -11,9 +11,9 @@ CREATE TABLE login
 (
 /*Primary Key for the user*/
 id SERIAL PRIMARY KEY  AUTOINCREMENT,
-login TEXT UNIQUE,
+login TEXT NOT NULL UNIQUE,
 fullname TEXT,
-password TEXT,
+password TEXT NOT NULL,
 salt TEXT,
 tzname TEXT,
 old_login TEXT,
@@ -23,7 +23,7 @@ inactive BOOLEAN
 CREATE TABLE role
 (
 id SERIAL PRIMARY KEY,
-name TEXT UNIQUE,
+name TEXT NOT NULL UNIQUE,
 description TEXT
 );
 
@@ -70,7 +70,7 @@ profile JSONB
 CREATE TABLE topic
 (
 id SERIAL NOT NULL PRIMARY KEY  AUTOINCREMENT,
-name TEXT UNIQUE,
+name TEXT NOT NULL UNIQUE,
 description TEXT
 );
 

@@ -31,10 +31,10 @@ admin	Admin Domain	Rule over this space
 --
 
 COPY login (id, login, fullname, password, tzname, modified_by_user, modified_timestamp, salt, old_login, inactive) FROM stdin;
-0	sys	System Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
-2	db	DB Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
-3	greg	Greg Fausak	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
-4	adm	Public System Administrator	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:09:32.652784-06	\N	\N	\N
+0	sys	System Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:21:15.442137-06	oihewuhweg98797325	\N	\N
+2	db	DB Admin	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:21:15.442137-06	oihewuhweg98797325	\N	\N
+3	greg	Greg Fausak	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:21:15.442137-06	oihewuhweg98797325	\N	\N
+4	adm	Public System Administrator	17q8IJB2AO5dCvCcjJg/DHcP51dAHrULJUD9zoNZIbg=	America/Chicago	0	2014-12-03 20:21:15.442137-06	oihewuhweg98797325	\N	\N
 \.
 
 
@@ -166,12 +166,12 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 10	2	4	admin	t	0	2014-11-25 17:12:32.738286-06
 11	3	5	call	t	0	2014-11-25 17:16:42.03835-06
 12	3	5	subscribe	t	0	2014-11-25 17:17:39.320429-06
-13	4	6	call	t	0	2014-11-26 08:21:46.422712-06
-14	4	6	subscribe	t	0	2014-11-26 08:23:27.206593-06
-15	5	2	call	t	0	2014-12-03 20:02:38.789938-06
-16	6	2	call	t	0	2014-12-03 20:02:43.696013-06
-17	7	2	call	t	0	2014-12-03 20:02:48.043339-06
-18	8	2	call	t	0	2014-12-03 20:07:49.722207-06
+14	4	6	call	t	0	2014-11-26 08:21:46.422712-06
+15	4	6	subscribe	t	0	2014-11-26 08:23:27.206593-06
+16	5	2	call	t	0	2014-12-03 20:02:38.789938-06
+17	6	2	call	t	0	2014-12-03 20:02:43.696013-06
+18	7	2	call	t	0	2014-12-03 20:02:48.043339-06
+19	8	2	call	t	0	2014-12-03 20:07:49.722207-06
 \.
 
 

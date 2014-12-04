@@ -330,23 +330,57 @@ class Component(ApplicationSession):
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
         defer.returnValue(self._columnize(qv))
 
+    #
+    # roleAdd
+    #  name         -> name of the role to add, like 'dba' or 'tenant12'
+    #  description  -> a description to associate with the role
+    #  bind_topic   -> the topic binding for the role, like 'adm.dba' or 'com.tenants.tenant12'
+    #  roles        -> array of roles to be a member of. like [ 'public', 'adm' ]
+    #
+    # This is the logic behind a role.
+    # A role is 'bound' to a topic.  The topic is specified at role create time.
+    # The topic can be just the role name, or, it can be prefixed by any
+    # number of intermediate vectors. The entire bind name is prefixed with 'role.',
+    # so in the above example we would ultimately have 'role.adm.dba' and 'role.com.tenants.tenant12'
+    # The first step of creating a role is to create the topic binding, so the user creating
+    # the role must have the permission to do that. Then the role itself is created with the
+    # 'bind_to' field set to the topic we just created. Finally, an 'admin' record is created in
+    # topicrole indicating that the new bind role topic has admin over that new topic.
+    #
     @inlineCallbacks
     def roleAdd(self, *args, **kwargs):
-        log.msg("roleAdd called {}".format(kwargs))
         qa = kwargs['action_args']
+        details = kwargs['details']
+        log.msg("roleAdd called {},{}".format(args, kwargs))
+
+        # this will throw exception if we don't have permission to add
+        # this topic, so we won't proceed because of the exception
+        rv = yield self.topicAdd( action_args={
+            'topic_name':qa['bind_topic'],'description':qa['description'] }, details=kwargs['details'] )
+        if len(rv) == 0:
+            raise Exception("impossible situation, no return value from topicAdd in roleAdd")
+        # we will bind the new role to the newly created topic.
+        qa['bind_to'] = rv[1][rv[0].index('id')]
+        # there is a transaction issue here.
+        # i should really do the creation of the topic and the creation of the role
+        # in the same transaction.  that would mess up my layering a bit, but it makes more
+        # database sense.  however, because i am lazy, i am going to leave it this way.
+        # that means that the role creation could fail and leave a dangling topic
+        # this could happen if the role already exists, but the topic doesn't.
+        # i might clean this up later if it ever matters.
         qv = yield self.call(self.query,
                 """
                     insert into
                         role
                     (
-                        name, description
+                        name, description, bind_to
                     )
                     values
                     (
-                        %(name)s, %(description)s
+                        %(name)s, %(description)s, %(bind_to)s
                     )
                     returning
-                        id, name, description
+                        id, name, description, bind_to
 		   """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result

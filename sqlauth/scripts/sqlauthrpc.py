@@ -491,6 +491,14 @@ class Component(ApplicationSession):
         except Exception as e:
             log.msg("topicrolePermission: exception {}".format(e))
 
+        # the allow is not coming back as a boolean, coerce here.
+        for i in qv:
+            if not isinstance(qv[i]['allow'], vtypes.BooleanType):
+                if qv[i]['allow'] == 't':
+                    qv[i]['allow'] = True
+                else:
+                    qv[i]['allow'] = False
+
         log.msg("topicrolePermission: result {}".format(qv))
 
         defer.returnValue(self._columnize(qv))
@@ -508,6 +516,26 @@ class Component(ApplicationSession):
     def topicAdd(self, *args, **kwargs):
         log.msg("topicAdd called {}".format(kwargs))
         qa = kwargs['action_args']
+
+        log.msg("topicAdd.details.caller {}".format(kwargs['details'].caller))
+        log.msg("topicAdd.details.authid {}".format(kwargs['details'].authid))
+        log.msg("topicAdd.details.authrole {}".format(kwargs['details'].authrole))
+        log.msg("topicAdd.details.authmethod {}".format(kwargs['details'].authmethod))
+        log.msg("topicAdd.details.caller_transport {}".format(kwargs['details'].caller_transport))
+
+        details = kwargs['details']
+
+        rv = self.topicrolePermission( action_args={
+            'authid':details.authid, 'topic_name':qa['name'],'type_id':'admin' })
+
+        log.msg("topicAdd.topicrolePermission {}".format(rv))
+        if len(rv) == 0:
+            raise Exception("no permission to add a topic in that hierchy")
+        if not rv[1][rv[0].index('allow')]:
+            raise Exception("False permission to add a topic in that hierchy")
+
+        log.msg("topicAdd.topicrolePermission, assert, {} has permission for admin in {}".format(details.authid, qa['name']))
+
         qv = yield self.call(self.query,
                 """
                     insert into

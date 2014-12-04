@@ -819,7 +819,6 @@ class Component(ApplicationSession):
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
             'topicrole.permission': {'method': self.topicrolePermission },
-            'topicrole.add': {'method': self.topicroleAdd },
             'activity.list': {'method': self.activityList },
             'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },

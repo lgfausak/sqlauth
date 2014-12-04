@@ -491,13 +491,15 @@ class Component(ApplicationSession):
         except Exception as e:
             log.msg("topicrolePermission: exception {}".format(e))
 
+        log.msg("topicrolePermission: initial result {}".format(qv))
+
         # the allow is not coming back as a boolean, coerce here.
         for i in qv:
-            if not isinstance(qv[i]['allow'], vtypes.BooleanType):
-                if qv[i]['allow'] == 't':
-                    qv[i]['allow'] = True
+            if not isinstance(i['allow'], vtypes.BooleanType):
+                if i['allow'] == 't':
+                    i['allow'] = True
                 else:
-                    qv[i]['allow'] = False
+                    i['allow'] = False
 
         log.msg("topicrolePermission: result {}".format(qv))
 

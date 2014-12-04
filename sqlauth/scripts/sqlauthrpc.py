@@ -461,28 +461,35 @@ class Component(ApplicationSession):
         qa = kwargs['action_args']
         log.msg("topicrolePermission: {} {} {}".format(qa['authid'], qa['topic_name'], qa['type_id']))
         s = qa['topic_name']
+        log.msg("topicrolePermission: name {}".format(s))
         # this gives us an array of ['com','com.db','com.db.query'] in above example
         qa['topiclist'] = ['.'.join(s.split('.')[:i+1]) for i in range(s.count('.')+1)]
+        log.msg("topicrolePermission: topiclist {}".format(qa['topiclist']))
 
-        qv = yield self.call("""
-            select
-                    t.name, length(t.name) as topic_length, tr.allow
-              from topic as t,
-                    topicrole as tr,
-                    loginrole as lr
-             where
-                    t.name in %(topiclist)s
-               and
-                    t.id = tr.topic_id
-               and
-                    tr.role_id = lr.role_id
-               and
-                    tr.type_id = %(type_id)s
-               and
-                    lr.login_id = %(authid)s
-          order by
-                    topic_length""",
-                qa, options = types.CallOptions(timeout=2000,discloseMe=True))
+        try:
+            qv = yield self.call("""
+                select
+                        t.name, length(t.name) as topic_length, tr.allow
+                  from topic as t,
+                        topicrole as tr,
+                        loginrole as lr
+                 where
+                        t.name in %(topiclist)s
+                   and
+                        t.id = tr.topic_id
+                   and
+                        tr.role_id = lr.role_id
+                   and
+                        tr.type_id = %(type_id)s
+                   and
+                        lr.login_id = %(authid)s
+              order by
+                        topic_length""",
+                    qa, options = types.CallOptions(timeout=2000,discloseMe=True))
+        except Exception as e:
+            log.msg("topicrolePermission: exception {}".format(e))
+
+        log.msg("topicrolePermission: result {}".format(qv))
 
         defer.returnValue(self._columnize(qv))
 

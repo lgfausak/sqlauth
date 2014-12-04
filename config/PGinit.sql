@@ -49,7 +49,7 @@ COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM st
 504	role.public	Role Public Binding	0	2014-11-26 08:06:09.931566-06
 \.
 
-SELECT pg_catalog.setval('topic_id_seq', 500, true);
+SELECT pg_catalog.setval('topic_id_seq', 600, true);
 
 COPY role (id, name, description, bind_to, modified_by_user, modified_timestamp) FROM stdin;
 1	sys	All things system	501	0	2014-11-25 12:54:50.715127-06

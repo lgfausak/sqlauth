@@ -200,6 +200,11 @@ def run():
     role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
+    role_p = sp.add_parser('topicrole')
+    role_p.add_argument('action', choices=['permission', 'list', 'add', 'delete'], help='TopicRole commands')
+    role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
     args = p.parse_args()
     if args.verbose:
        log.startLogging(sys.stdout)

@@ -442,6 +442,59 @@ class Component(ApplicationSession):
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
         defer.returnValue(self._columnize(qv))
 
+    #
+    # we search 'down' the topic '.' (dot) separated list, first hit is our permission to use
+    # for example:
+    # com.db.query.
+    # first we look for permissions with our user with 'com', then 'com.db', then 'com.db.query'.
+    # if no permissions exist for all three then the user doesn't have permission.
+    # if we get a hit, the first hit is the permission to use. we get the 'allow' column from
+    # the topicrole permission table and return that.  using that means that permissions can be
+    # allowed (True), or revoked (False).
+    #
+    # checkPermission
+    #  authid         -> the autobahn user id to check permission for
+    #  topic_name     -> com.db, sys.whatever, etc..
+    #  type_id        -> one of call,register,publish,subscribe,admin,start,end
+    @inlineCallbacks
+    def topicrolePermission(self, *args, **kwargs):
+        qa = kwargs['action_args']
+        log.msg("topicrolePermission: {} {} {}".format(qa['authid'], qa['topic_name'], qa['type_id']))
+        s = qa['topic_name']
+        # this gives us an array of ['com','com.db','com.db.query'] in above example
+        qa['topiclist'] = ['.'.join(s.split('.')[:i+1]) for i in range(s.count('.')+1)]
+
+        qv = yield self.call("""
+            select
+                    t.name, length(t.name) as topic_length, tr.allow
+              from topic as t,
+                    topicrole as tr,
+                    loginrole as lr
+             where
+                    t.name in %(topiclist)s
+               and
+                    t.id = tr.topic_id
+               and
+                    tr.role_id = lr.role_id
+               and
+                    tr.type_id = %(type_id)s
+               and
+                    lr.login_id = %(authid)s
+          order by
+                    topic_length""",
+                qa, options = types.CallOptions(timeout=2000,discloseMe=True))
+
+        defer.returnValue(self._columnize(qv))
+
+        return
+
+    # topicAdd
+    #  name           -> the name of the topic (com.db, com.db.query, etc)
+    #  description    -> the description of the topic
+    #
+    # Note: the role adding the topic MUST have admin permission of something in
+    #       topic hierarchy.  So, if you are adding com.db.query, you must have
+    #       admin permission for com or com.db
     @inlineCallbacks
     def topicAdd(self, *args, **kwargs):
         log.msg("topicAdd called {}".format(kwargs))
@@ -765,8 +818,9 @@ class Component(ApplicationSession):
             'topic.get': {'method': self.topicGet },
             'topic.add': {'method': self.topicAdd },
             'topic.delete': {'method': self.topicDelete },
+            'topicrole.permission': {'method': self.topicrolePermission },
+            'topicrole.add': {'method': self.topicroleAdd },
             'activity.list': {'method': self.activityList },
-#            'activity.add': {'method': self.activityAdd },
             'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },
             'session.delete': {'method': self.sessionDelete },

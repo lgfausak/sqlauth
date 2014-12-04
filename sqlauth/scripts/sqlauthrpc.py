@@ -356,9 +356,10 @@ class Component(ApplicationSession):
         # this will throw exception if we don't have permission to add
         # this topic, so we won't proceed because of the exception
         rv = yield self.topicAdd( action_args={
-            'topic_name':qa['bind_topic'],'description':qa['description'] }, details=kwargs['details'] )
+            'name':qa['bind_topic'],'description':qa['description'] }, details=kwargs['details'] )
         if len(rv) == 0:
             raise Exception("impossible situation, no return value from topicAdd in roleAdd")
+        log.msg("roleAdd, topicAdd returned {}".format(rv))
         # we will bind the new role to the newly created topic.
         qa['bind_to'] = rv[1][rv[0].index('id')]
         # there is a transaction issue here.

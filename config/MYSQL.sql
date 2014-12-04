@@ -21,14 +21,6 @@ inactive BOOLEAN,
 PRIMARY KEY (id)
 );
 
-CREATE TABLE role
-(
-id SERIAL,
-name TEXT NOT NULL UNIQUE,
-description TEXT,
-PRIMARY KEY (id)
-);
-
 CREATE TABLE session
 (
 id SERIAL NOT NULL AUTO_INCREMENT,
@@ -45,6 +37,15 @@ session_id INTEGER,
 topic_name TEXT,
 type_id TEXT,
 allow BOOLEAN,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE role
+(
+bind_to INTEGER,
+name TEXT NOT NULL UNIQUE,
+id SERIAL,
+description TEXT,
 PRIMARY KEY (id)
 );
 
@@ -89,6 +90,8 @@ ALTER TABLE session ADD FOREIGN KEY login_id_idxfk (login_id) REFERENCES login (
 ALTER TABLE activity ADD FOREIGN KEY session_id_idxfk (session_id) REFERENCES session (id);
 
 ALTER TABLE activity ADD FOREIGN KEY type_id_idxfk (type_id) REFERENCES activity_type (id);
+
+ALTER TABLE role ADD FOREIGN KEY j (bind_to) REFERENCES topic (id);
 
 CREATE UNIQUE INDEX topicrole_topic_id_role_id_type_id ON topicrole (topic_id,role_id,type_id(50),allow);
 

@@ -20,13 +20,6 @@ old_login TEXT,
 inactive BOOLEAN
 );
 
-CREATE TABLE role
-(
-id SERIAL PRIMARY KEY,
-name TEXT NOT NULL UNIQUE,
-description TEXT
-);
-
 CREATE TABLE session
 (
 id SERIAL NOT NULL PRIMARY KEY  AUTOINCREMENT,
@@ -42,6 +35,14 @@ session_id INTEGER REFERENCES session (id),
 topic_name TEXT,
 type_id TEXT REFERENCES activity_type (id),
 allow BOOLEAN
+);
+
+CREATE TABLE role
+(
+bind_to INTEGER REFERENCES topic (id),
+name TEXT NOT NULL UNIQUE,
+id SERIAL PRIMARY KEY,
+description TEXT
 );
 
 CREATE TABLE topicrole

@@ -519,12 +519,7 @@ class Component(ApplicationSession):
         log.msg("topicAdd called {}".format(kwargs))
         qa = kwargs['action_args']
 
-        log.msg("topicAdd.details.caller {}".format(kwargs['details'].caller))
-        log.msg("topicAdd.details.authid {}".format(kwargs['details'].authid))
-        log.msg("topicAdd.details.authrole {}".format(kwargs['details'].authrole))
-        log.msg("topicAdd.details.authmethod {}".format(kwargs['details'].authmethod))
-        log.msg("topicAdd.details.caller_transport {}".format(kwargs['details'].caller_transport))
-
+        # permission from here
         details = kwargs['details']
 
         rv = yield self.topicrolePermission( action_args={
@@ -537,6 +532,7 @@ class Component(ApplicationSession):
             raise Exception("False permission to add a topic in that hierchy")
 
         log.msg("topicAdd.topicrolePermission, assert, {} has permission for admin in {}".format(details.authid, qa['name']))
+        # to here
 
         qv = yield self.call(self.query,
                 """
@@ -563,6 +559,22 @@ class Component(ApplicationSession):
     def topicDelete(self, *args, **kwargs):
         log.msg("topicDelete called {}".format(kwargs))
         qa = kwargs['action_args']
+
+        # permission from here
+        details = kwargs['details']
+
+        rv = yield self.topicrolePermission( action_args={
+            'authid':details.authid, 'topic_name':qa['name'],'type_id':'admin' })
+
+        log.msg("topicDelete.topicrolePermission {}".format(rv))
+        if len(rv) == 0:
+            raise Exception("no permission to delete a topic in that hierchy")
+        if not rv[1][rv[0].index('allow')]:
+            raise Exception("False permission to delete a topic in that hierchy")
+
+        log.msg("topicDelete.topicrolePermission, assert, {} has permission for admin in {}".format(details.authid, qa['name']))
+        # to here
+
         rtitle = [
             "Topic to role association",
             "Role"

@@ -525,7 +525,7 @@ class Component(ApplicationSession):
 
         details = kwargs['details']
 
-        rv = self.topicrolePermission( action_args={
+        rv = yield self.topicrolePermission( action_args={
             'authid':details.authid, 'topic_name':qa['name'],'type_id':'admin' })
 
         log.msg("topicAdd.topicrolePermission {}".format(rv))
@@ -821,7 +821,7 @@ class Component(ApplicationSession):
         #
         log.msg("onJoin add our session record {}:{},{}".format(
             self.svar['topic_base']+'.session.add', details.authid, details.session))
-        rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':details.session })
+        rv = yield self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':details.session })
         log.msg("onJoin added late session record {}".format(rv))
         #
         # just a little more goofiness, there are a few sessions set up by the authentication, authorization,
@@ -831,7 +831,7 @@ class Component(ApplicationSession):
         sysses = yield self.call('sys.session.listsysid')
         log.msg("onJoin :sysses {}".format(sysses))
         for dt in sysses.values():
-            rv = self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':dt })
+            rv = yield self.sessionAdd( action_args={ 'login_id':details.authid, 'ab_session_id':dt })
 
         # call the activityAdd manually, first, so we catch all of the registrations
         # in the activity table

@@ -467,7 +467,8 @@ class Component(ApplicationSession):
         log.msg("topicrolePermission: topiclist {}".format(qa['topiclist']))
 
         try:
-            qv = yield self.call("""
+            qv = yield self.call(self.query,
+                """
                 select
                         t.name, length(t.name) as topic_length, tr.allow
                   from topic as t,
@@ -484,7 +485,8 @@ class Component(ApplicationSession):
                    and
                         lr.login_id = %(authid)s
               order by
-                        topic_length""",
+                        topic_length
+                """,
                     qa, options = types.CallOptions(timeout=2000,discloseMe=True))
         except Exception as e:
             log.msg("topicrolePermission: exception {}".format(e))

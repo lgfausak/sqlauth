@@ -227,7 +227,7 @@ class Component(ApplicationSession):
 		     	l.login
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     @inlineCallbacks
     def userGet(self, *args, **kwargs):
@@ -242,7 +242,7 @@ class Component(ApplicationSession):
 		     	login = %(login)s
 		   """,
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     #
     # userAdd
@@ -304,7 +304,7 @@ class Component(ApplicationSession):
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
         
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     # the account isn't deleted, rather, its login name is nulled
     # and its groups are removed
@@ -348,14 +348,14 @@ class Component(ApplicationSession):
 
         if isinstance(qv, vtypes.DictType):
             # this will never happen for this query.
-            defer.returnValue(self._columnize(qv))
+            defer.returnValue(self._format_results(qv))
         else:
             # this case will always happen
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
                 rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._columnize(qv[ri])
+                rv[ri]['result'] = self._format_results(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.
             defer.returnValue(rv)
@@ -384,7 +384,7 @@ class Component(ApplicationSession):
 		     	r.name
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     @inlineCallbacks
     def roleGet(self, *args, **kwargs):
@@ -401,7 +401,7 @@ class Component(ApplicationSession):
 		     	r.name = %(name)s
 		   """,
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     #
     # roleAdd
@@ -597,7 +597,7 @@ class Component(ApplicationSession):
 		     	t.name
 		   """,
                    {}, options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     @inlineCallbacks
     def topicGet(self, *args, **kwargs):
@@ -612,7 +612,7 @@ class Component(ApplicationSession):
 		     	name = %(name)s
 		   """,
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     #
     # we search 'down' the topic '.' (dot) separated list, first hit is our permission to use
@@ -675,7 +675,7 @@ class Component(ApplicationSession):
 
         log.msg("topicrolePermission: result {}".format(qv))
 
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
         return
 
@@ -729,7 +729,7 @@ class Component(ApplicationSession):
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
         
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     # the account isn't deleted, rather, its login name is nulled
     # and its groups are removed
@@ -775,14 +775,14 @@ class Component(ApplicationSession):
 
         if isinstance(qv, vtypes.DictType):
             # this will never happen for this query.
-            defer.returnValue(self._columnize(qv))
+            defer.returnValue(self._format_results(qv))
         else:
             # this case will always happen
             rv = {}
             for ri in range(len(qv)):
                 rv[ri] = {}
                 rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._columnize(qv[ri])
+                rv[ri]['result'] = self._format_results(qv[ri])
             # we have a dict, keys are numbers starting with 0 increasing by 1, values are
             # the array of results, first row is header, second row - end is data.
             defer.returnValue(rv)
@@ -877,7 +877,7 @@ class Component(ApplicationSession):
                 """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
 
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
 
     #
@@ -943,7 +943,7 @@ class Component(ApplicationSession):
 
         log.msg("sessionList:Ended up with {}".format(rv.values()))
 
-        defer.returnValue(self._columnize(rv.values(), fullscan=True))
+        defer.returnValue(self._format_results(rv.values(), fullscan=True))
 
     @inlineCallbacks
     def sessionAdd(self, *args, **kwargs):
@@ -966,7 +966,7 @@ class Component(ApplicationSession):
 		   """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
 
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     @inlineCallbacks
     def sessionDelete(self, *args, **kwargs):
@@ -985,7 +985,7 @@ class Component(ApplicationSession):
 		   """,
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
 
-        defer.returnValue(self._columnize(qv))
+        defer.returnValue(self._format_results(qv))
 
     @inlineCallbacks
     def onJoin(self, details):

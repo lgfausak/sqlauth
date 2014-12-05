@@ -414,7 +414,23 @@ class Component(ApplicationSession):
 
         log.msg("roleAdd, topicAdd returned {}".format(qv))
 
-        defer.returnValue(self._columnize(qv))
+        if isinstance(qv, vtypes.DictType):
+            # this will never happen for this query.
+            defer.returnValue(self._columnize(qv))
+        else:
+            # this case will always happen
+            rtitle = [
+                "Add the role",
+                "And the topicrole admin association"
+            ]
+            rv = {}
+            for ri in range(len(qv)):
+                rv[ri] = {}
+                rv[ri]['title'] = rtitle[ri]
+                rv[ri]['result'] = self._columnize(qv[ri])
+            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
+            # the array of results, first row is header, second row - end is data.
+            defer.returnValue(rv)
 
     # the account isn't deleted, rather, its login name is nulled
     # and its groups are removed

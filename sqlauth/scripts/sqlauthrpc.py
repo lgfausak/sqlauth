@@ -529,7 +529,7 @@ class Component(ApplicationSession):
                            select id from role where name = %(name)s
                        )
                  returning
-                        id, topic_id, role_id
+                        id, login_id, role_id
 		    """,
                     """
                     delete

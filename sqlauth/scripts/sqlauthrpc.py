@@ -1039,6 +1039,7 @@ class Component(ApplicationSession):
             'topicrole.permission': {'method': self.topicrolePermission },
             'activity.list': {'method': self.activityList },
             'session.list': {'method': self.sessionList },
+            'session.list': {'method': self.sessionList },
             'session.add': {'method': self.sessionAdd },
             'session.delete': {'method': self.sessionDelete },
         }

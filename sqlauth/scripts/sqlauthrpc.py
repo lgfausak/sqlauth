@@ -335,7 +335,6 @@ class Component(ApplicationSession):
     #  name         -> name of the role to add, like 'dba' or 'tenant12'
     #  description  -> a description to associate with the role
     #  bind_topic   -> the topic binding for the role, like 'adm.dba' or 'com.tenants.tenant12'
-    #  roles        -> array of roles to be a member of. like [ 'public', 'adm' ]
     #
     # This is the logic behind a role.
     # A role is 'bound' to a topic.  The topic is specified at role create time.
@@ -355,8 +354,12 @@ class Component(ApplicationSession):
 
         # this will throw exception if we don't have permission to add
         # this topic, so we won't proceed because of the exception
+        # make sure the left side of the bind_topic is rooted on 'role.'
+        bt = qa['bind_topic']
+        if bt[0:5] != 'role.':
+            bt = 'role.' + bt
         rv = yield self.topicAdd( action_args={
-            'name':qa['bind_topic'],'description':qa['description'] }, details=kwargs['details'] )
+            'name':bt,'description':qa['description'] }, details=kwargs['details'] )
         if len(rv) == 0:
             raise Exception("impossible situation, no return value from topicAdd in roleAdd")
         log.msg("roleAdd, topicAdd returned {}".format(rv))
@@ -370,7 +373,8 @@ class Component(ApplicationSession):
         # this could happen if the role already exists, but the topic doesn't.
         # i might clean this up later if it ever matters.
         qv = yield self.call(self.query,
-                """
+                [
+                    """
                     insert into
                         role
                     (
@@ -382,10 +386,28 @@ class Component(ApplicationSession):
                     )
                     returning
                         id, name, description, bind_to
-		   """,
-                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+                    """,
+                    """
+                    insert into
+                        topicrole
+                    (
+                        topic_id, role_id, type_id, allow
+                    )
+                    values
+                    (
+                        ( select bind_to from role where name = %(bind_to)s ),
+                        ( select id from role where name = %(bind_to)s ),
+                        'admin',
+                        t
+                    )
+                    returning
+                        id, topic_id, role_id, type_id, allow
+		    """
+                ], qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
-        
+
+        log.msg("roleAdd, topicAdd returned {}".format(qv))
+
         defer.returnValue(self._columnize(qv))
 
     # the account isn't deleted, rather, its login name is nulled

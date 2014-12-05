@@ -55,6 +55,14 @@ installation, with a postgres superuser named 'autouser'.
 I have included a quick setup script for postgres.  You can run it
 like this:
 
+First, you need to install the sqlauth code, that is done like this:
+
+```
+sudo pip install sqlauth
+```
+
+That installion includes the sqlpginit code. WARNING.  DESTRUCTIVE!
+
 ```
 sudo sqlpginit -a
 ```
@@ -68,21 +76,20 @@ schema in the database, and loads the initial data. When this command
 completes successfully the database is ready for the sqlauthrouter.
 
 ## Notes
-Most of the database specific code is in sqlauthrpc.py.  This code
-contains the bridge between the database engine (sqlbridge) and the
-Autobahn calls.  However, since this router authenticates and authorizes,
-there are 2 database calls embedded in the code.  In the userdb.get()
-method there is a database query that fetches the user from the database,
-this method is used to authenticate a user credentials on login
-(for wampcra).  The second is in authorize.check_permission() method.
-This does a lookup of the topic/action being requested for the current
-session/authid.  These are both emgedded mostly for performance reasons.
-There isn't any reason the code in these two places couldn't do a call
-to the db.info rpc to determine the type of database that is connected,
-then customize the query accordingly.  I'm just not concerned with
-database portability at this moment, so I am stopping work on this aspect.
-Contact me if you need help writing a driver for a different database,
-I would be happy to help.
+This code contains the bridge between the database engine (sqlbridge)
+and the Autobahn calls.  However, since this router authenticates and
+authorizes, there are 2 database calls embedded in the code.  In the
+userdb.get() method there is a database query that fetches the user from
+the database, this method is used to authenticate a user credentials
+on login (for wampcra).  The second is in authorize.check_permission()
+method.  This does a lookup of the topic/action being requested for the
+current session/authid.  These are both emgedded mostly for performance
+reasons.  There isn't any reason the code in these two places couldn't
+do a call to the db.info rpc to determine the type of database that is
+connected, then customize the query accordingly.  I'm just not concerned
+with database portability at this moment, so I am stopping work on this
+aspect.  Contact me if you need help writing a driver for a different
+database, I would be happy to help.
 
 [schema]:https://github.com/lgfausak/sqlauth/raw/master/docs/schema.png "AAA Schema"
 

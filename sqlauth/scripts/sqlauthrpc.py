@@ -493,13 +493,14 @@ class Component(ApplicationSession):
     # roleDelete
     #  name         -> name of the role to delete, like 'dba' or 'tenant12'
     #
-    # Note: there are 4 separate delete operations.
-    #       1. first, all of the roles associations with topics are deleted.
-    #       2. then, all roles associated with the admin binding topic are deleted.  Normally this is only one,
+    # Note: there are 5 separate delete operations.
+    #       1. first, all of the topics associations with this role are deleted (not the topics, just the association).
+    #       2. then, all of the users associations with this role are deleted (not the users, just the association).
+    #       3. then, all roles associated with the admin binding topic are deleted.  Normally this is only one,
     #          and it is picked up by the first delete operation.  But, there isn't any reason that
     #          the admin topic for the role couldn't be added to other roles.
-    #       3. then, we delete the topic bound to the role.
-    #       4. finally, we delete the role itself.
+    #       4. then, we delete the topic bound to the role.
+    #       5. finally, we delete the role itself.
     #
 
     @inlineCallbacks
@@ -512,6 +513,17 @@ class Component(ApplicationSession):
                     delete
                       from
                         topicrole
+                     where
+                       role_id = (
+                           select id from role where name = %(name)s
+                       )
+                 returning
+                        id, topic_id, role_id
+		    """,
+                    """
+                    delete
+                      from
+                        loginrole
                      where
                        role_id = (
                            select id from role where name = %(name)s
@@ -555,9 +567,10 @@ class Component(ApplicationSession):
         # qv[0] contains the results as an array of dicts, one dict for each query that ran
 
         rtitle = [
-            "Role topic permissions",
-            "Role admin topic bindings",
-            "Role admin topic",
+            "Topic Associations",
+            "User Associations",
+            "Bind Topic Associations",
+            "Bind Topic",
             "Role"
         ]
         defer.returnValue(self._format_results(qv, rtitle))

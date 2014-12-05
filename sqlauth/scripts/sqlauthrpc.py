@@ -140,6 +140,40 @@ class Component(ApplicationSession):
 
         return rv
 
+    #
+    # this function handles either a single query return value
+    # or multiple query return values
+    #
+    def _format_results(self, *args, **kwargs):
+        if len(args) < 1:
+            raise Exception("must supply data!")
+
+        qv = args[0]
+
+        # no array, no results, we done.
+        if len(qv) == 0:
+            return []
+
+        # the title for each of the queries can be passed as
+        # the second positional argument
+        rtitle = []
+        if len(args) > 1:
+            rtitle = args[1]
+        else:
+            for ri in range(len(qv)):
+                rtitle.append("Result Set {}".format(ri))
+
+        if isinstance(qv, vtypes.DictType):
+            defer.returnValue(self._columnize(qv,**kwargs))
+        else:
+            rv = {}
+            for ri in range(len(qv)):
+                rv[ri] = {}
+                rv[ri]['title'] = rtitle[ri]
+                rv[ri]['result'] = self._columnize(qv[ri],**kwargs)
+            defer.returnValue(rv)
+
+
     def onConnect(self):
         log.msg("onConnect")
         auth_type = 'none'
@@ -337,13 +371,15 @@ class Component(ApplicationSession):
                          where lr.login_id = l.id
                         )
                     select
-                        r.id, r.name, r.description, private.array_accum(l.login) as users
+                        r.name, r.description, t.name as role_binding, private.array_accum(l.login) as users
 		      from
                         role r
+                  left join
+                        topic t on t.id = r.bind_to
            left outer join
                         role_users l on l.role_id = r.id
 		  group by
-		  	r.id
+		  	r.name, r.description, t.name
 		  order by
 		     	r.name
 		   """,
@@ -356,11 +392,13 @@ class Component(ApplicationSession):
         qv = yield self.call(self.query,
                 """
                     select
-                        name, description, id
+                        r.name, r.description, t.name, r.id
                       from
-                        role
+                        role as r
+                  left join
+                        topic t on t.id = r.bind_to
 		     where
-		     	name = %(name)s
+		     	r.name = %(name)s
 		   """,
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
         defer.returnValue(self._columnize(qv))
@@ -449,23 +487,24 @@ class Component(ApplicationSession):
 
         log.msg("roleAdd, topicAdd returned {}".format(qv))
 
-        if isinstance(qv, vtypes.DictType):
-            # this will never happen for this query.
-            defer.returnValue(self._columnize(qv))
-        else:
-            # this case will always happen
-            rtitle = [
-                "Add the role",
-                "And the topicrole admin association"
-            ]
-            rv = {}
-            for ri in range(len(qv)):
-                rv[ri] = {}
-                rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._columnize(qv[ri])
-            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
-            # the array of results, first row is header, second row - end is data.
-            defer.returnValue(rv)
+        defer.returnValue(self._format_results(qv, ['Add Role','Add Topic Admin Association']))
+#        if isinstance(qv, vtypes.DictType):
+#            # this will never happen for this query.
+#            defer.returnValue(self._columnize(qv))
+#        else:
+#            # this case will always happen
+#            rtitle = [
+#                "Add the role",
+#                "And the topicrole admin association"
+#            ]
+#            rv = {}
+#            for ri in range(len(qv)):
+#                rv[ri] = {}
+#                rv[ri]['title'] = rtitle[ri]
+#                rv[ri]['result'] = self._columnize(qv[ri])
+#            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
+#            # the array of results, first row is header, second row - end is data.
+#            defer.returnValue(rv)
 
     # the account isn't deleted, rather, its login name is nulled
     # and its groups are removed

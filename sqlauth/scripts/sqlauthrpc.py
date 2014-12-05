@@ -65,12 +65,10 @@ from twisted.internet import reactor
 from twisted.internet.defer import inlineCallbacks
 from twisted.internet import defer
 
-from autobahn.wamp.types import RegisterOptions
-
+from autobahn.wamp.types import RegisterOptions, CallOptions, CloseDetails
 from autobahn.twisted.wamp import ApplicationRunner,ApplicationSession
 from autobahn.wamp import auth
 from autobahn.wamp import types
-from autobahn.wamp.types import CallOptions
 
 from autobahn import util
 
@@ -1055,7 +1053,8 @@ class Component(ApplicationSession):
                 log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
             except Exception as e:
                 log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
-                self.leave(reason=six.u(e.__class__.__name__),log_message=six.u('test'))
+                self.leave(CloseDetails(message=six.u("Error registering {}:{}".format(self.svar['topic_base']+'.'+r),e)))
+        self.join(self.config.realm, [six.u(auth_type)], six.u(auth_user))
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))

@@ -398,7 +398,7 @@ class Component(ApplicationSession):
                         ( select bind_to from role where name = %(bind_to)s ),
                         ( select id from role where name = %(bind_to)s ),
                         'admin',
-                        t
+                        true
                     )
                     returning
                         id, topic_id, role_id, type_id, allow

@@ -488,34 +488,24 @@ class Component(ApplicationSession):
         log.msg("roleAdd, topicAdd returned {}".format(qv))
 
         defer.returnValue(self._format_results(qv, ['Add Role','Add Topic Admin Association']))
-#        if isinstance(qv, vtypes.DictType):
-#            # this will never happen for this query.
-#            defer.returnValue(self._columnize(qv))
-#        else:
-#            # this case will always happen
-#            rtitle = [
-#                "Add the role",
-#                "And the topicrole admin association"
-#            ]
-#            rv = {}
-#            for ri in range(len(qv)):
-#                rv[ri] = {}
-#                rv[ri]['title'] = rtitle[ri]
-#                rv[ri]['result'] = self._columnize(qv[ri])
-#            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
-#            # the array of results, first row is header, second row - end is data.
-#            defer.returnValue(rv)
 
-    # the account isn't deleted, rather, its login name is nulled
-    # and its groups are removed
+    #
+    # roleDelete
+    #  name         -> name of the role to delete, like 'dba' or 'tenant12'
+    #
+    # Note: there are 4 separate delete operations.
+    #       1. first, all of the roles associations with topics are deleted.
+    #       2. then, all roles associated with the admin binding topic are deleted.  Normally this is only one,
+    #          and it is picked up by the first delete operation.  But, there isn't any reason that
+    #          the admin topic for the role couldn't be added to other roles.
+    #       3. then, we delete the topic bound to the role.
+    #       4. finally, we delete the role itself.
+    #
+
     @inlineCallbacks
     def roleDelete(self, *args, **kwargs):
         log.msg("roleDelete called {}".format(kwargs))
         qa = kwargs['action_args']
-        rtitle = [
-            "Role to topic association",
-            "Role"
-        ]
         qv = yield self.call(self.query,
                 [
                     """
@@ -532,6 +522,28 @@ class Component(ApplicationSession):
                     """
                     delete
                       from
+                        topicrole
+                     where
+                       topic_id = (
+                           select bind_to from role where name = %(name)s
+                       )
+                 returning
+                        id, topic_id, role_id
+		    """,
+                    """
+                    delete
+                      from
+                        topic
+                     where
+                        id = (
+                           select bind_to from role where name = %(name)s
+                        )
+                 returning
+                        id, name, description
+		    """,
+                    """
+                    delete
+                      from
                         role
                      where
                         name = %(name)s
@@ -542,19 +554,13 @@ class Component(ApplicationSession):
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the results as an array of dicts, one dict for each query that ran
 
-        if isinstance(qv, vtypes.DictType):
-            # this will never happen for this query.
-            defer.returnValue(self._columnize(qv))
-        else:
-            # this case will always happen
-            rv = {}
-            for ri in range(len(qv)):
-                rv[ri] = {}
-                rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._columnize(qv[ri])
-            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
-            # the array of results, first row is header, second row - end is data.
-            defer.returnValue(rv)
+        rtitle = [
+            "Role topic permissions",
+            "Role admin topic bindings",
+            "Role admin topic",
+            "Role"
+        ]
+        defer.returnValue(self._format_results(qv, rtitle))
 
     @inlineCallbacks
     def topicList(self, *args, **kwargs):

@@ -210,11 +210,46 @@ class Component(ApplicationSession):
                    kwargs['action_args'], options=types.CallOptions(timeout=2000,discloseMe=True))
         defer.returnValue(self._columnize(qv))
 
+    #
+    # userAdd
+    #  login    -> login name of the user to add
+    #  fullname -> fullname of the new user
+    #  secret   -> password for the new user
+    #  tzname   -> valid tzname, like America/Chicago
+    #  roles    -> list of roles to be added to.
+    #
+    # fairly straight forward, a login is added.  the roles is an array of roles
+    # to add the user to.  public is a role that is automatically added, so no need
+    # to specify it here.  the user that is adding this user must have admin
+    # privileges to all roles being added.
+    #
     @inlineCallbacks
     def userAdd(self, *args, **kwargs):
         log.msg("userAdd called {}".format(kwargs))
-        salt = os.urandom(32).encode('base_64')
         qa = kwargs['action_args']
+        details = kwargs['details']
+        if not 'roles' in qa:
+            log.msg("roleAdd: roles missing, adding blank array")
+            qa['roles'] = []
+        elif isinstance(qv, vtypes.StringType):
+            log.msg("roleAdd: roles is a simple string, promoting to an array of one string")
+            qa['roles'] = [ qa['roles'] ]
+        elif not isinstance(qv, vtypes.ListType):
+            raise Exception("roles must be a string, or an array of strings")
+        for i in qa['roles']:
+            if not isinstance(i, vtypes.StringType):
+                raise Exception("roles array must contain only strings")
+        if 'public' in qa['roles']:
+            qa['roles'].remove('public')
+        #
+        # verify permissions on roles members
+        #
+        for i in qa['roles']:
+            pass
+
+        # add public back in to roles
+        qa['roles'].append('public')
+        salt = os.urandom(32).encode('base_64')
         password = auth.derive_key(qa['secret'].encode('utf8'), salt.encode('utf8')).decode('ascii')
         qa['salt'] = salt
         qa['password'] = password
@@ -586,6 +621,21 @@ class Component(ApplicationSession):
 
         return
 
+    @inlineCallbacks
+    def _permissionCheck(self, *args, **kwargs):
+        log.msg("_permissionCheck called {}".format(kwargs))
+        qa = kwargs['action_args']
+        
+        rv = yield self.topicrolePermission(self, *args, **kwargs)
+
+        log.msg("topicAdd.topicrolePermission {}".format(rv))
+        if len(rv) == 0:
+            defer.returnValue(False)
+        if not rv[1][rv[0].index('allow')]:
+            defer.returnValue(False)
+
+        defer.returnValue(True)
+
     # topicAdd
     #  name           -> the name of the topic (com.db, com.db.query, etc)
     #  description    -> the description of the topic
@@ -598,20 +648,11 @@ class Component(ApplicationSession):
         log.msg("topicAdd called {}".format(kwargs))
         qa = kwargs['action_args']
 
-        # permission from here
         details = kwargs['details']
-
-        rv = yield self.topicrolePermission( action_args={
+        rv = yield self._permissionCheck( action_args={
             'authid':details.authid, 'topic_name':qa['name'],'type_id':'admin' })
-
-        log.msg("topicAdd.topicrolePermission {}".format(rv))
-        if len(rv) == 0:
+        if not rv:
             raise Exception("no permission to add a topic in that hierchy")
-        if not rv[1][rv[0].index('allow')]:
-            raise Exception("False permission to add a topic in that hierchy")
-
-        log.msg("topicAdd.topicrolePermission, assert, {} has permission for admin in {}".format(details.authid, qa['name']))
-        # to here
 
         qv = yield self.call(self.query,
                 """
@@ -638,21 +679,11 @@ class Component(ApplicationSession):
     def topicDelete(self, *args, **kwargs):
         log.msg("topicDelete called {}".format(kwargs))
         qa = kwargs['action_args']
-
-        # permission from here
         details = kwargs['details']
-
-        rv = yield self.topicrolePermission( action_args={
+        rv = yield self._permissionCheck( action_args={
             'authid':details.authid, 'topic_name':qa['name'],'type_id':'admin' })
-
-        log.msg("topicDelete.topicrolePermission {}".format(rv))
-        if len(rv) == 0:
-            raise Exception("no permission to delete a topic in that hierchy")
-        if not rv[1][rv[0].index('allow')]:
-            raise Exception("False permission to delete a topic in that hierchy")
-
-        log.msg("topicDelete.topicrolePermission, assert, {} has permission for admin in {}".format(details.authid, qa['name']))
-        # to here
+        if not rv:
+            raise Exception("no permission to add a topic in that hierchy")
 
         rtitle = [
             "Topic to role association",

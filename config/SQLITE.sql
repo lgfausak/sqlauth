@@ -39,7 +39,7 @@ allow BOOLEAN
 
 CREATE TABLE role
 (
-bind_to INTEGER REFERENCES topic (id),
+bind_to INTEGER REFERENCES topic (id)  ON DELETE SET NULL,
 name TEXT NOT NULL UNIQUE,
 id SERIAL PRIMARY KEY,
 description TEXT

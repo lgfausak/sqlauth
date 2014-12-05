@@ -91,7 +91,7 @@ ALTER TABLE activity ADD FOREIGN KEY session_id_idxfk (session_id) REFERENCES se
 
 ALTER TABLE activity ADD FOREIGN KEY type_id_idxfk (type_id) REFERENCES activity_type (id);
 
-ALTER TABLE role ADD FOREIGN KEY j (bind_to) REFERENCES topic (id);
+ALTER TABLE role ADD FOREIGN KEY role_topic_binding (bind_to) REFERENCES topic (id) ON DELETE SET NULL;
 
 CREATE UNIQUE INDEX topicrole_topic_id_role_id_type_id ON topicrole (topic_id,role_id,type_id(50),allow);
 

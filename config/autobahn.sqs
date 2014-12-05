@@ -49,10 +49,11 @@
             <referencesTable>login</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[login]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></referencesFieldUID>
             <referencesTableUID><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></referencesTableUID>
+            <referenceLinkName><![CDATA[loginrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[user_id]]></temporaryOriginalName>
             <uid><![CDATA[D08D5113-6366-414B-B7C7-5006C76AFB52]]></uid>
             <unique><![CDATA[0]]></unique>
@@ -64,11 +65,12 @@
             <referencesTable>role</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[role]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></referencesFieldUID>
             <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
             <forcedUnique><![CDATA[0]]></forcedUnique>
+            <referenceLinkName><![CDATA[loginrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></uid>
             <unique><![CDATA[0]]></unique>
@@ -99,11 +101,11 @@
         <uid><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></uid>
     </SQLTable>
     <SQLComment>
-        <name><![CDATA[Comment2_2]]></name>
+        <name><![CDATA[Comment2_3]]></name>
         <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
         <location>
-            <x>1734.00</x>
-            <y>777.00</y>
+            <x>2004.00</x>
+            <y>773.00</y>
         </location>
         <size>
             <width>184.00</width>
@@ -123,8 +125,8 @@
         <name><![CDATA[Comment2_1]]></name>
         <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
         <location>
-            <x>1340.00</x>
-            <y>742.00</y>
+            <x>1258.00</x>
+            <y>716.00</y>
         </location>
         <size>
             <width>229.00</width>
@@ -144,8 +146,8 @@
         <name><![CDATA[topicrole]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1922.00</x>
-            <y>637.00</y>
+            <x>2107.00</x>
+            <y>601.00</y>
         </location>
         <size>
             <width>457.00</width>
@@ -168,11 +170,12 @@
             <referencesTable>topic</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[topic]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>1</sourceCardinality>
+            <destinationCardinality>3</destinationCardinality>
             <referencesFieldUID><![CDATA[D9C09D16-5EF1-4E48-8EE2-DD0FFDC18607]]></referencesFieldUID>
             <referencesTableUID><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></referencesTableUID>
             <notNull><![CDATA[1]]></notNull>
+            <referenceLinkName><![CDATA[topicrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[641475EF-28A2-41EB-B0F3-A1FEADC95A53]]></uid>
         </SQLField>
@@ -183,11 +186,12 @@
             <referencesTable>role</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[role]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>1</sourceCardinality>
+            <destinationCardinality>3</destinationCardinality>
             <referencesFieldUID><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></referencesFieldUID>
             <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
             <notNull><![CDATA[1]]></notNull>
+            <referenceLinkName><![CDATA[topicrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[DFA4A4AA-39A8-490A-81D9-6204BA5E7573]]></uid>
             <unique><![CDATA[0]]></unique>
@@ -199,8 +203,8 @@
             <referencesTable>activity_type</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[activity_type]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[8B5D1ACC-B0B6-476F-8CF7-8D74D6238756]]></referencesFieldUID>
             <referencesTableUID><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></referencesTableUID>
             <notNull><![CDATA[1]]></notNull>
@@ -278,8 +282,8 @@
             <referencesTable>session</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[session]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[F7D61799-3C0F-4DD0-9D33-B653FC32F72A]]></referencesFieldUID>
             <referencesTableUID><![CDATA[EA0931D6-E3B7-4381-988E-3E4B9AD0D8B7]]></referencesTableUID>
             <forcedUnique><![CDATA[0]]></forcedUnique>
@@ -299,8 +303,8 @@
             <referencesTable>activity_type</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[activity_type]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[8B5D1ACC-B0B6-476F-8CF7-8D74D6238756]]></referencesFieldUID>
             <referencesTableUID><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></referencesTableUID>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
@@ -321,8 +325,8 @@
         <name><![CDATA[Comment1]]></name>
         <comment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></comment>
         <location>
-            <x>1658.00</x>
-            <y>122.00</y>
+            <x>1629.00</x>
+            <y>106.00</y>
         </location>
         <size>
             <width>162.00</width>
@@ -384,14 +388,40 @@
         <name><![CDATA[role]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1401.00</x>
-            <y>908.00</y>
+            <x>1665.00</x>
+            <y>712.00</y>
         </location>
         <size>
             <width>229.00</width>
-            <height>80.00</height>
+            <height>100.00</height>
         </size>
         <zorder>1</zorder>
+        <SQLField>
+            <name><![CDATA[bind_to]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>topic</referencesTable>
+            <deleteAction>3</deleteAction>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[topic]]></referencesTable>
+            <sourceCardinality>1</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
+            <referencesFieldUID><![CDATA[D9C09D16-5EF1-4E48-8EE2-DD0FFDC18607]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></referencesTableUID>
+            <forcedUnique><![CDATA[0]]></forcedUnique>
+            <foreignKeyName><![CDATA[role_topic_binding]]></foreignKeyName>
+            <referenceLinkName><![CDATA[role topic binding]]></referenceLinkName>
+            <uid><![CDATA[F7EEED7E-10B8-462F-A445-530A838C3523]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[name]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <forcedUnique><![CDATA[0]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
+            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
+            <uid><![CDATA[8346705D-DD57-4A8F-895D-8075BCB26869]]></uid>
+            <unique><![CDATA[1]]></unique>
+        </SQLField>
         <SQLField>
             <name><![CDATA[id]]></name>
             <type><![CDATA[SERIAL]]></type>
@@ -399,13 +429,6 @@
             <forcedUnique><![CDATA[1]]></forcedUnique>
             <uid><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></uid>
             <unique><![CDATA[0]]></unique>
-        </SQLField>
-        <SQLField>
-            <name><![CDATA[name]]></name>
-            <type><![CDATA[TEXT]]></type>
-            <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
-            <uid><![CDATA[8346705D-DD57-4A8F-895D-8075BCB26869]]></uid>
-            <unique><![CDATA[1]]></unique>
         </SQLField>
         <SQLField>
             <name><![CDATA[description]]></name>
@@ -429,7 +452,7 @@
             <y>44.00</y>
         </location>
         <size>
-            <width>193.00</width>
+            <width>263.00</width>
             <height>180.00</height>
         </size>
         <zorder>0</zorder>
@@ -446,6 +469,7 @@
         <SQLField>
             <name><![CDATA[login]]></name>
             <type><![CDATA[TEXT]]></type>
+            <notNull><![CDATA[1]]></notNull>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[1A10F97B-CF23-49C3-BB96-C4B0A1F6EF61]]></uid>
             <unique><![CDATA[1]]></unique>
@@ -460,6 +484,7 @@
             <name><![CDATA[password]]></name>
             <type><![CDATA[TEXT]]></type>
             <forcedUnique><![CDATA[0]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
             <uid><![CDATA[B570D8DD-D65E-456C-BD9A-371DBDFFBD5B]]></uid>
         </SQLField>
         <SQLField>
@@ -491,12 +516,33 @@
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></uid>
     </SQLTable>
+    <SQLComment>
+        <name><![CDATA[Comment2_2]]></name>
+        <comment><![CDATA[each role is associated with a single topic at role creation time. So the creator of a new role must have the permission to create that role (in the hierarchy), and the permissions to create the binding topic.]]></comment>
+        <location>
+            <x>1989.00</x>
+            <y>379.00</y>
+        </location>
+        <size>
+            <width>184.00</width>
+            <height>168.00</height>
+        </size>
+        <zorder>16</zorder>
+        <commentTitle><![CDATA[role binding]]></commentTitle>
+        <hidden><![CDATA[0]]></hidden>
+        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
+        <labelName><![CDATA[roles]]></labelName>
+        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
+        <uid><![CDATA[B5D18617-F574-42C6-9BE1-B178880A1007]]></uid>
+    </SQLComment>
     <SQLTable>
         <name><![CDATA[topic]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1686.00</x>
-            <y>532.00</y>
+            <x>1663.00</x>
+            <y>543.00</y>
         </location>
         <size>
             <width>199.00</width>
@@ -516,6 +562,7 @@
         <SQLField>
             <name><![CDATA[name]]></name>
             <type><![CDATA[TEXT]]></type>
+            <notNull><![CDATA[1]]></notNull>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[4164851A-16EA-4442-8303-8D1D8BBBD31D]]></uid>
             <unique><![CDATA[1]]></unique>
@@ -538,8 +585,8 @@
         <name><![CDATA[sqlauth]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>2080.00</x>
-            <y>892.00</y>
+            <x>1903.00</x>
+            <y>1004.00</y>
         </location>
         <size>
             <width>200.00</width>
@@ -570,8 +617,8 @@
         <name><![CDATA[Comment2]]></name>
         <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
         <location>
-            <x>1997.00</x>
-            <y>800.00</y>
+            <x>2108.00</x>
+            <y>1016.00</y>
         </location>
         <size>
             <width>288.00</width>
@@ -656,8 +703,8 @@
             <referencesTable>login</referencesTable>
             <referencesField><![CDATA[id]]></referencesField>
             <referencesTable><![CDATA[login]]></referencesTable>
-            <sourceCardinality>0</sourceCardinality>
-            <destinationCardinality>0</destinationCardinality>
+            <sourceCardinality>5</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></referencesFieldUID>
             <referencesTableUID><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></referencesTableUID>
             <temporaryOriginalName><![CDATA[user_id]]></temporaryOriginalName>
@@ -846,7 +893,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[mysql]]></exportDialect>
+        <exportDialect><![CDATA[SQLite]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>
@@ -859,8 +906,8 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <SourceSidebarWidth><![CDATA[421.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
         <windowHeight><![CDATA[1267.000000]]></windowHeight>
-        <windowLocationX><![CDATA[194.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[150.000000]]></windowLocationY>
+        <windowLocationX><![CDATA[-2537.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[173.000000]]></windowLocationY>
         <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[1888.000000]]></windowWidth>
     </SQLDocumentInfo>

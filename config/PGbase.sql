@@ -92,7 +92,7 @@ ALTER TABLE activity ADD FOREIGN KEY (session_id) REFERENCES session (id);
 
 ALTER TABLE activity ADD FOREIGN KEY (type_id) REFERENCES activity_type (id);
 
-ALTER TABLE role ADD CONSTRAINT j FOREIGN KEY (bind_to) REFERENCES topic (id);
+ALTER TABLE role ADD CONSTRAINT role_topic_binding FOREIGN KEY (bind_to) REFERENCES topic (id) ON DELETE SET NULL;
 
 ALTER TABLE topicrole ADD CONSTRAINT topicrole_topic_id_role_id_type_id UNIQUE (topic_id,role_id,type_id,allow);
 

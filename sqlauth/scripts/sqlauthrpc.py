@@ -335,6 +335,8 @@ class Component(ApplicationSession):
     #  name         -> name of the role to add, like 'dba' or 'tenant12'
     #  description  -> a description to associate with the role
     #  bind_topic   -> the topic binding for the role, like 'adm.dba' or 'com.tenants.tenant12'
+    #                  if you omit role. from the beginning of the bind_topic it will be prepended.
+    #                  if you omit .name (the name of your role) to the end of the bind_topic it will be suffixed there
     #
     # This is the logic behind a role.
     # A role is 'bound' to a topic.  The topic is specified at role create time.
@@ -357,7 +359,11 @@ class Component(ApplicationSession):
         # make sure the left side of the bind_topic is rooted on 'role.'
         bt = qa['bind_topic']
         if bt[0:5] != 'role.':
+            log.msg("roleAdd: prepending role. to bind_topic name {}".format(bt))
             bt = 'role.' + bt
+        if bt[-len('.'+qa['name']):] != '.'+qa['name']:
+            log.msg("roleAdd: suffixing .{} to bind_topic name {}".format(qa['name'],bt))
+            bt = bt + '.' + qa['name']
         rv = yield self.topicAdd( action_args={
             'name':bt,'description':qa['description'] }, details=kwargs['details'] )
         if len(rv) == 0:

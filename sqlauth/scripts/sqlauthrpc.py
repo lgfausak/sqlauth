@@ -401,8 +401,8 @@ class Component(ApplicationSession):
                     )
                     values
                     (
-                        ( select bind_to from role where name = %(bind_to)s ),
-                        ( select id from role where name = %(bind_to)s ),
+                        ( select bind_to from role where name = %(name)s ),
+                        ( select id from role where name = %(name)s ),
                         'admin',
                         true
                     )

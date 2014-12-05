@@ -1054,7 +1054,6 @@ class Component(ApplicationSession):
             except Exception as e:
                 log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
                 self.leave(CloseDetails(message=six.u("Error registering {}:{}".format(self.svar['topic_base']+'.'+r),e)))
-        self.join(self.config.realm, [six.u(auth_type)], six.u(auth_user))
 
     def onLeave(self, details):
         sys.stderr.write("Leaving realm : {}\n".format(details))

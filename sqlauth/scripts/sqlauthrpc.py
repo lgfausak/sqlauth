@@ -163,15 +163,16 @@ class Component(ApplicationSession):
             for ri in range(len(qv)):
                 rtitle.append("Result Set {}".format(ri))
 
-        if isinstance(qv, vtypes.DictType):
-            defer.returnValue(self._columnize(qv,**kwargs))
-        else:
-            rv = {}
-            for ri in range(len(qv)):
-                rv[ri] = {}
-                rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._columnize(qv[ri],**kwargs)
-            defer.returnValue(rv)
+        if isinstance(qv, vtypes.ListType):
+            if isinstance(qv[0], vtypes.DictType):
+                defer.returnValue(self._columnize(qv,**kwargs))
+            else:
+                rv = {}
+                for ri in range(len(qv)):
+                    rv[ri] = {}
+                    rv[ri]['title'] = rtitle[ri]
+                    rv[ri]['result'] = self._columnize(qv[ri],**kwargs)
+                defer.returnValue(rv)
 
 
     def onConnect(self):

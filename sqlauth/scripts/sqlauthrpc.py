@@ -811,13 +811,33 @@ class Component(ApplicationSession):
         qa = kwargs['action_args']
         details = kwargs['details']
 
-        #
-        # determine if we have the right to add a user to this role.
-        #
+        # check to make sure we have admin permission on the role
+        # that is going to have the user added.
+
+        qv = yield self.call(self.query,
+                """
+                    select
+                        t.name
+                      from
+                        topic t,
+                        role r
+		     where
+                        t.id = r.bind_to
+                       and
+                        r.name = %(name)s
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            raise Exception("cannot find role {}, maybe it was misspelled".format(qa['name']))
+
         rv = yield self._permissionCheck( action_args={
             'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
         if not rv:
-            raise Exception("no permission to add a user to this role")
+            raise Exception("Executing user does not have admin on role {}".format(qa['name']))
+
+        #
+        # assert: if we get this far we have admin on the role.
+        #
 
         #
         # insert the record.  if it already exists we will
@@ -859,13 +879,29 @@ class Component(ApplicationSession):
         qa = kwargs['action_args']
         details = kwargs['details']
 
-        #
-        # determine if we have the right to delete a user to this role.
-        #
+        # check to make sure we have admin permission on the role
+        # that is going to have the user added.
+
+        qv = yield self.call(self.query,
+                """
+                    select
+                        t.name
+                      from
+                        topic t,
+                        role r
+		     where
+                        t.id = r.bind_to
+                       and
+                        r.name = %(name)s
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            raise Exception("cannot find role {}, maybe it was misspelled".format(qa['name']))
+
         rv = yield self._permissionCheck( action_args={
             'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
         if not rv:
-            raise Exception("no permission to delete a user from this role")
+            raise Exception("Executing user does not have admin on role {}".format(qa['name']))
 
         #
         # delete the record.

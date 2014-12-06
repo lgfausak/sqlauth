@@ -37,6 +37,8 @@ COPY topic (id, name, description, modified_by_user, modified_timestamp) FROM st
 1	sys	All things system, including authentication and authorization	0	2014-11-25 12:59:21.890086-06
 2	sys.topic	Topic stuff	0	2014-12-03 19:58:36.862908-06
 3	sys.role	Add a topic	0	2014-12-03 20:07:45.035027-06
+4	sys.userrole	User role association	0	2014-12-03 19:58:36.862908-06
+5	sys.topicrole	Topic role association	0	2014-12-03 19:58:36.862908-06
 200	adm	Administrator Space	0	2014-11-26 08:06:09.931566-06
 300	com	Community Space	0	2014-11-26 08:06:09.931566-06
 400	pub	Public Space	0	2014-11-26 08:06:09.931566-06
@@ -96,6 +98,8 @@ COPY topicrole (id, topic_id, role_id, type_id, allow, modified_by_user, modifie
 20	400	4	admin	t	0	2014-11-25 13:12:29.087589-06
 21	2	4	call	t	0	2014-11-25 13:12:29.087589-06
 22	3	4	call	t	0	2014-11-25 13:12:29.087589-06
+22	4	4	call	t	0	2014-11-25 13:12:29.087589-06
+22	5	4	call	t	0	2014-11-25 13:12:29.087589-06
 100	500	1	admin	t	0	2014-11-25 13:12:29.087589-06
 101	501	1	admin	t	0	2014-11-25 13:12:29.087589-06
 102	502	2	admin	t	0	2014-11-25 13:12:29.087589-06

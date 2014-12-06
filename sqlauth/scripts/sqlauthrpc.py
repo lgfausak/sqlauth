@@ -796,6 +796,97 @@ class Component(ApplicationSession):
 
         defer.returnValue(self._format_results(qv, ['Topic to role association','Role']))
 
+    #
+    # userroleAdd
+    #  login  -> login name of the user to add to role
+    #  name   -> name of role to add user to
+    #
+    # we are simply associating the role and the user in the loginrole
+    # table. the only criteria is that the person executing this command
+    # must have admin on the role gaining the new user.
+    #
+    @inlineCallbacks
+    def userroleAdd(self, *args, **kwargs):
+        log.msg("userroleAdd called {}".format(kwargs))
+        qa = kwargs['action_args']
+        details = kwargs['details']
+
+        #
+        # determine if we have the right to add a user to this role.
+        #
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("no permission to add a user to this role")
+
+        #
+        # insert the record.  if it already exists we will
+        # get a duplicate key exception on login_id, role_id.
+        #
+        qv = yield self.call(self.query,
+                """
+                    insert into
+                        loginrole
+                    (
+                        login_id,
+                        role_id
+                    )
+                    values
+                    (
+                        ( select id from login where login = %(login)s ),
+                        ( select id from role where name = %(name)s )
+                    )
+                    returning
+                        id, login_id, role_id
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._format_results(qv))
+
+    #
+    # userroleDelete
+    #  login  -> login name of the user to delete to role
+    #  name   -> name of role to delete user to
+    #
+    # we are simply unassociating the role and the user in the loginrole
+    # table. the only criteria is that the person executing this command
+    # must have admin on the role losing the user.
+    #
+    @inlineCallbacks
+    def userroleDelete(self, *args, **kwargs):
+        log.msg("userroleDelete called {}".format(kwargs))
+        qa = kwargs['action_args']
+        details = kwargs['details']
+
+        #
+        # determine if we have the right to delete a user to this role.
+        #
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("no permission to delete a user from this role")
+
+        #
+        # delete the record.
+        #
+        qv = yield self.call(self.query,
+                """
+                    delete
+                      from
+                        loginrole
+                     where
+                        login_id = ( select id from login where login = %(login)s )
+                       and
+                        role_id = ( select id from role where name = %(name)s )
+                    returning
+                        id, login_id, role_id
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._format_results(qv))
+
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
@@ -1038,6 +1129,8 @@ class Component(ApplicationSession):
             'user.get': {'method': self.userGet },
             'user.add': {'method': self.userAdd },
             'user.delete': {'method': self.userDelete },
+            'userrole.add': {'method': self.userroleAdd },
+            'userrole.delete': {'method': self.userroleDelete },
             'role.list': {'method': self.roleList },
             'role.get': {'method': self.roleGet },
             'role.add': {'method': self.roleAdd },

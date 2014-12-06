@@ -185,6 +185,11 @@ def run():
     user_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
+    userrole_p = sp.add_parser('userrole')
+    userrole_p.add_argument('action', choices=['add', 'delete'], help='User role association commands')
+    userrole_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
     role_p = sp.add_parser('role')
     role_p.add_argument('action', choices=['list', 'get', 'add', 'update', 'delete'], help='Role commands')
     role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
@@ -193,6 +198,11 @@ def run():
     role_p = sp.add_parser('topic')
     role_p.add_argument('action', choices=['list', 'get', 'add', 'update', 'delete'], help='Topic commands')
     role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
+    topicrole_p = sp.add_parser('topicrole')
+    topicrole_p.add_argument('action', choices=['add', 'delete'], help='Topic role association commands')
+    topicrole_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
     role_p = sp.add_parser('activity')

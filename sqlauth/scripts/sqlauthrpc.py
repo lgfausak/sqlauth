@@ -505,6 +505,7 @@ class Component(ApplicationSession):
     def roleDelete(self, *args, **kwargs):
         log.msg("roleDelete called {}".format(kwargs))
         qa = kwargs['action_args']
+        details = kwargs['details']
 
         # check to make sure we have permission to delete the role's admin topic
         # that means we have 'admin' womewhere in the heirarchy between the leaf and the root.

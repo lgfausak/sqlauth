@@ -923,6 +923,151 @@ class Component(ApplicationSession):
         
         defer.returnValue(self._format_results(qv))
 
+    #
+    # topicroleAdd
+    #  topic_name  -> topic name of the topic to associate to role
+    #  name        -> name of role to associate topic to
+    #
+    @inlineCallbacks
+    def topicroleAdd(self, *args, **kwargs):
+        log.msg("topicroleAdd called {}".format(kwargs))
+        qa = kwargs['action_args']
+        details = kwargs['details']
+
+        # check to make sure we have admin permission on the role
+        # that is going to have the topic added.
+
+        qv = yield self.call(self.query,
+                """
+                    select
+                        t.name
+                      from
+                        topic t,
+                        role r
+		     where
+                        t.id = r.bind_to
+                       and
+                        r.name = %(name)s
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            raise Exception("cannot find role {}, maybe it was misspelled".format(qa['name']))
+
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("Executing topic does not have admin on role {}".format(qa['name']))
+
+        #
+        # assert: if we get this far we have admin on the role.
+        #
+        # now check to make sure we have admin on the topic
+        #
+
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qa['topic_name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("Executing user does not have admin on topic {}".format(qa['topic_name']))
+
+        #
+        # we have admin on the topic, so proceed.
+        #
+
+        #
+        # insert the record.  if it already exists we will
+        # get a duplicate key exception on topic_id, role_id.
+        #
+        qv = yield self.call(self.query,
+                """
+                    insert into
+                        topicrole
+                    (
+                        topic_id,
+                        role_id
+                    )
+                    values
+                    (
+                        ( select id from topic where name = %(topic_name)s ),
+                        ( select id from role where name = %(name)s )
+                    )
+                    returning
+                        id, topic_id, role_id
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._format_results(qv))
+
+    #
+    # topicroleDelete
+    #  topic_name  -> topic name of the topic to delete to role
+    #  name        -> name of role to delete topic to
+    #
+    @inlineCallbacks
+    def topicroleDelete(self, *args, **kwargs):
+        log.msg("topicroleDelete called {}".format(kwargs))
+        qa = kwargs['action_args']
+        details = kwargs['details']
+
+        # check to make sure we have admin permission on the role
+        # that is going to have the topic association deleted.
+
+        qv = yield self.call(self.query,
+                """
+                    select
+                        t.name
+                      from
+                        topic t,
+                        role r
+		     where
+                        t.id = r.bind_to
+                       and
+                        r.name = %(name)s
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            raise Exception("cannot find role {}, maybe it was misspelled".format(qa['name']))
+
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("Executing user does not have admin on role {}".format(qa['name']))
+
+        #
+        # assert: if we get this far we have admin on the role.
+        #
+        # now check to make sure we have admin on the topic
+        #
+
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qa['topic_name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("Executing user does not have admin on topic {}".format(qa['topic_name']))
+
+        #
+        # we have admin on the topic, so proceed.
+        #
+
+        #
+        # delete the record.
+        #
+        qv = yield self.call(self.query,
+                """
+                    delete
+                      from
+                        topicrole
+                     where
+                        topic_id = ( select id from topic where name = %(topic_name)s )
+                       and
+                        role_id = ( select id from role where name = %(name)s )
+                    returning
+                        id, topic_id, role_id
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        # qv[0] contains the result
+        
+        defer.returnValue(self._format_results(qv))
+
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))

@@ -1004,7 +1004,7 @@ class Component(ApplicationSession):
                     values
                     (
                         ( select id from topic where name = %(topic_name)s ),
-                        ( select id from role where name = %(name)s )
+                        ( select id from role where name = %(name)s ),
                         %(type_id_{})s,
                         true
                     )

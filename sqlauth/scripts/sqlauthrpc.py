@@ -311,10 +311,6 @@ class Component(ApplicationSession):
     def userDelete(self, *args, **kwargs):
         log.msg("userDelete called {}".format(kwargs))
         qa = kwargs['action_args']
-        rtitle = [
-            "Login to role association",
-            "Login"
-        ]
         qv = yield self.call(self.query,
                 [
                     """
@@ -345,19 +341,7 @@ class Component(ApplicationSession):
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the results as an array of dicts, one dict for each query that ran
 
-        if isinstance(qv, vtypes.DictType):
-            # this will never happen for this query.
-            defer.returnValue(self._format_results(qv))
-        else:
-            # this case will always happen
-            rv = {}
-            for ri in range(len(qv)):
-                rv[ri] = {}
-                rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._format_results(qv[ri])
-            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
-            # the array of results, first row is header, second row - end is data.
-            defer.returnValue(rv)
+        defer.returnValue(self._format_results(qv, ['Login to role association', 'Login']))
 
     @inlineCallbacks
     def roleList(self, *args, **kwargs):
@@ -436,22 +420,34 @@ class Component(ApplicationSession):
         if bt[-len('.'+qa['name']):] != '.'+qa['name']:
             log.msg("roleAdd: suffixing .{} to bind_topic name {}".format(qa['name'],bt))
             bt = bt + '.' + qa['name']
-        rv = yield self.topicAdd( action_args={
-            'name':bt,'description':qa['description'] }, details=kwargs['details'] )
-        if len(rv) == 0:
-            raise Exception("impossible situation, no return value from topicAdd in roleAdd")
-        log.msg("roleAdd, topicAdd returned {}".format(rv))
+
+        # check to make sure we have permission to create the role's admin topic
+        # that means we have 'admin' womewhere in the heirarchy between the leaf and the root.
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':bt,'type_id':'admin' })
+        if not rv:
+            raise Exception("no permission to add a topic in that hierchy")
+
         # we will bind the new role to the newly created topic.
-        qa['bind_to'] = rv[1][rv[0].index('id')]
-        # there is a transaction issue here.
-        # i should really do the creation of the topic and the creation of the role
-        # in the same transaction.  that would mess up my layering a bit, but it makes more
-        # database sense.  however, because i am lazy, i am going to leave it this way.
-        # that means that the role creation could fail and leave a dangling topic
-        # this could happen if the role already exists, but the topic doesn't.
-        # i might clean this up later if it ever matters.
+        qa['bind_to_name'] = bt
+
+        # all of these operations are done in the same
+        # transaction, they all work, or all fail.
         qv = yield self.call(self.query,
                 [
+                    """
+                    insert into
+                        topic
+                    (
+                        name, description
+                    )
+                    values
+                    (
+                        %(bind_to_name)s, %(description)s
+                    )
+                    returning
+                        id, name as bind_to_name, description
+		    """,
                     """
                     insert into
                         role
@@ -460,7 +456,10 @@ class Component(ApplicationSession):
                     )
                     values
                     (
-                        %(name)s, %(description)s, %(bind_to)s
+                        %(name)s, %(description)s,
+                        (
+                            select id from topic where name = %(bind_to_name)s
+                        )
                     )
                     returning
                         id, name, description, bind_to
@@ -486,7 +485,7 @@ class Component(ApplicationSession):
 
         log.msg("roleAdd, topicAdd returned {}".format(qv))
 
-        defer.returnValue(self._format_results(qv, ['Add Role','Add Topic Admin Association']))
+        defer.returnValue(self._format_results(qv, ['Role Admin Topic', 'Add Role','Add Topic Admin Association']))
 
     #
     # roleDelete
@@ -506,6 +505,32 @@ class Component(ApplicationSession):
     def roleDelete(self, *args, **kwargs):
         log.msg("roleDelete called {}".format(kwargs))
         qa = kwargs['action_args']
+
+        # check to make sure we have permission to delete the role's admin topic
+        # that means we have 'admin' womewhere in the heirarchy between the leaf and the root.
+        # to do that, we need to get the bind_to topic for the role to be deleted.
+
+        qv = yield self.call(self.query,
+                """
+                    select
+                        t.name
+                      from
+                        topic t,
+                        role r
+		     where
+                        t.id = r.bind_to
+                       and
+                        r.name = %(name)s
+		   """,
+                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+        if len(qv) == 0:
+            raise Exception("cannot find roles bind_to topic name")
+
+        rv = yield self._permissionCheck( action_args={
+            'authid':details.authid, 'topic_name':qv[0]['name'],'type_id':'admin' })
+        if not rv:
+            raise Exception("no permission to delete roles bind_to topic")
+
         qv = yield self.call(self.query,
                 [
                     """
@@ -742,10 +767,6 @@ class Component(ApplicationSession):
         if not rv:
             raise Exception("no permission to add a topic in that hierchy")
 
-        rtitle = [
-            "Topic to role association",
-            "Role"
-        ]
         qv = yield self.call(self.query,
                 [
                     """
@@ -772,19 +793,7 @@ class Component(ApplicationSession):
                    qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the results as an array of dicts, one dict for each query that ran
 
-        if isinstance(qv, vtypes.DictType):
-            # this will never happen for this query.
-            defer.returnValue(self._format_results(qv))
-        else:
-            # this case will always happen
-            rv = {}
-            for ri in range(len(qv)):
-                rv[ri] = {}
-                rv[ri]['title'] = rtitle[ri]
-                rv[ri]['result'] = self._format_results(qv[ri])
-            # we have a dict, keys are numbers starting with 0 increasing by 1, values are
-            # the array of results, first row is header, second row - end is data.
-            defer.returnValue(rv)
+        defer.returnValue(self._format_results(qv, ['Topic to role association','Role']))
 
     @inlineCallbacks
     def activityList(self, *args, **kwargs):

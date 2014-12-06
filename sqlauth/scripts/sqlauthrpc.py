@@ -483,7 +483,7 @@ class Component(ApplicationSession):
                 ], qa, options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
 
-        log.msg("roleAdd, topicAdd returned {}".format(qv))
+        log.msg("roleAdd returned {}".format(qv))
 
         defer.returnValue(self._format_results(qv, ['Role Admin Topic', 'Add Role','Add Topic Admin Association']))
 
@@ -711,7 +711,7 @@ class Component(ApplicationSession):
         
         rv = yield self.topicrolePermission(self, *args, **kwargs)
 
-        log.msg("topicAdd.topicrolePermission {}".format(rv))
+        log.msg("_permissionCheck topicrolePermission {}".format(rv))
         if len(rv) == 0:
             defer.returnValue(False)
         if not rv[1][rv[0].index('allow')]:

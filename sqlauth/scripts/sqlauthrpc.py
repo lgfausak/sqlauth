@@ -927,6 +927,9 @@ class Component(ApplicationSession):
     # topicroleAdd
     #  topic_name  -> topic name of the topic to associate to role
     #  name        -> name of role to associate topic to
+    #  activity    -> id of the activity type (admin,subscribe,publish,call,register)
+    #                 this can be a single string, or an array of strings to do more than one.
+    #                 if omitted, then all activities are assumed
     #
     @inlineCallbacks
     def topicroleAdd(self, *args, **kwargs):
@@ -973,27 +976,48 @@ class Component(ApplicationSession):
         # we have admin on the topic, so proceed.
         #
 
-        #
-        # insert the record.  if it already exists we will
-        # get a duplicate key exception on topic_id, role_id.
-        #
-        qv = yield self.call(self.query,
-                """
+        ti = []
+        if not 'activity' in qa:
+            log.msg("activity not specified, so all activities will be inserted")
+            ti = [ 'admin', 'call', 'register', 'subscribe', 'publish' ]
+        else:
+            ti = qa['activity']
+            if not isinstance(ti, vtypes.ListType):
+                if not isinstance(ti, vtypes.StringType):
+                    raise Exception("Must pass activity, which should be a string or an array of strings, each string is an action (call,register,subscribe,publish,admin)")
+                else:
+                    ti = [ ti ]
+
+        qva = []
+        for i in range(len(ti)):
+            type_id = ti[i]
+            qa['type_id_'+str(i)] = type_id
+            nst = """
                     insert into
                         topicrole
                     (
                         topic_id,
-                        role_id
+                        role_id,
+                        type_id,
+                        allow
                     )
                     values
                     (
                         ( select id from topic where name = %(topic_name)s ),
                         ( select id from role where name = %(name)s )
+                        %(type_id_{})s,
+                        true
                     )
                     returning
-                        id, topic_id, role_id
-		   """,
-                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+                        id, topic_id, role_id, type_id, allow
+		   """.format(i)
+            qva.append(nst)
+        #
+        # insert the record(s).  if they already exists we will
+        # get a duplicate key exception on topic_id, role_id, type_id
+        #
+        qv = yield self.call(self.query, qva, qa,
+                options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
         
         defer.returnValue(self._format_results(qv))

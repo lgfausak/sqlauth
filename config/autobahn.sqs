@@ -53,6 +53,7 @@
             <destinationCardinality>1</destinationCardinality>
             <referencesFieldUID><![CDATA[E5C68647-CEE5-4835-AF7D-22F12D26C364]]></referencesFieldUID>
             <referencesTableUID><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></referencesTableUID>
+            <notNull><![CDATA[1]]></notNull>
             <referenceLinkName><![CDATA[loginrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[user_id]]></temporaryOriginalName>
             <uid><![CDATA[D08D5113-6366-414B-B7C7-5006C76AFB52]]></uid>
@@ -70,6 +71,7 @@
             <referencesFieldUID><![CDATA[F52BBD04-3FE3-4109-AC3A-2AC2E5E45785]]></referencesFieldUID>
             <referencesTableUID><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></referencesTableUID>
             <forcedUnique><![CDATA[0]]></forcedUnique>
+            <notNull><![CDATA[1]]></notNull>
             <referenceLinkName><![CDATA[loginrole]]></referenceLinkName>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[F98B5E12-6E88-4F36-806E-29B4492C798D]]></uid>
@@ -104,8 +106,8 @@
         <name><![CDATA[Comment2_3]]></name>
         <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
         <location>
-            <x>2004.00</x>
-            <y>773.00</y>
+            <x>2003.00</x>
+            <y>747.00</y>
         </location>
         <size>
             <width>184.00</width>
@@ -125,8 +127,8 @@
         <name><![CDATA[Comment2_1]]></name>
         <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
         <location>
-            <x>1258.00</x>
-            <y>716.00</y>
+            <x>1373.00</x>
+            <y>702.00</y>
         </location>
         <size>
             <width>229.00</width>
@@ -469,7 +471,7 @@
         <SQLField>
             <name><![CDATA[login]]></name>
             <type><![CDATA[TEXT]]></type>
-            <notNull><![CDATA[1]]></notNull>
+            <notNull><![CDATA[0]]></notNull>
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[1A10F97B-CF23-49C3-BB96-C4B0A1F6EF61]]></uid>
             <unique><![CDATA[1]]></unique>
@@ -585,8 +587,8 @@
         <name><![CDATA[sqlauth]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1903.00</x>
-            <y>1004.00</y>
+            <x>1497.00</x>
+            <y>842.00</y>
         </location>
         <size>
             <width>200.00</width>
@@ -617,8 +619,8 @@
         <name><![CDATA[Comment2]]></name>
         <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
         <location>
-            <x>2108.00</x>
-            <y>1016.00</y>
+            <x>1702.00</x>
+            <y>840.00</y>
         </location>
         <size>
             <width>288.00</width>
@@ -893,7 +895,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
         <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
-        <exportDialect><![CDATA[SQLite]]></exportDialect>
+        <exportDialect><![CDATA[postgres]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
         <generator><![CDATA[com.malcolmhardie.sqleditor]]></generator>
         <generatorVersion><![CDATA[2.0]]></generatorVersion>

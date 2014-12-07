@@ -11,7 +11,7 @@ CREATE TABLE login
 (
 /*Primary Key for the user*/
 id SERIAL PRIMARY KEY  AUTOINCREMENT,
-login TEXT NOT NULL UNIQUE,
+login TEXT UNIQUE,
 fullname TEXT,
 password TEXT NOT NULL,
 salt TEXT,
@@ -57,8 +57,8 @@ allow BOOLEAN
 CREATE TABLE loginrole
 (
 id SERIAL NOT NULL PRIMARY KEY  AUTOINCREMENT,
-login_id INTEGER REFERENCES login (id),
-role_id INTEGER REFERENCES role (id)
+login_id INTEGER NOT NULL REFERENCES login (id),
+role_id INTEGER NOT NULL REFERENCES role (id)
 );
 
 CREATE TABLE sqlauth

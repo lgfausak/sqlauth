@@ -12,7 +12,7 @@ CREATE TABLE login
 (
 /*Primary Key for the user*/
 id SERIAL,
-login TEXT NOT NULL UNIQUE,
+login TEXT UNIQUE,
 fullname TEXT,
 password TEXT NOT NULL,
 salt TEXT,
@@ -63,8 +63,8 @@ PRIMARY KEY (id)
 CREATE TABLE loginrole
 (
 id SERIAL NOT NULL,
-login_id INTEGER,
-role_id INTEGER,
+login_id INTEGER NOT NULL,
+role_id INTEGER NOT NULL,
 PRIMARY KEY (id)
 );
 

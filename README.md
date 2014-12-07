@@ -13,6 +13,7 @@ A topic is a dot separated name describing an address.  Examples include:
 * adm.inventory.rubberbands.quantity
 * com.home.garage.door.open
 * com.home.garage.door.close
+
 Topics have an inherent hierarchy. The root is to the left, the leaf is to the right.  In the
 example above, com.home.garage.door would be the logical parent of
 com.home.garage.door.open and com.home.garage.door.close.
@@ -36,10 +37,12 @@ Permissions can be granted anywhere in the tree.  For example, I could grant the
 permission on the action 'call' for the topics :
 * com.home.garage.door.open
 * com.home.garage.door.close
+
 So that would mean that any user I associate with the role family could open or close
 the garage door.  You can grant further up the tree as well.  So, instead of making 2 grants
 I could just grant call to the topic:
 * com.home.garage.door
+
 And that would accomplish the same thing.  This illustrates a permission concept.  All permissions are
 evaluated from the root of the topic chain down to the leaf.  If the permission necessary is
 anywhere in the chain, the permission is granted.  That means if I have subscribe permission to the

@@ -1072,11 +1072,26 @@ class Component(ApplicationSession):
         # we have admin on the topic, so proceed.
         #
 
-        #
-        # delete the record.
-        #
-        qv = yield self.call(self.query,
-                """
+        qva = []
+        ti = []
+        if not 'activity' in qa:
+            # we could run a different query, and just delete all topic/role
+            # without regard to the type_id, but, for now, do it the
+            # hard way
+            log.msg("activity not specified, so all activities will be deleted")
+            ti = [ 'admin', 'call', 'register', 'subscribe', 'publish' ]
+        else:
+            ti = qa['activity']
+            if not isinstance(ti, vtypes.ListType):
+                if not isinstance(ti, vtypes.StringType):
+                    raise Exception("Must pass activity, which should be a string or an array of strings, each string is an action (call,register,subscribe,publish,admin)")
+                else:
+                    ti = [ ti ]
+
+        for i in range(len(ti)):
+            type_id = ti[i]
+            qa['type_id_'+str(i)] = type_id
+            nst = """
                     delete
                       from
                         topicrole
@@ -1084,10 +1099,17 @@ class Component(ApplicationSession):
                         topic_id = ( select id from topic where name = %(topic_name)s )
                        and
                         role_id = ( select id from role where name = %(name)s )
+                       and
+                        type_id = %(type_id_{})s
                     returning
-                        id, topic_id, role_id
-		   """,
-                   qa, options=types.CallOptions(timeout=2000,discloseMe=True))
+                        id, topic_id, role_id, type_id, allow
+		   """.format(i)
+            qva.append(nst)
+        #
+        # delete the record.
+        #
+        qv = yield self.call(self.query, qva, qa,
+                options=types.CallOptions(timeout=2000,discloseMe=True))
         # qv[0] contains the result
         
         defer.returnValue(self._format_results(qv))

@@ -3,22 +3,61 @@
 
 SQL Authorization and Authentication via SQL for Autobahn
 
+## Overview
+
+This is a simple authentication / authorization scheme. Users can be added to the user database.  Once added, authentication can occur.
+However, a user has no permissions other than the permission to authenticate.
+
+A topic is a dot separated name describing an address.  Examples include:
+* com.store.temp
+* adm.inventory.rubberbands.quantity
+* com.home.garage.door.open
+* com.home.garage.door.close
+Topics have an inherent hierarchy. The root is to the left, the leaf is to the right.  In the
+example above, com.home.garage.door would be the logical parent of
+com.home.garage.door.open and com.home.garage.door.close.
+
+Roles are groups of users.  There can be 0, 1 or more users belonging to a role.  A user can belong
+to many roles.  This forms a n:m (many to many) relationship between the concept of a role
+and the concept of a user.  A role is important, because all permissions are granted to roles,
+not to users. So, I can grant call, register, subscribe, and publish permission to a topic from a role.
+In addition to the 4 basic actions I can grant, there is also 'admin'.  Admin action is the authority
+to grant permissions to others.
+
+When a user authenticates, a session record is created in the database.  The session is open until the
+user disconnects, at which time the session ceases to be active.
+
+When a user is connected, they can call Autobahn actions (call,register,subscribe,publish).
+Those commands are authorized based upon
+the data describing permissions in the database.  Every action (whether authorized or not)
+is recorded in the activity table.
+
+Permissions can be granted anywhere in the tree.  For example, I could grant the role 'family'
+permission on the action 'call' for the topics :
+* com.home.garage.door.open
+* com.home.garage.door.close
+So that would mean that any user I associate with the role family could open or close
+the garage door.  You can grant further up the tree as well.  So, instead of making 2 grants
+I could just grant call to the topic:
+* com.home.garage.door
+And that would accomplish the same thing.  This illustrates a permission concept.  All permissions are
+evaluated from the root of the topic chain down to the leaf.  If the permission necessary is
+anywhere in the chain, the permission is granted.  That means if I have subscribe permission to the
+topic 'com', *any* publication with com. in the root would be granted. That would include publishing to:
+* com.one
+* com.lower.still
+* com.this.is.out.there
+
+Then there is the 'admin' action.  Actually, this is not an Autobahn action, it is just for sqlauth.
+Having admin means that you can grant any permission for that object.  That is fairly easy to understand
+with a topic.
+
+It is harder with a role, because I left something out previously.  When you create a new role, you
+must specify a topic that binds its admin permission.  So, when I create a new role I bind it to
+a topic name of my choice.  This new topic is also created when the role is created.  The new topic is
+what is used to control permissions for the role.  More on this later...
+
 ## Summary
-
-I need the ability to dynamically authorize Autobahn clients in a
-multi-tenant fashion.  I do not want to push this to the application
-level.  Logically, if an Autobahn client receives a call to an RPC
-the client can assume that the caller has the authority to make that
-call. Similarly with all the activities (subscribe,publish,register).
-The actual authorization is done centrally so that the application
-clients can just be concerned with their function, not the
-authentication/authorization function.
-
-From an implementation point of view this can be backended by any
-database that sqlbridge supports.  However, I am only interested in
-(and supporting) a Postgres backend at this time.  Primarily because
-the listen/notify functionality.  This makes authentication/authorization
-caching extremely efficient. In a nutshell, this code:
 
 * Authenticates a user.  At web socket connection time a challenge
 is submitted using wampcra. The credentials and associated permissions
@@ -38,6 +77,76 @@ we can determine who the current clients of a Autobahn session are.
 * Sessions can be summarily destroyed (Users can be 'kicked off' the Autobahn).
 * Activity can be tracked.  Any publish,subscribe,call,register action is
 called an activity.
+
+## Commands
+
+The permissions can be maintained by simply updating the database with appropriate records.
+Or, I've created a simple api that can be used to manage the
+database.  This is probably a better way to manage it, but either will work.  The utility to
+manage them is called sqladm.  You can run sqladm --help to pick up a help message. Also,
+you can get help with the activity you want to do, like sqladm user --help to list all of the user commands.
+
+### user (commands: list,get,add,delete)
+* list - list all of the users in the database.  Yes, I need to add qualification but now you get them all back.
+* get - specify the login (user name) and fetch the single user record
+* add - specify login, fullname, secret, tzname. login is the user id (alphanum), fullname is a string, like 'John Doe'.
+secret is the password to assign that user. tzname is a linux time zone, like America/Chicago.
+* delete - specify the login (user id) to delete the record
+
+Examples:
+```
+sqladm -u adm -s 123test user add --args '{"login":"greg","secret":"spass","fullname":"Greg Last", "tzname":"America/Chicago"}'
+sqladm -u adm -s 123test user get --args '{"login":"greg"}'
+sqladm -u adm -s 123test user delete --args '{"login":"greg"}'
+```
+
+* Note: notice the -u and -s arguments for sqladm.  That is because sqladm is authenticated and authorized as well.
+The database is shipped with 2 native users.  sys is one, adm is the other. sys is for internal use, adm is
+the root level administrator for your use.  You initial roles and users must be added using
+adm or sys.  Once added, you can grant your new users admin, and to your administration with other users.
+* Note: Yes, the arguments for each of the activities is json.  Ultimately I may flesh that
+out a bit.
+* Note: Users records are left in the database when deleted, but they are marked inactive and the login name can
+be reused immediately after deletion.
+
+### role (commands: list,get,add,delete)
+* list - list all of the roles in the database. Along with each role you get a list of all users associated with
+that role.
+* get - specify the name (role name) and fetch the single role record
+* add - specify name, description, bind_topic and a new role is created. The bind_topic is simply
+a topic name.  That name is prepended with the role. string. Also, if the bind_topic doesn't terminate
+with the name of the role being created that is appended.  So, for example, if I specify
+test as my bind_topic, and the role I am creating's name is 'administrator', then the ultimate
+created bind_topic will be 'role.test.administrator'.  That becomes the controlling topic for
+the new role 'administrator'.  Further, the current user requesting to create this role
+must have admin permission in the role.test.administrator hierarchy.  It boils down to this,
+you can't create a role unless you have admin permission somewhere in the role. hierarchy.
+* delete - specify the name (role name) to delete.  The role is deleted, along with all records
+that reference that role.
+
+### userrole (commands: add,delete)
+* add - add a user to a role
+* delete - delete a user from a role
+
+### topic (commands: list,get,add,delete)
+* list - list all of the topics in the database. Along with the topic, all roles that have been granted any permission to this
+each topic are listed.
+* get - specify the name (topic name) and fetch the single topic record.
+* add - specify name, description. A topic with name and description is added (that
+is assuming the user requesting the addition has admin permission in the new topic name's hierarchy).
+* delete - specify the name (topic name) to delete the record and all associated records.
+
+### topicrole (commands: add,delete)
+* add - add a topic to a role
+* delete - delete a topic from a role
+
+### session (commands: list)
+* list - list all of the sessions in the database.
+
+### activity (commands: list)
+* list - list all of the ctivities for active sessions in the database
+
+Yes, this documentatino is light.  More later...
 
 ## Schema
 

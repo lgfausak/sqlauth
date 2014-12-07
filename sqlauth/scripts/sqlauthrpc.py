@@ -247,7 +247,7 @@ class Component(ApplicationSession):
     # userAdd
     #  login    -> login name of the user to add
     #  fullname -> fullname of the new user
-    #  password -> password for the new user
+    #  secret   -> password for the new user
     #  tzname   -> valid tzname, like America/Chicago
     #  roles    -> list of roles to be added to.
     #

@@ -6,14 +6,17 @@ SQL Authorization and Authentication via SQL for Autobahn
 ## Overview
 
 This is a simple authentication / authorization scheme. Users can be added to the user database.  Once added, authentication can occur.
-However, a user has no permissions other than the permission to authenticate.
+However, a user has no permissions other than the permission to authenticate.  Once authenticated a session is established and
+recorded. At any time a list of current and past sessions can be retrieved. A session remains current until
+such time as the endpoint leaves the session, then it becoems historical.
 
-A topic is a dot separated name describing an address.  Examples include:
+A topic is a dot separated name describing an endpoint.  Examples include:
 * com.store.temp
 * adm.inventory.rubberbands.quantity
 * com.home.garage.door.open
 * com.home.garage.door.close
 
+In Autobahn topics can be bound to remote procedure calls, or subscriptions.
 Topics have an inherent hierarchy. The root is to the left, the leaf is to the right.  In the
 example above, com.home.garage.door would be the logical parent of
 com.home.garage.door.open and com.home.garage.door.close.
@@ -24,9 +27,6 @@ and the concept of a user.  A role is important, because all permissions are gra
 not to users. So, I can grant call, register, subscribe, and publish permission to a topic from a role.
 In addition to the 4 basic actions I can grant, there is also 'admin'.  Admin action is the authority
 to grant permissions to others.
-
-When a user authenticates, a session record is created in the database.  The session is open until the
-user disconnects, at which time the session ceases to be active.
 
 When a user is connected, they can call Autobahn actions (call,register,subscribe,publish).
 Those commands are authorized based upon
@@ -44,9 +44,9 @@ I could just grant call to the topic:
 * com.home.garage.door
 
 And that would accomplish the same thing.  This illustrates a permission concept.  All permissions are
-evaluated from the root of the topic chain down to the leaf.  If the permission necessary is
+evaluated from the root of the topic chain down to the leaf.  If the permission needed is
 anywhere in the chain, the permission is granted.  That means if I have subscribe permission to the
-topic 'com', *any* publication with com. in the root would be granted. That would include publishing to:
+topic 'com', *any* publication with com. in the root would be granted. That would include subscribing to:
 * com.one
 * com.lower.still
 * com.this.is.out.there
@@ -60,27 +60,6 @@ must specify a topic that binds its admin permission.  So, when I create a new r
 a topic name of my choice.  This new topic is also created when the role is created.  The new topic is
 what is used to control permissions for the role.  More on this later...
 
-## Summary
-
-* Authenticates a user.  At web socket connection time a challenge
-is submitted using wampcra. The credentials and associated permissions
-are maintained in an sql database.
-
-* Authorize activities. All web socket activity by an active authenticated session
-is authorized.  This means that publish, subscribe, register and call are
-permission based.
-
-The side affects of these two activities are:
-* A user table is maintained.
-* A user is a member of roles. All permissions are granted to roles.
-* A user can be a member of 0, 1 or more roles.
-* A role can have 0, 1 or more users. (a n:m relationship exists between users and roles)
-* A session table is maintained.  All active sessions can be accessed. In other words,
-we can determine who the current clients of a Autobahn session are.
-* Sessions can be summarily destroyed (Users can be 'kicked off' the Autobahn).
-* Activity can be tracked.  Any publish,subscribe,call,register action is
-called an activity.
-
 ## Commands
 
 The permissions can be maintained by simply updating the database with appropriate records.
@@ -90,11 +69,11 @@ manage them is called sqladm.  You can run sqladm --help to pick up a help messa
 you can get help with the activity you want to do, like sqladm user --help to list all of the user commands.
 
 ### user (commands: list,get,add,delete)
-* list - list all of the users in the database.  Yes, I need to add qualification but now you get them all back.
+* list - list all of the users in the database.
 * get - specify the login (user name) and fetch the single user record
 * add - specify login, fullname, secret, tzname. login is the user id (alphanum), fullname is a string, like 'John Doe'.
 secret is the password to assign that user. tzname is a linux time zone, like America/Chicago.
-* delete - specify the login (user id) to delete the record
+* delete - specify the login (user id) to delete the record.  The record, and all role associates, are deleted.
 
 Examples:
 ```
@@ -102,7 +81,6 @@ sqladm -u adm -s 123test user add --args '{"login":"greg","secret":"spass","full
 sqladm -u adm -s 123test user get --args '{"login":"greg"}'
 sqladm -u adm -s 123test user delete --args '{"login":"greg"}'
 ```
-
 * Note: notice the -u and -s arguments for sqladm.  That is because sqladm is authenticated and authorized as well.
 The database is shipped with 2 native users.  sys is one, adm is the other. sys is for internal use, adm is
 the root level administrator for your use.  You initial roles and users must be added using
@@ -127,9 +105,36 @@ you can't create a role unless you have admin permission somewhere in the role. 
 * delete - specify the name (role name) to delete.  The role is deleted, along with all records
 that reference that role.
 
+Examples:
+```
+sqladm -u adm -s 123test role add --args '{"name":"myusers","description":"Group of my users", "bind_topic":"adm.myusers"}'
+sqladm -u adm -s 123test role get --args '{"name":"myusers"}' 
+sqladm -u adm -s 123test role list 
+sqladm -u adm -s 123test role delete --args '{"name":"myusers"}' 
+```
+
+* Note: The session that is calling the role add call must have admin
+permission on the topic 'role.adm.myusers'.  The adm user has admin on the role.adm
+topic by default, so, this is fulfilled.  This keeps just anyone from creating a topic, only
+those with admin in a role decendant topic can create a new role.
+
+* Note: You can only delete a role if you have admin permission on that role's bind_to
+topic.
+
+
 ### userrole (commands: add,delete)
-* add - add a user to a role
-* delete - delete a user from a role
+* add - add a user to a role. The name (role name) and login (user name) must be supplied.
+* delete - delete a user from a role.  The name (role name) and login (user name) must be supplied.
+
+Examples:
+```
+sqladm -u adm -s 123test userrole add --args '{"login":"greg","name":"adm"}'
+sqladm -u adm -s 123test userrole delete --args '{"login":"greg","name":"adm"}'
+```
+
+* Note: When a user is added to a role, the user assumes all authority that has been granted that role.
+* Note: The session that is calling these userrole calls must have admin permission on them. In other words
+to associate a user with a role, I must be admin for that role.
 
 ### topic (commands: list,get,add,delete)
 * list - list all of the topics in the database. Along with the topic, all roles that have been granted any permission to this
@@ -139,9 +144,35 @@ each topic are listed.
 is assuming the user requesting the addition has admin permission in the new topic name's hierarchy).
 * delete - specify the name (topic name) to delete the record and all associated records.
 
+Examples:
+```
+sqladm -t sys -u adm -s 123test topic add -a '{"name":"adm.tenants","description":"Test second level"}'
+sqladm -t sys -u adm -s 123test topic list
+sqladm -t sys -u adm -s 123test topic get -a '{"name":"adm.tenants"}'
+sqladm -t sys -u adm -s 123test topic delete -a '{"name":"adm.tenants"}'
+```
+
+* Note: When adding a new topic, you must have admin permission in the hierarchy you are adding to.
+* Note: When deleting a topic, you must have admin permission on the topic.
+
 ### topicrole (commands: add,delete)
-* add - add a topic to a role
-* delete - delete a topic from a role
+* add - add a topic to a role. Minimum of topic_name (the name of the topic) and name (the name of the role)
+must be specified.
+* delete - delete a topic from a role. Minimum of topic_name (the name of the topic) and name (the name of the role)
+must be specified.
+
+Examples:
+```
+sqladm -t sys -u adm -s 123test topicrole add -a '{"topic_name":"adm.myusers","name":"myusers"}'
+sqladm -t sys -u adm -s 123test topicrole delete -a '{"topic_name":"adm.myusers","name":"myusers"}'
+sqladm -t sys -u adm -s 123test topicrole add -a '{"topic_name":"adm.myusers","name":"myusers","activity":["admin"]}'
+```
+
+* Note: The session calling these api functions must have admin permission on the topic as well as the role.
+* Note: an additional argument to the first two of these examples is: "activity":[ "call","register","subscribe","publish","admin"].
+If activity is not specified in either add or delete args then the activity is assumed to be all 5 actions.
+* Note: the third example shows adding just a single action to the topic/role permission association.
+
 
 ### session (commands: list)
 * list - list all of the sessions in the database.
@@ -149,7 +180,7 @@ is assuming the user requesting the addition has admin permission in the new top
 ### activity (commands: list)
 * list - list all of the ctivities for active sessions in the database
 
-Yes, this documentatino is light.  More later...
+Yes, this documentation is light.  More later...
 
 ## Schema
 

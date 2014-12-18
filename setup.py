@@ -72,6 +72,7 @@ setup(
          'sqladm = sqlauth.scripts.sqladm:run',
          'sqlauthrpc = sqlauth.scripts.sqlauthrpc:run',
          'sqlauthrouter = sqlauth.scripts.sqlauthrouter:run',
+         'abroute = sqlauth.scripts.abroute:run',
       ]},
    packages = find_packages(),
    include_package_data = True,

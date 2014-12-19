@@ -30,7 +30,7 @@ from twisted.internet.defer import inlineCallbacks
 from autobahn import util
 from autobahn.wamp import auth
 from autobahn.wamp import types
-from autobahn.wamp.types import RegisterOptions, CallOptions
+from autobahn.wamp.types import RegisterOptions, CallOptions, CloseDetails
 from autobahn.wamp.interfaces import IRouter
 from autobahn.twisted.wamp import Router
 from autobahn.twisted.wamp import RouterSession
@@ -65,6 +65,81 @@ class Xomponent(ApplicationSession):
         log.msg("sending to super.init args {}, kwargs {}".format(args,kwargs))
         ApplicationSession.__init__(self, *args, **kwargs)
 
+    # this sets the autobahn application that we run against for call,register,publish,subscribe
+    def set_session(self, app_session):
+        log.msg("Xomponent:set_session()")
+        self.app_session = app_session
+        return
+ 
+    # simple function to change a dictionary from each row
+    # to an array of arrays, first row contains the column names
+    # second+ rows contain the data.  this routine does not assume
+    # that each row has the same keys, so it loops through the
+    # entire result set looking for all the unique keys if
+    # fullscan=True is in kwargs
+    def _columnize(self, *args, **kwargs):
+        if len(args) < 1:
+            raise Exception("must supply list of dictionaries")
+        if not isinstance(args[0], vtypes.ListType):
+            raise Exception("fist argument must be list of dictionaries")
+        qv = args[0]
+        if len(qv) == 0:
+            return []
+        kv = {}
+        # pass argument fullscan=True to consider all rows for column headers
+        fs = kwargs.get('fullscan', False)
+
+        for r in qv:
+            for k in r.keys():
+                kv[k] = True
+            # here we only consider the first row if is fullscan is not set.
+            # in other words, every row contains the same column keys
+            if not fs:
+                break
+
+        rv = []
+        ra = kv.keys()
+        rv.append(ra)
+        #append a row in the array for each result, in the same order as the original row 1
+        for r in qv:
+            rv.append([r.get(c,None) for c in ra])
+
+        return rv
+
+    #
+    # this function handles either a single query return value
+    # or multiple query return values
+    #
+    def _format_results(self, *args, **kwargs):
+        if len(args) < 1:
+            raise Exception("must supply data!")
+
+        qv = args[0]
+
+        # no array, no results, we done.
+        if len(qv) == 0:
+            return []
+
+        # the title for each of the queries can be passed as
+        # the second positional argument
+        rtitle = []
+        if len(args) > 1:
+            rtitle = args[1]
+        else:
+            for ri in range(len(qv)):
+                rtitle.append("Result Set {}".format(ri))
+
+        if isinstance(qv, vtypes.ListType):
+            if isinstance(qv[0], vtypes.DictType):
+                defer.returnValue(self._columnize(qv,**kwargs))
+            else:
+                rv = {}
+                for ri in range(len(qv)):
+                    rv[ri] = {}
+                    rv[ri]['title'] = rtitle[ri]
+                    rv[ri]['result'] = self._columnize(qv[ri],**kwargs)
+                defer.returnValue(rv)
+
     def onConnect(self):
         log.msg("onConnect")
         auth_type = 'none'
@@ -95,49 +170,57 @@ class Xomponent(ApplicationSession):
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
     @inlineCallbacks
+    def routerCall(self, *args, **kwargs):
+        log.msg("routerCall called {}".format(kwargs))
+
+        # make call to other router
+        qv = yield self.call(kwargs['topic'], **kwargs)
+
+        defer.returnValue(qv)
+
+
+    @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
         rv = []
 
-        try:
-            log.msg("{}.{}.{}".format(self.svar['topic_base'],self.svar['command'],self.svar['action']))
-            nv = yield self.call(self.svar['topic_base'] + '.' + self.svar['command'] + '.' +
-                self.svar['action'], action_args=self.svar['action_args'],
-                options = CallOptions(timeout=2000,discloseMe = True))
+        rpc_register = {
+            'router.call': {'method': self.routerCall },
+        }
 
-            drv = nv
-            if isinstance(nv, vtypes.ListType):
-                drv = {}
-                drv['0'] = {
-                    'title':self.svar['command'],
-                    'result':nv
-                }
-    
-            for i in range(len(drv)):
-                log.msg("onJoin: result index {}: title {}".format(i,drv[str(i)]['title']))
-                rv = drv[str(i)]['result']
-         
-                if len(rv) > 0:
-                    log.msg("onJoin: rv is {}".format(rv))
-                    print "Result set {} {}".format(i + 1, drv[str(i)]['title'])
-                    print tabulate(rv, headers="firstrow", tablefmt="simple")
-                else:
-                    print "Result set {} {}, [no results]".format(i + 1, drv[str(i)]['title'])
-        except Exception as e:
-            sys.stderr.write("ERROR: {}\n".format(e))
+        #
+        # cross register router functions.
+        # each end has the other end's router function.
+        #
+        for r in rpc_register.keys():
+            try:
+                # we are registering a method with the remote router.
+                # this method accesses this router's rpc calls
+                regl = yield self.register(rpc_register[r]['method'],
+                    self.svar['topic_base'] + '.' + r,
+                    RegisterOptions(details_arg = 'details'))
+                log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
+                # we are registering a method with the local router.
+                # this method accesses the remote router's rpc calls
+                reg = yield self.app_session.register(rpc_register[r]['method'],
+                    self.svar['topic_base'] + '.' + r,
+                    RegisterOptions(details_arg = 'details'))
+                log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
+            except Exception as e:
+                log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
+                self.leave(CloseDetails(message=six.u("Error registering {}:{}".format(self.svar['topic_base']+'.'+r),e)))
 
-        log.msg("onJoin disconnecting : {}")
-        #self.disconnect()
+        log.msg("onJoin finished : ")
 
     def onLeave(self, details):
         log.msg("onLeave: {}".format(details))
 
-        #self.disconnect()
+        self.disconnect()
         return
 
     def onDisconnect(self):
         log.msg("onDisconnect:")
-        reactor.stop()
+        #reactor.stop()
 
 class SessionData(ApplicationSession):
     def __init__(self, *args, **kwargs):
@@ -469,6 +552,7 @@ def run():
     xdb = Xomponent(config=xomponent_config,
             authinfo=ai,topic_base=args.topic_base,debug=args.verbose,
             command='session',action='list',action_args={})
+    xdb.set_session(db_session)
     runner = ApplicationRunner(args.xsocket, args.realm)
     runner.run(lambda _: xdb, start_reactor=False)
 

@@ -215,6 +215,11 @@ def run():
     role_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
                         help='action args, json format, default: ' + def_action_args)
 
+    router_p = sp.add_parser('session')
+    router_p.add_argument('action', choices=['call','publish'], help='Remote router commands')
+    router_p.add_argument('-a', '--args', action='store', dest='action_args', default=def_action_args,
+                        help='action args, json format, default: ' + def_action_args)
+
     args = p.parse_args()
     if args.verbose:
        log.startLogging(sys.stdout)

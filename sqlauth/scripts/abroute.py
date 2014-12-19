@@ -173,8 +173,12 @@ class Xomponent(ApplicationSession):
     def routerCall(self, *args, **kwargs):
         log.msg("routerCall called {}".format(kwargs))
 
+        r_args = kwargs['action_args']
+
         # make call to other router
-        qv = yield self.call(kwargs['topic'], **kwargs)
+        log.msg("routerCall calling {} with action_args {}".format(r_args['topic'], r_args['action_args']))
+        qv = yield self.call(r_args['topic'], action_args=r_args['action_args'])
+        log.msg("routerCall returning {} ".format(qv))
 
         defer.returnValue(qv)
 

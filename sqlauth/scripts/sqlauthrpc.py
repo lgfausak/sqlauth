@@ -1117,7 +1117,6 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def activityList(self, *args, **kwargs):
         log.msg("activityList called {}".format(kwargs))
-        qa = kwargs['action_args']
 	av = yield self.call(self.svar['topic_base'] + '.session.listid',
             options=types.CallOptions(timeout=2000,discloseMe=True))
         if len(av) == 0:

@@ -170,6 +170,19 @@ class Xomponent(ApplicationSession):
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
     @inlineCallbacks
+    def routerRemoteCall(self, *args, **kwargs):
+        log.msg("routerRemoteCall called {}".format(kwargs))
+
+        r_args = kwargs['action_args']
+
+        # make call to other router
+        log.msg("routerRemoteCall calling {} with action_args {}".format(r_args['topic'], r_args['action_args']))
+        qv = yield self.app_session.call(r_args['topic'], action_args=r_args['action_args'])
+        log.msg("routerRemoteCall returning {} ".format(qv))
+
+        defer.returnValue(qv)
+
+    @inlineCallbacks
     def routerCall(self, *args, **kwargs):
         log.msg("routerCall called {}".format(kwargs))
 
@@ -186,33 +199,18 @@ class Xomponent(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("onJoin session attached {}".format(details))
-        rv = []
 
-        rpc_register = {
-            'router.call': {'method': self.routerCall },
-        }
+        # we are registering a method with the remote router.
+        # this method accesses this router's rpc calls
+        regl = yield self.register(self.routerRemoteCall,
+                self.svar['topic_base'] + '.router.call',
+                RegisterOptions(details_arg = 'details'))
+        log.msg("onJoin register 1")
 
-        #
-        # cross register router functions.
-        # each end has the other end's router function.
-        #
-        for r in rpc_register.keys():
-            try:
-                # we are registering a method with the remote router.
-                # this method accesses this router's rpc calls
-                regl = yield self.register(rpc_register[r]['method'],
-                    self.svar['topic_base'] + '.' + r,
-                    RegisterOptions(details_arg = 'details'))
-                log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
-                # we are registering a method with the local router.
-                # this method accesses the remote router's rpc calls
-                reg = yield self.app_session.register(rpc_register[r]['method'],
-                    self.svar['topic_base'] + '.' + r,
-                    RegisterOptions(details_arg = 'details'))
-                log.msg("onJoin register {}".format(self.svar['topic_base']+'.'+r))
-            except Exception as e:
-                log.msg("onJoin register exception {} {}".format(self.svar['topic_base']+'.'+r, e))
-                self.leave(CloseDetails(message=six.u("Error registering {}:{}".format(self.svar['topic_base']+'.'+r),e)))
+        reg = yield self.app_session.register(self.routerCall,
+            self.svar['topic_base'] + '.router.call',
+            RegisterOptions(details_arg = 'details'))
+        log.msg("onJoin register 2")
 
         log.msg("onJoin finished : ")
 
@@ -429,7 +427,7 @@ def run():
     ##
 
     def_wsocket = 'ws://127.0.0.1:8080/ws'
-    def_xsocket = 'ws://127.0.0.2:8080/ws'
+    def_xsocket = None
     def_user = 'sys'
     def_secret = '123test'
     def_realm = 'realm1'
@@ -443,7 +441,7 @@ def run():
     p.add_argument('-w', '--websocket', action='store', dest='wsocket', default=def_wsocket,
                         help='web socket '+def_wsocket)
     p.add_argument('-x', '--xsocket', action='store', dest='xsocket', default=def_xsocket,
-                        help='x socket definition, default is: '+def_xsocket)
+                        help='x socket definition, default is: None ')
     p.add_argument('-r', '--realm', action='store', dest='realm', default=def_realm,
                         help='connect to websocket using "realm", default '+def_realm)
     p.add_argument('-v', '--verbose', action='store_true', dest='verbose',
@@ -553,12 +551,14 @@ def run():
     reactor.callWhenRunning(listen)
     reactor.callWhenRunning(addsession)
 
-    xdb = Xomponent(config=xomponent_config,
-            authinfo=ai,topic_base=args.topic_base,debug=args.verbose,
-            command='session',action='list',action_args={})
-    xdb.set_session(db_session)
-    runner = ApplicationRunner(args.xsocket, args.realm)
-    runner.run(lambda _: xdb, start_reactor=False)
+    # if we set this router to be mastered by another, then start communicating with it
+    if args.xsocket is not None:
+        xdb = Xomponent(config=xomponent_config,
+                authinfo=ai,topic_base=args.topic_base,debug=args.verbose,
+                command='session',action='list',action_args={})
+        xdb.set_session(db_session)
+        runner = ApplicationRunner(args.xsocket, args.realm)
+        runner.run(lambda _: xdb, start_reactor=False)
 
     reactor.run()
 

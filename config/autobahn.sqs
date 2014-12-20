@@ -1,38 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <SQLContainer>
-    <SQLComment>
-        <name><![CDATA[Comment4]]></name>
-        <comment><![CDATA[topics are addresses.  com.db.query is an example, or adm.user.login.  The addresses can be subscribed/published.  Registered and called.  topics have permissions granted to them.]]></comment>
-        <location>
-            <x>1701.00</x>
-            <y>407.00</y>
-        </location>
-        <size>
-            <width>216.00</width>
-            <height>106.00</height>
-        </size>
-        <zorder>10</zorder>
-        <commentTitle><![CDATA[topics]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
-        <labelName><![CDATA[comments]]></labelName>
-        <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
-        <labelWindowIndex><![CDATA[8]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[Comment4]]></temporaryOriginalName>
-        <uid><![CDATA[0AEEA148-9288-44BE-B3CF-78846ACEBD2B]]></uid>
-    </SQLComment>
     <SQLTable>
         <name><![CDATA[loginrole]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1220.00</x>
-            <y>531.00</y>
+            <x>1424.00</x>
+            <y>248.00</y>
         </location>
         <size>
             <width>211.00</width>
             <height>100.00</height>
         </size>
-        <zorder>13</zorder>
+        <zorder>7</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
             <type><![CDATA[SERIAL]]></type>
@@ -94,6 +73,7 @@
             <indexType><![CDATA[UNIQUE]]></indexType>
             <uid><![CDATA[E32B1188-A601-47AB-A602-D335AEFCADED]]></uid>
         </SQLIndex>
+        <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
         <labelName><![CDATA[authentication]]></labelName>
         <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
@@ -102,54 +82,53 @@
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[0EECDB57-4619-449F-A3CE-028093E69FA8]]></uid>
     </SQLTable>
-    <SQLComment>
-        <name><![CDATA[Comment2_3]]></name>
-        <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
+    <SQLTable>
+        <name><![CDATA[router]]></name>
+        <schema><![CDATA[]]></schema>
+        <comment><![CDATA[multiple routers can be known to a routing domain.  when running a router, at least one tuple will be populated.  when other routers become known to this router, their information is populated here.  ultimately routers might be rooted on topics, dunno yet...]]></comment>
         <location>
-            <x>2003.00</x>
-            <y>747.00</y>
+            <x>1072.00</x>
+            <y>22.00</y>
         </location>
         <size>
-            <width>184.00</width>
-            <height>168.00</height>
+            <width>200.00</width>
+            <height>100.00</height>
         </size>
-        <zorder>11</zorder>
-        <commentTitle><![CDATA[topicrole]]></commentTitle>
+        <zorder>10</zorder>
+        <SQLField>
+            <name><![CDATA[id]]></name>
+            <type><![CDATA[SERIAL]]></type>
+            <primaryKey>1</primaryKey>
+            <uid><![CDATA[3B22725D-EF0E-45CE-B7CE-2408B636C3DD]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[version]]></name>
+            <type><![CDATA[TEXT]]></type>
+            <uid><![CDATA[E72333C1-56AF-4BA8-AFD9-27549D730D91]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[profile]]></name>
+            <type><![CDATA[JSONB]]></type>
+            <uid><![CDATA[AC445234-3B17-45B0-9B7B-F57E740B2B57]]></uid>
+        </SQLField>
+        <SQLField>
+            <name><![CDATA[self]]></name>
+            <type><![CDATA[BOOLEAN]]></type>
+            <uid><![CDATA[D064486B-8F67-4091-BF74-757292E886B1]]></uid>
+        </SQLField>
         <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
-        <labelName><![CDATA[roles]]></labelName>
-        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[4]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
-        <uid><![CDATA[1EA7360E-8F45-47A3-A84F-A5E2BC864545]]></uid>
-    </SQLComment>
-    <SQLComment>
-        <name><![CDATA[Comment2_1]]></name>
-        <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
-        <location>
-            <x>1373.00</x>
-            <y>702.00</y>
-        </location>
-        <size>
-            <width>229.00</width>
-            <height>124.00</height>
-        </size>
-        <zorder>8</zorder>
-        <commentTitle><![CDATA[role]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
-        <labelName><![CDATA[roles]]></labelName>
-        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[7]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
-        <uid><![CDATA[203FCF6D-C8F5-46D1-9BB6-60EF4AF3B998]]></uid>
-    </SQLComment>
+        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <objectComment><![CDATA[multiple routers can be known to a routing domain.  when running a router, at least one tuple will be populated.  when other routers become known to this router, their information is populated here.  ultimately routers might be rooted on topics, dunno yet...]]></objectComment>
+        <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
+        <uid><![CDATA[34A1C159-3E25-4D9F-9941-1CDF4C960BAA]]></uid>
+    </SQLTable>
     <SQLTable>
         <name><![CDATA[topicrole]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
         <location>
-            <x>2107.00</x>
-            <y>601.00</y>
+            <x>1062.00</x>
+            <y>548.00</y>
         </location>
         <size>
             <width>457.00</width>
@@ -248,10 +227,12 @@
             <indexType><![CDATA[UNIQUE]]></indexType>
             <uid><![CDATA[89F3DA29-15B6-450F-892C-C5F363B631A7]]></uid>
         </SQLIndex>
+        <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
         <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <objectComment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.topicrole]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[35360BB8-09B2-4AC1-B27D-7471F3F219F2]]></uid>
@@ -259,9 +240,10 @@
     <SQLTable>
         <name><![CDATA[activity]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[all activity by a user is recorded in the activity table. types of activity are register, call, publish, subscribe and grant.]]></comment>
         <location>
-            <x>2175.00</x>
-            <y>258.00</y>
+            <x>1886.00</x>
+            <y>254.00</y>
         </location>
         <size>
             <width>203.00</width>
@@ -318,80 +300,20 @@
             <temporaryOriginalName><![CDATA[publish_1]]></temporaryOriginalName>
             <uid><![CDATA[D50B5B3C-5AA3-490E-BB98-05198D675B9D]]></uid>
         </SQLField>
-        <labelWindowIndex><![CDATA[10]]></labelWindowIndex>
+        <hidden><![CDATA[0]]></hidden>
+        <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
+        <objectComment><![CDATA[all activity by a user is recorded in the activity table. types of activity are register, call, publish, subscribe and grant.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.activity]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[401A249C-BCE5-42F0-A0B0-2B53AE64FB8E]]></uid>
     </SQLTable>
-    <SQLComment>
-        <name><![CDATA[Comment1]]></name>
-        <comment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></comment>
-        <location>
-            <x>1629.00</x>
-            <y>106.00</y>
-        </location>
-        <size>
-            <width>162.00</width>
-            <height>158.00</height>
-        </size>
-        <zorder>12</zorder>
-        <commentTitle><![CDATA[session]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
-        <labelName><![CDATA[authentication]]></labelName>
-        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
-        <labelWindowIndex><![CDATA[3]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[login authentication]]></temporaryOriginalName>
-        <uid><![CDATA[51C474B7-790F-4D09-9CFB-1F6B05EAF083]]></uid>
-    </SQLComment>
-    <SQLComment>
-        <name><![CDATA[Comment1_1]]></name>
-        <comment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></comment>
-        <location>
-            <x>1232.00</x>
-            <y>309.00</y>
-        </location>
-        <size>
-            <width>276.00</width>
-            <height>157.00</height>
-        </size>
-        <zorder>7</zorder>
-        <commentTitle><![CDATA[login authentication]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
-        <labelName><![CDATA[authentication]]></labelName>
-        <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
-        <labelWindowIndex><![CDATA[6]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[user authentication]]></temporaryOriginalName>
-        <uid><![CDATA[53E73D9A-DFD7-44C6-AB61-2211B0730E67]]></uid>
-    </SQLComment>
-    <SQLComment>
-        <name><![CDATA[Comment3]]></name>
-        <comment><![CDATA[all activity by a user is recorded in the activity table. types of activity are register, call, publish, subscribe and grant.]]></comment>
-        <location>
-            <x>1892.00</x>
-            <y>207.00</y>
-        </location>
-        <size>
-            <width>254.00</width>
-            <height>74.00</height>
-        </size>
-        <zorder>9</zorder>
-        <commentTitle><![CDATA[activity]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{0.841398,0.674705,0.837643,1}]]></labelColor>
-        <labelName><![CDATA[comments]]></labelName>
-        <labelUid><![CDATA[A5C8B1A0-A09F-4FC6-BCF4-E85825E45282]]></labelUid>
-        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[Comment3]]></temporaryOriginalName>
-        <uid><![CDATA[5F736E38-1514-420F-A732-A9E5DE4C7B1B]]></uid>
-    </SQLComment>
     <SQLTable>
         <name><![CDATA[role]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
         <location>
-            <x>1665.00</x>
-            <y>712.00</y>
+            <x>1424.00</x>
+            <y>382.00</y>
         </location>
         <size>
             <width>229.00</width>
@@ -438,10 +360,12 @@
             <temporaryOriginalName><![CDATA[id_1]]></temporaryOriginalName>
             <uid><![CDATA[FAB95116-8C65-471A-9916-1FD217BB6390]]></uid>
         </SQLField>
+        <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
         <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
+        <objectComment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.role]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[67B24CDB-77E3-4A3A-AC42-D6A213D4DE4C]]></uid>
@@ -449,6 +373,7 @@
     <SQLTable>
         <name><![CDATA[login]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></comment>
         <location>
             <x>1333.00</x>
             <y>44.00</y>
@@ -510,10 +435,12 @@
             <type><![CDATA[BOOLEAN]]></type>
             <uid><![CDATA[5BE6641D-A0D9-4199-B3A9-F90E005D2E0C]]></uid>
         </SQLField>
+        <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{0.8,1,1,0.8}]]></labelColor>
         <labelName><![CDATA[authentication]]></labelName>
         <labelUid><![CDATA[66614161-89FD-42BF-9AE3-91E938C13511]]></labelUid>
         <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <objectComment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.login]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></uid>
@@ -522,29 +449,30 @@
         <name><![CDATA[Comment2_2]]></name>
         <comment><![CDATA[each role is associated with a single topic at role creation time. So the creator of a new role must have the permission to create that role (in the hierarchy), and the permissions to create the binding topic.]]></comment>
         <location>
-            <x>1989.00</x>
-            <y>379.00</y>
+            <x>1168.00</x>
+            <y>330.00</y>
         </location>
         <size>
             <width>184.00</width>
             <height>168.00</height>
         </size>
-        <zorder>16</zorder>
-        <commentTitle><![CDATA[role binding]]></commentTitle>
+        <zorder>9</zorder>
+        <commentTitle><![CDATA[topic role binding]]></commentTitle>
         <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
         <uid><![CDATA[B5D18617-F574-42C6-9BE1-B178880A1007]]></uid>
     </SQLComment>
     <SQLTable>
         <name><![CDATA[topic]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[topics are addresses.  com.db.query is an example, or adm.user.login.  The addresses can be subscribed/published.  Registered and called.  topics have permissions granted to them.]]></comment>
         <location>
-            <x>1663.00</x>
-            <y>543.00</y>
+            <x>1569.00</x>
+            <y>704.00</y>
         </location>
         <size>
             <width>199.00</width>
@@ -575,10 +503,12 @@
             <temporaryOriginalName><![CDATA[desc]]></temporaryOriginalName>
             <uid><![CDATA[674F5402-A92A-4A1B-8B65-27F0A65BB454]]></uid>
         </SQLField>
+        <hidden><![CDATA[0]]></hidden>
         <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
         <labelName><![CDATA[roles]]></labelName>
         <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
         <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
+        <objectComment><![CDATA[topics are addresses.  com.db.query is an example, or adm.user.login.  The addresses can be subscribed/published.  Registered and called.  topics have permissions granted to them.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.topic]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></uid>
@@ -586,15 +516,16 @@
     <SQLTable>
         <name><![CDATA[sqlauth]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
         <location>
-            <x>1497.00</x>
-            <y>842.00</y>
+            <x>1071.00</x>
+            <y>175.00</y>
         </location>
         <size>
-            <width>200.00</width>
+            <width>223.00</width>
             <height>100.00</height>
         </size>
-        <zorder>14</zorder>
+        <zorder>8</zorder>
         <SQLField>
             <name><![CDATA[component]]></name>
             <type><![CDATA[TEXT]]></type>
@@ -611,37 +542,18 @@
             <type><![CDATA[JSONB]]></type>
             <uid><![CDATA[AA14E009-D869-47E6-BAD8-CC94BE05B44F]]></uid>
         </SQLField>
-        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
+        <hidden><![CDATA[0]]></hidden>
+        <labelWindowIndex><![CDATA[2]]></labelWindowIndex>
+        <objectComment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></objectComment>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[DB53F091-56BB-435D-89D6-BD7389AEECAE]]></uid>
     </SQLTable>
-    <SQLComment>
-        <name><![CDATA[Comment2]]></name>
-        <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
-        <location>
-            <x>1702.00</x>
-            <y>840.00</y>
-        </location>
-        <size>
-            <width>288.00</width>
-            <height>85.00</height>
-        </size>
-        <zorder>15</zorder>
-        <commentTitle><![CDATA[sqlauth]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
-        <labelName><![CDATA[roles]]></labelName>
-        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
-        <uid><![CDATA[E8313FE7-4129-453E-BFF7-171A1AE659BC]]></uid>
-    </SQLComment>
     <SQLTable>
         <name><![CDATA[activity_type]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>2263.00</x>
-            <y>464.00</y>
+            <x>1891.00</x>
+            <y>607.00</y>
         </location>
         <size>
             <width>187.00</width>
@@ -671,7 +583,8 @@
             <temporaryOriginalName><![CDATA[desc]]></temporaryOriginalName>
             <uid><![CDATA[F8319815-1811-4330-B319-2FC081C235E3]]></uid>
         </SQLField>
-        <labelWindowIndex><![CDATA[9]]></labelWindowIndex>
+        <hidden><![CDATA[0]]></hidden>
+        <labelWindowIndex><![CDATA[4]]></labelWindowIndex>
         <temporaryOriginalName><![CDATA[auto.activity_type]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[E93E5364-55C4-4F66-BCBF-8BFE596F0302]]></uid>
@@ -679,9 +592,10 @@
     <SQLTable>
         <name><![CDATA[session]]></name>
         <schema><![CDATA[]]></schema>
+        <comment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></comment>
         <location>
-            <x>1824.00</x>
-            <y>25.00</y>
+            <x>1740.00</x>
+            <y>24.00</y>
         </location>
         <size>
             <width>377.00</width>
@@ -736,7 +650,9 @@
             <indexType><![CDATA[UNIQUE]]></indexType>
             <uid><![CDATA[09DA758C-A206-4EB8-AD8C-38081D6108F5]]></uid>
         </SQLIndex>
-        <labelWindowIndex><![CDATA[5]]></labelWindowIndex>
+        <hidden><![CDATA[0]]></hidden>
+        <labelWindowIndex><![CDATA[3]]></labelWindowIndex>
+        <objectComment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></objectComment>
         <temporaryOriginalName><![CDATA[auto.session]]></temporaryOriginalName>
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[EA0931D6-E3B7-4381-988E-3E4B9AD0D8B7]]></uid>
@@ -893,7 +809,7 @@ b21NYXJnaW6GkoSjnqiiNIaShJmZD05TU2NhbGluZ0ZhY3RvcoaShKOeqKIBhpKE
 mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
 ]]></encodedPrintInfo>
         <autoSizeTablesOption><![CDATA[0]]></autoSizeTablesOption>
-        <documentScaleFactor><![CDATA[1]]></documentScaleFactor>
+        <documentScaleFactor><![CDATA[0.842]]></documentScaleFactor>
         <dropTableOption><![CDATA[0]]></dropTableOption>
         <exportDialect><![CDATA[postgres]]></exportDialect>
         <fileversion><![CDATA[3.1]]></fileversion>
@@ -905,17 +821,18 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <PageGridVisible><![CDATA[0]]></PageGridVisible>
         <sidebarIndex><![CDATA[0]]></sidebarIndex>
         <snapToGrid><![CDATA[0]]></snapToGrid>
-        <SourceSidebarWidth><![CDATA[421.000000]]></SourceSidebarWidth>
+        <SourceSidebarWidth><![CDATA[276.000000]]></SourceSidebarWidth>
         <uid><![CDATA[6740DFDF-7C9F-4BE2-AE53-213E928FA2E7]]></uid>
-        <windowHeight><![CDATA[1267.000000]]></windowHeight>
-        <windowLocationX><![CDATA[-2537.000000]]></windowLocationX>
-        <windowLocationY><![CDATA[173.000000]]></windowLocationY>
-        <windowScrollOrigin><![CDATA[{1212, 0}]]></windowScrollOrigin>
-        <windowWidth><![CDATA[1888.000000]]></windowWidth>
+        <windowHeight><![CDATA[842.000000]]></windowHeight>
+        <windowLocationX><![CDATA[0.000000]]></windowLocationX>
+        <windowLocationY><![CDATA[35.000000]]></windowLocationY>
+        <windowScrollOrigin><![CDATA[{847, 0}]]></windowScrollOrigin>
+        <windowWidth><![CDATA[1440.000000]]></windowWidth>
     </SQLDocumentInfo>
     <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>
     <containerName><![CDATA[model controller orginal container]]></containerName>
     <defaultLabelExpanded><![CDATA[1]]></defaultLabelExpanded>
+    <defaultLabelHidden><![CDATA[0]]></defaultLabelHidden>
     <SQLObjectLabel>
         <name><![CDATA[comments]]></name>
         <colorString><![CDATA[{0.841398,0.674705,0.837643,1}]]></colorString>

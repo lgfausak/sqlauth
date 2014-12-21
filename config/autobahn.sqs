@@ -4,8 +4,8 @@
         <name><![CDATA[loginrole]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1424.00</x>
-            <y>248.00</y>
+            <x>940.00</x>
+            <y>275.00</y>
         </location>
         <size>
             <width>211.00</width>
@@ -87,14 +87,14 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[multiple routers can be known to a routing domain.  when running a router, at least one tuple will be populated.  when other routers become known to this router, their information is populated here.  ultimately routers might be rooted on topics, dunno yet...]]></comment>
         <location>
-            <x>1072.00</x>
-            <y>22.00</y>
+            <x>1232.00</x>
+            <y>679.00</y>
         </location>
         <size>
             <width>200.00</width>
-            <height>100.00</height>
+            <height>120.00</height>
         </size>
-        <zorder>10</zorder>
+        <zorder>9</zorder>
         <SQLField>
             <name><![CDATA[id]]></name>
             <type><![CDATA[SERIAL]]></type>
@@ -116,6 +116,20 @@
             <type><![CDATA[BOOLEAN]]></type>
             <uid><![CDATA[D064486B-8F67-4091-BF74-757292E886B1]]></uid>
         </SQLField>
+        <SQLField>
+            <name><![CDATA[topic_id]]></name>
+            <type><![CDATA[INTEGER]]></type>
+            <referencesField>id</referencesField>
+            <referencesTable>topic</referencesTable>
+            <referencesField><![CDATA[id]]></referencesField>
+            <referencesTable><![CDATA[topic]]></referencesTable>
+            <sourceCardinality>1</sourceCardinality>
+            <destinationCardinality>1</destinationCardinality>
+            <referencesFieldUID><![CDATA[D9C09D16-5EF1-4E48-8EE2-DD0FFDC18607]]></referencesFieldUID>
+            <referencesTableUID><![CDATA[CCEA0965-F91D-40C6-8816-3E8139B8A845]]></referencesTableUID>
+            <referenceLinkName><![CDATA[router root]]></referenceLinkName>
+            <uid><![CDATA[CC1A4F70-F0EC-4CA9-865B-F705E3243F21]]></uid>
+        </SQLField>
         <hidden><![CDATA[0]]></hidden>
         <labelWindowIndex><![CDATA[0]]></labelWindowIndex>
         <objectComment><![CDATA[multiple routers can be known to a routing domain.  when running a router, at least one tuple will be populated.  when other routers become known to this router, their information is populated here.  ultimately routers might be rooted on topics, dunno yet...]]></objectComment>
@@ -127,8 +141,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[this is the actual permission granted to the role for the topic.  The permission are self explanitory, publish means that the role can publish this topic, etc.  The admin permission is external to Autobahn, it simply means that this role can grant permissions to other roles for this topic.]]></comment>
         <location>
-            <x>1062.00</x>
-            <y>548.00</y>
+            <x>1068.00</x>
+            <y>458.00</y>
         </location>
         <size>
             <width>457.00</width>
@@ -242,8 +256,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[all activity by a user is recorded in the activity table. types of activity are register, call, publish, subscribe and grant.]]></comment>
         <location>
-            <x>1886.00</x>
-            <y>254.00</y>
+            <x>1821.00</x>
+            <y>285.00</y>
         </location>
         <size>
             <width>203.00</width>
@@ -312,8 +326,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[roles represent bound together rpc calls and subscriptions.  Groups of them are formed, perhaps like 'tenant' or 'site'.  These groups of permissions are granted to tenants forming the basis of rpc authorization.]]></comment>
         <location>
-            <x>1424.00</x>
-            <y>382.00</y>
+            <x>1311.00</x>
+            <y>273.00</y>
         </location>
         <size>
             <width>229.00</width>
@@ -375,8 +389,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[a login tuple must exist for someone to access the autobahn websocket installation.   when connecting to the federation, the login and password are used during authentication. once authenticated, a tuple is inserted into the session table indicating the user is currently logged in. when disconnected the tuple is updated with an ended time. once ended, that session can no longer be used.]]></comment>
         <location>
-            <x>1333.00</x>
-            <y>44.00</y>
+            <x>936.00</x>
+            <y>41.00</y>
         </location>
         <size>
             <width>263.00</width>
@@ -445,34 +459,13 @@
         <ui.treeExpanded><![CDATA[1]]></ui.treeExpanded>
         <uid><![CDATA[974B5821-8CA3-4D76-B293-8B58F33E35F2]]></uid>
     </SQLTable>
-    <SQLComment>
-        <name><![CDATA[Comment2_2]]></name>
-        <comment><![CDATA[each role is associated with a single topic at role creation time. So the creator of a new role must have the permission to create that role (in the hierarchy), and the permissions to create the binding topic.]]></comment>
-        <location>
-            <x>1168.00</x>
-            <y>330.00</y>
-        </location>
-        <size>
-            <width>184.00</width>
-            <height>168.00</height>
-        </size>
-        <zorder>9</zorder>
-        <commentTitle><![CDATA[topic role binding]]></commentTitle>
-        <hidden><![CDATA[0]]></hidden>
-        <labelColor><![CDATA[{1,0.828828,0,1}]]></labelColor>
-        <labelName><![CDATA[roles]]></labelName>
-        <labelUid><![CDATA[07C8B2F6-7C0D-4C57-A570-829D1799D82B]]></labelUid>
-        <labelWindowIndex><![CDATA[1]]></labelWindowIndex>
-        <temporaryOriginalName><![CDATA[role]]></temporaryOriginalName>
-        <uid><![CDATA[B5D18617-F574-42C6-9BE1-B178880A1007]]></uid>
-    </SQLComment>
     <SQLTable>
         <name><![CDATA[topic]]></name>
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[topics are addresses.  com.db.query is an example, or adm.user.login.  The addresses can be subscribed/published.  Registered and called.  topics have permissions granted to them.]]></comment>
         <location>
-            <x>1569.00</x>
-            <y>704.00</y>
+            <x>1574.00</x>
+            <y>677.00</y>
         </location>
         <size>
             <width>199.00</width>
@@ -518,8 +511,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[this contains the version number and then a profile which is undefined json text. The component allows us to maintain different versions of different pieces of this applicaiton.]]></comment>
         <location>
-            <x>1071.00</x>
-            <y>175.00</y>
+            <x>940.00</x>
+            <y>680.00</y>
         </location>
         <size>
             <width>223.00</width>
@@ -552,8 +545,8 @@
         <name><![CDATA[activity_type]]></name>
         <schema><![CDATA[]]></schema>
         <location>
-            <x>1891.00</x>
-            <y>607.00</y>
+            <x>1843.00</x>
+            <y>519.00</y>
         </location>
         <size>
             <width>187.00</width>
@@ -594,8 +587,8 @@
         <schema><![CDATA[]]></schema>
         <comment><![CDATA[A session is created when someone authenticates with Autobahn. If the session's ended column is not null then the session is historical. The session_id is the number assigned by autobahn when the session is created.]]></comment>
         <location>
-            <x>1740.00</x>
-            <y>24.00</y>
+            <x>1500.00</x>
+            <y>19.00</y>
         </location>
         <size>
             <width>377.00</width>
@@ -826,7 +819,7 @@ mZkLTlNQYXBlck5hbWWGkoSZmQluYS1sZXR0ZXKGhoY=
         <windowHeight><![CDATA[842.000000]]></windowHeight>
         <windowLocationX><![CDATA[0.000000]]></windowLocationX>
         <windowLocationY><![CDATA[35.000000]]></windowLocationY>
-        <windowScrollOrigin><![CDATA[{847, 0}]]></windowScrollOrigin>
+        <windowScrollOrigin><![CDATA[{606, 0}]]></windowScrollOrigin>
         <windowWidth><![CDATA[1440.000000]]></windowWidth>
     </SQLDocumentInfo>
     <AllowsIndexRenamingOnInsert><![CDATA[1]]></AllowsIndexRenamingOnInsert>

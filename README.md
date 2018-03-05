@@ -1,5 +1,5 @@
 # sqlauth - Authentication and Authorization via SQL for Autobahn
-[![Version](https://pypip.in/version/sqlauth/badge.svg)![Status](https://pypip.in/status/sqlauth/badge.svg)![Downloads](https://pypip.in/download/sqlauth/badge.svg)](https://pypi.python.org/pypi/sqlauth/)[![Build Status](https://travis-ci.org/lgfausak/sqlauth.svg?branch=master)](https://travis-ci.org/lgfausak/sqlauth)
+[![Version](https://img.shields.io/pypi/v/sqlauth.svg)![Status](https://img.shields.io/pypi/status/sqlauth.svg)![Downloads](https://img.shields.io/pypi/dm/sqlauth.svg)](https://pypi.python.org/pypi/sqlauth/)[![Build Status](https://travis-ci.org/lgfausak/sqlauth.svg?branch=master)](https://travis-ci.org/lgfausak/sqlauth)
 
 SQL Authorization and Authentication via SQL for Autobahn
 
